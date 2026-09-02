@@ -38,6 +38,42 @@ interface SidebarProps {
   onToggleCollapse: () => void;
 }
 
+const NAV_LABEL_STYLE: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif",
+  fontSize: '12.5px',
+  fontWeight: 400,
+  letterSpacing: 0,
+  color: '#4B4A46',
+};
+
+const NAV_LABEL_ACTIVE_STYLE: React.CSSProperties = {
+  ...NAV_LABEL_STYLE,
+  fontWeight: 500,
+  color: '#1D1F1E',
+};
+
+const SECTION_LABEL_STYLE: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif",
+  fontSize: '10px',
+  fontWeight: 500,
+  letterSpacing: '0.07em',
+  textTransform: 'uppercase',
+  color: '#77736C',
+  padding: '0 12px',
+  marginBottom: '2px',
+};
+
+const BADGE_STYLE: React.CSSProperties = {
+  fontFamily: "'Inter', sans-serif",
+  fontSize: '10px',
+  fontWeight: 500,
+  letterSpacing: '0.02em',
+  padding: '1px 6px',
+  borderRadius: '3px',
+  flexShrink: 0,
+  lineHeight: 1.4,
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
@@ -50,16 +86,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
     label: string;
     icon: any;
     badge?: string;
-    badgeColor?: string;
+    badgeStyle?: React.CSSProperties;
   }[] = [
-    { tab: 'dashboard',  label: 'Command Dashboard',        icon: LayoutDashboard },
-    { tab: 'map',        label: 'Live Network Map',         icon: Map,          badge: 'LIVE',  badgeColor: 'bg-[#F0FDF4] text-[#15803D] border border-[#BBF7D0]'    },
-    { tab: 'planner',    label: 'AI Block Planner',         icon: CalendarClock, badge: 'AUTO', badgeColor: 'bg-[#EFF6FF] text-[#1E3A5F] border border-[#BFDBFE]'    },
-    { tab: 'assets',     label: 'Asset Intelligence',       icon: Layers,        badge: '17 WNG', badgeColor: 'bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]'  },
-    { tab: 'trains',     label: 'Train Operations (COA)',   icon: Train },
-    { tab: 'conflicts',  label: 'Conflict Center',          icon: AlertTriangle, badge: '3 CNF', badgeColor: 'bg-[#FEF2F2] text-[#B91C1C] border border-[#FECACA]'  },
-    { tab: 'simulation', label: 'What-If Sandbox',          icon: Flame,         badge: 'SANDBOX', badgeColor: 'bg-[#FAF5FF] text-[#6B21A8] border border-[#E9D5FF]' },
-    { tab: 'insights',   label: 'AI Analytics & ROI',       icon: Sparkles },
+    { tab: 'dashboard',  label: 'Overview',               icon: LayoutDashboard },
+    { tab: 'map',        label: 'Live Network',            icon: Map,
+      badge: 'Live',
+      badgeStyle: { backgroundColor: '#EDF5F0', color: '#4D8B68', border: '1px solid #96C4AE' },
+    },
+    { tab: 'planner',    label: 'Block Planner',           icon: CalendarClock,
+      badge: 'Auto',
+      badgeStyle: { backgroundColor: '#EEF2F8', color: '#1E3A5F', border: '1px solid #B0C4DC' },
+    },
+    { tab: 'assets',     label: 'Asset Intelligence',      icon: Layers,
+      badge: '17 ⚠',
+      badgeStyle: { backgroundColor: '#FBF5E6', color: '#D49A32', border: '1px solid #E0BF7A' },
+    },
+    { tab: 'trains',     label: 'Train Operations',        icon: Train },
+    { tab: 'conflicts',  label: 'Conflict Center',         icon: AlertTriangle,
+      badge: '3',
+      badgeStyle: { backgroundColor: '#F9EEEE', color: '#C84B43', border: '1px solid #DCA09C' },
+    },
+    { tab: 'simulation', label: 'What-If Sandbox',         icon: Flame,
+      badge: 'Sandbox',
+      badgeStyle: { backgroundColor: '#F5F0F8', color: '#6B21A8', border: '1px solid #D8B4FE' },
+    },
+    { tab: 'insights',   label: 'AI Insights',             icon: Sparkles },
   ];
 
   const deptNavItems: {
@@ -68,146 +119,171 @@ export const Sidebar: React.FC<SidebarProps> = ({
     icon: any;
     deptCode: string;
   }[] = [
-    { tab: 'dept-track', label: 'Civil Track (TMS)',        icon: FileSpreadsheet, deptCode: 'TMS'  },
-    { tab: 'dept-ohe',   label: 'Electrical OHE / SCADA',  icon: Zap,             deptCode: 'TDMS' },
-    { tab: 'dept-snt',   label: 'Signal & Telecom (SMMS)', icon: Radio,           deptCode: 'SMMS' },
+    { tab: 'dept-track', label: 'Civil / Track',        icon: FileSpreadsheet, deptCode: 'TMS'  },
+    { tab: 'dept-ohe',   label: 'Electrical / OHE',     icon: Zap,             deptCode: 'TDMS' },
+    { tab: 'dept-snt',   label: 'Signal & Telecom',     icon: Radio,           deptCode: 'SMMS' },
   ];
+
+  const renderNavItem = (
+    tab: NavTab,
+    label: string,
+    Icon: any,
+    badge?: string,
+    badgeStyle?: React.CSSProperties,
+    deptCode?: string,
+  ) => {
+    const isActive = activeTab === tab;
+    return (
+      <button
+        key={tab}
+        onClick={() => onTabChange(tab)}
+        title={collapsed ? label : undefined}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          gap: collapsed ? 0 : 10,
+          padding: collapsed ? '8px 0' : '7px 12px',
+          justifyContent: collapsed ? 'center' : 'flex-start',
+          borderRadius: '4px',
+          backgroundColor: isActive ? '#EDE5D8' : 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          position: 'relative',
+          transition: 'background-color 0.12s ease',
+          marginBottom: '1px',
+        }}
+        onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = '#F0ECE4'; }}
+        onMouseLeave={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'transparent'; }}
+      >
+        {/* Left-edge indicator for active item */}
+        {isActive && !collapsed && (
+          <span style={{
+            position: 'absolute', left: 0, top: '4px', bottom: '4px',
+            width: '2px', borderRadius: '2px',
+            backgroundColor: '#1D1F1E',
+          }} />
+        )}
+
+        <Icon
+          style={{
+            width: 15,
+            height: 15,
+            flexShrink: 0,
+            color: isActive ? '#1D1F1E' : '#77736C',
+            transition: 'color 0.12s ease',
+          }}
+        />
+
+        {!collapsed && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1, overflow: 'hidden' }}>
+            <span style={isActive ? NAV_LABEL_ACTIVE_STYLE : NAV_LABEL_STYLE}>
+              {label}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+              {badge && (
+                <span style={{ ...BADGE_STYLE, ...badgeStyle }}>
+                  {badge}
+                </span>
+              )}
+              {deptCode && (
+                <span style={{
+                  ...BADGE_STYLE,
+                  backgroundColor: 'transparent',
+                  border: `1px solid ${isActive ? '#A8A29E' : '#D5CEC1'}`,
+                  color: isActive ? '#1D1F1E' : '#77736C',
+                }}>
+                  {deptCode}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </button>
+    );
+  };
 
   return (
     <aside
-      className={`fixed left-0 top-14 bottom-0 bg-[#F7F4EE] border-r border-[#D8D1C5] z-30 flex flex-col transition-all duration-200 select-none ${
-        collapsed ? 'w-16' : 'w-60 lg:w-64'
-      }`}
+      style={{
+        position: 'fixed',
+        left: 0, top: 48, bottom: 0,
+        backgroundColor: '#F8F5EF',
+        borderRight: '1px solid #D5CEC1',
+        zIndex: 30,
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'width 0.2s ease',
+        width: collapsed ? 56 : 232,
+        userSelect: 'none',
+      }}
     >
-      {/* Precision line header mark */}
-      <div className="h-[2px] bg-[#1A1815] w-full shrink-0" />
+      {/* Top accent line */}
+      <div style={{ height: 2, backgroundColor: '#1D1F1E', flexShrink: 0 }} />
 
-      {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+      {/* Navigation */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: 0 }}>
 
-        {/* ── MISSION CONTROL ── */}
-        <div className="mb-2">
+        {/* ── Mission Control ── */}
+        <div style={{ marginBottom: 8 }}>
           {!collapsed && (
-            <div className="px-3 pt-1 pb-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#615A4F]">
+            <div style={{ ...SECTION_LABEL_STYLE, marginBottom: 4 }}>
               Mission Control
             </div>
           )}
-          {primaryNavItems.map(item => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.tab;
-            return (
-              <button
-                key={item.tab}
-                onClick={() => onTabChange(item.tab)}
-                title={collapsed ? item.label : undefined}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 my-0.5 text-xs rounded-[2px] transition-colors cursor-pointer ${
-                  isActive
-                    ? 'bg-[#1A1815] text-[#FFFFFF]'
-                    : 'text-[#1A1815] hover:bg-[#EFEAE1]'
-                }`}
-              >
-                <Icon
-                  className={`w-4 h-4 shrink-0 ${
-                    isActive ? 'text-[#FFFFFF]' : 'text-[#615A4F]'
-                  }`}
-                />
-                {!collapsed && (
-                  <div className="flex items-center justify-between flex-1 truncate">
-                    <span className="truncate font-sans font-medium text-[12px]">{item.label}</span>
-                    {item.badge && (
-                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-[2px] shrink-0 ${item.badgeColor}`}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </button>
-            );
-          })}
+          {primaryNavItems.map(item =>
+            renderNavItem(item.tab, item.label, item.icon, item.badge, item.badgeStyle)
+          )}
         </div>
 
-        {/* ── DEPARTMENTS ── */}
-        <div className="pt-2 border-t border-[#D8D1C5] mb-2">
+        {/* ── Departments ── */}
+        <div style={{ paddingTop: 8, borderTop: '1px solid #E8E2D8', marginBottom: 8 }}>
           {!collapsed && (
-            <div className="px-3 pt-1 pb-1 flex items-center justify-between">
-              <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-[#615A4F]">
-                Departments
-              </span>
-              <span className="text-[9px] font-mono text-[#615A4F]">FUSION</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px', marginBottom: 4 }}>
+              <span style={{ ...SECTION_LABEL_STYLE, padding: 0 }}>Departments</span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', color: '#77736C' }}>Fusion</span>
             </div>
           )}
-          {deptNavItems.map(item => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.tab;
-            return (
-              <button
-                key={item.tab}
-                onClick={() => onTabChange(item.tab)}
-                title={collapsed ? item.label : undefined}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 my-0.5 text-xs rounded-[2px] transition-colors cursor-pointer ${
-                  isActive
-                    ? 'bg-[#1A1815] text-[#FFFFFF]'
-                    : 'text-[#1A1815] hover:bg-[#EFEAE1]'
-                }`}
-              >
-                <Icon
-                  className={`w-4 h-4 shrink-0 ${
-                    isActive ? 'text-[#FFFFFF]' : 'text-[#615A4F]'
-                  }`}
-                />
-                {!collapsed && (
-                  <div className="flex items-center justify-between flex-1 truncate">
-                    <span className="truncate font-sans font-medium text-[12px]">{item.label}</span>
-                    <span className={`text-[9px] font-mono border px-1 rounded-[2px] shrink-0 ${
-                      isActive ? 'border-[#FFFFFF]/30 text-[#D8D1C5]' : 'border-[#D8D1C5] text-[#615A4F] bg-[#FFFFFF]'
-                    }`}>
-                      {item.deptCode}
-                    </span>
-                  </div>
-                )}
-              </button>
-            );
-          })}
+          {deptNavItems.map(item =>
+            renderNavItem(item.tab, item.label, item.icon, undefined, undefined, item.deptCode)
+          )}
         </div>
 
-        {/* ── ADMINISTRATION ── */}
-        <div className="pt-2 border-t border-[#D8D1C5]">
+        {/* ── Governance ── */}
+        <div style={{ paddingTop: 8, borderTop: '1px solid #E8E2D8' }}>
           {!collapsed && (
-            <div className="px-3 pt-1 pb-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#615A4F]">
+            <div style={{ ...SECTION_LABEL_STYLE, marginBottom: 4 }}>
               Governance
             </div>
           )}
-          <button
-            onClick={() => onTabChange('admin')}
-            title={collapsed ? 'Safety Rules & Audit' : undefined}
-            className={`w-full flex items-center gap-2.5 px-3 py-2 my-0.5 text-xs rounded-[2px] transition-colors cursor-pointer ${
-              activeTab === 'admin'
-                ? 'bg-[#1A1815] text-[#FFFFFF]'
-                : 'text-[#1A1815] hover:bg-[#EFEAE1]'
-            }`}
-          >
-            <ShieldCheck
-              className={`w-4 h-4 shrink-0 ${
-                activeTab === 'admin' ? 'text-[#FFFFFF]' : 'text-[#615A4F]'
-              }`}
-            />
-            {!collapsed && (
-              <span className="truncate font-sans font-medium text-[12px]">Safety Rules & Audit</span>
-            )}
-          </button>
+          {renderNavItem('admin', 'Safety & Audit', ShieldCheck)}
         </div>
       </div>
 
-      {/* ── Collapse Toggle ── */}
-      <div className="border-t border-[#D8D1C5] bg-[#F0EBE1] shrink-0">
+      {/* Collapse toggle */}
+      <div style={{ borderTop: '1px solid #D5CEC1', flexShrink: 0 }}>
         <button
           onClick={onToggleCollapse}
-          className="w-full py-2 px-2 text-[#615A4F] hover:text-[#1A1815] hover:bg-[#EAE4D9] text-[10px] font-mono font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer"
+          style={{
+            width: '100%',
+            padding: '9px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: "'Inter', sans-serif",
+            fontSize: '10px', fontWeight: 500,
+            color: '#77736C',
+            letterSpacing: '0.05em',
+            transition: 'background-color 0.12s ease, color 0.12s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#EDE5D8'; e.currentTarget.style.color = '#1D1F1E'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#77736C'; }}
         >
           <ChevronRight
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsed ? '' : 'rotate-180'}`}
+            style={{ width: 14, height: 14, transition: 'transform 0.2s ease', transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)' }}
           />
-          {!collapsed && <span>COLLAPSE</span>}
+          {!collapsed && <span>Collapse</span>}
         </button>
       </div>
     </aside>

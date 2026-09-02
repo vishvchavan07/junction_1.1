@@ -9,7 +9,6 @@ import {
   ChevronDown,
   CheckCircle,
   Database,
-  Train,
   Maximize2,
   Minimize2,
 } from 'lucide-react';
@@ -68,114 +67,207 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="bg-[#FFFFFF]/90 backdrop-blur-md h-12 border-b border-[#1A1815] fixed top-0 right-0 left-0 z-40 flex items-center justify-between px-3 sm:px-6 select-none shadow-sm">
+    <header
+      className="fixed top-0 right-0 left-0 z-40 flex items-center justify-between select-none"
+      style={{
+        height: '48px',
+        backgroundColor: '#F8F5EF',
+        borderBottom: '1px solid #D5CEC1',
+        padding: '0 20px',
+      }}
+    >
+      {/* ── Brand: Space Grotesk JUNCTION + compact mark ── */}
+      <div className="flex items-center gap-3">
+        {/* Junction mark — clean track switch SVG, no box */}
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="3" width="14" height="12" rx="1.5" stroke="#1D1F1E" strokeWidth="1.5" fill="none"/>
+          <line x1="8" y1="7" x2="16" y2="7" stroke="#1D1F1E" strokeWidth="1.1"/>
+          <circle cx="8.5" cy="11" r="1.2" fill="#1D1F1E"/>
+          <circle cx="15.5" cy="11" r="1.2" fill="#1D1F1E"/>
+          <path d="M4 21L8 16M20 21L16 16" stroke="#1D1F1E" strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1="8" y1="16" x2="16" y2="16" stroke="#1D1F1E" strokeWidth="1.4" strokeLinecap="round"/>
+        </svg>
 
-      {/* ── Brand Identity: Integrated Train & Junction Mark ── */}
-      <div className="flex items-center gap-2.5">
-        <div className="w-7 h-7 border border-[#1A1815] bg-[#F7F4EE] flex items-center justify-center shrink-0 rounded-[2px]">
-          {/* Integrated Train & Track Switch SVG */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="5" y="3" width="14" height="13" rx="1.5" stroke="#1A1815" strokeWidth="1.6" fill="none" />
-            <line x1="8" y1="7" x2="16" y2="7" stroke="#1A1815" strokeWidth="1.2" />
-            <circle cx="8.5" cy="11.5" r="1.2" fill="#1A1815" />
-            <circle cx="15.5" cy="11.5" r="1.2" fill="#1A1815" />
-            {/* Lower rails */}
-            <path d="M4 21L8 16M20 21L16 16M10 21H14" stroke="#1A1815" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="font-sans font-extrabold text-[15px] text-[#1A1815] tracking-[0.08em]">
+        <div className="flex items-baseline gap-2.5">
+          {/* JUNCTION — Space Grotesk, brand weight */}
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '16px',
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
+              color: '#1D1F1E',
+              lineHeight: 1,
+            }}
+          >
             JUNCTION
           </span>
-          <span className="hidden sm:inline-block text-[9.5px] bg-[#F0EBE1] border border-[#D8D1C5] text-[#615A4F] px-1.5 py-0.2 rounded-[2px] font-mono font-semibold">
-            IR-ABPS · VR-ST
+          {/* System tag — Inter, very small */}
+          <span
+            className="hidden sm:inline-block"
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '9.5px',
+              fontWeight: 500,
+              letterSpacing: '0.05em',
+              color: '#77736C',
+              textTransform: 'uppercase',
+              padding: '2px 5px',
+              border: '1px solid #D5CEC1',
+              borderRadius: '2px',
+              backgroundColor: 'transparent',
+            }}
+          >
+            IR-ABPS
           </span>
         </div>
       </div>
 
-      {/* ── Center: Corridor Live Telemetry ── */}
-      <div className="hidden lg:flex items-center gap-3">
-        <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#615A4F]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#15803D]"></span>
-          <span>CORRIDOR:</span>
-          <span className="text-[#1A1815] font-semibold">25kV AC (KM 100–160)</span>
+      {/* ── Center: Corridor live telemetry — Inter, restrained ── */}
+      <div className="hidden lg:flex items-center gap-4" style={{ fontSize: '12px', fontFamily: "'Inter', sans-serif", color: '#4B4A46' }}>
+        <div className="flex items-center gap-1.5">
+          <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: '#4D8B68', display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ color: '#77736C' }}>Corridor</span>
+          <span style={{ fontWeight: 500, color: '#1D1F1E' }}>25kV AC · KM 100–160</span>
         </div>
-        <div className="h-3 w-[1px] bg-[#D8D1C5]" />
-        <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#615A4F]">
-          <Database className="w-3 h-3 text-[#615A4F]" />
-          <span>FUSION:</span>
-          <span className="text-[#1A1815] font-semibold">TMS · TDMS · SMMS · COA</span>
+        <span style={{ width: 1, height: 14, backgroundColor: '#D5CEC1', display: 'inline-block' }} />
+        <div className="flex items-center gap-1.5">
+          <Database style={{ width: 12, height: 12, color: '#77736C', flexShrink: 0 }} />
+          <span style={{ color: '#77736C' }}>Fusion</span>
+          <span style={{ fontWeight: 500, color: '#1D1F1E' }}>TMS · TDMS · SMMS · COA</span>
         </div>
       </div>
 
-      {/* ── Right: Emergency Trigger, Clock, Role Switcher & Focus Mode ── */}
-      <div className="flex items-center gap-2">
+      {/* ── Right controls ── */}
+      <div className="flex items-center gap-1.5">
 
-        {/* Hackathon Demo Simulation Trigger */}
+        {/* Demo simulation trigger — primary graphite action */}
         {onTriggerDemo && (
           <button
             onClick={onTriggerDemo}
-            className="px-2.5 py-1 bg-[#1A1815] hover:bg-[#2D2A26] text-[#FFFFFF] text-[10px] font-mono font-bold uppercase rounded-[2px] shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+            className="flex items-center gap-1.5 cursor-pointer"
+            style={{
+              padding: '5px 12px',
+              backgroundColor: '#1D1F1E',
+              color: '#F2EADF',
+              border: '1px solid #1D1F1E',
+              borderRadius: '4px',
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '12px',
+              fontWeight: 500,
+              letterSpacing: '0.01em',
+              transition: 'background-color 0.15s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#242725')}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#1D1F1E')}
             title="Launch 30-Second Automated Hackathon Story"
           >
-            <Activity className="w-3 h-3 text-[#15803D]" />
-            <span className="hidden sm:inline">SIMULATE OPERATION</span>
+            <Activity style={{ width: 12, height: 12, color: '#4D8B68', flexShrink: 0 }} />
+            <span className="hidden sm:inline">Simulate Operation</span>
           </button>
         )}
 
-        {/* Emergency Simulation Trigger */}
+        {/* Emergency toggle — restrained */}
         <button
           onClick={onToggleEmergency}
-          className={`px-2 py-1 text-[10px] font-mono font-semibold flex items-center gap-1.5 rounded-[2px] transition-colors border cursor-pointer ${
-            activeEmergency
-              ? 'bg-[#B91C1C] text-[#FFFFFF] border-[#B91C1C]'
-              : 'bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#B91C1C] border-[#FCA5A5]'
-          }`}
-          title="Toggle Emergency Incident Simulation (Rail Fracture at KM 127/4)"
+          style={{
+            padding: '5px 10px',
+            backgroundColor: activeEmergency ? '#C84B43' : '#F9EEEE',
+            color: activeEmergency ? '#FFFFFF' : '#C84B43',
+            border: `1px solid ${activeEmergency ? '#C84B43' : '#DCA09C'}`,
+            borderRadius: '4px',
+            fontFamily: "'Inter', sans-serif",
+            fontSize: '11px',
+            fontWeight: 500,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
+          title="Toggle Emergency Incident Simulation"
         >
-          <AlertTriangle className="w-3 h-3 shrink-0" />
+          <AlertTriangle style={{ width: 11, height: 11, flexShrink: 0 }} />
           <span className="hidden sm:inline">
-            {activeEmergency ? 'INCIDENT ACTIVE' : 'SIMULATE INCIDENT'}
+            {activeEmergency ? 'Incident Active' : 'Simulate Incident'}
           </span>
         </button>
 
-        {/* Clock */}
-        <div className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 border border-[#D8D1C5] bg-[#F7F4EE] rounded-[2px]">
-          <Clock className="w-3 h-3 text-[#615A4F] shrink-0" />
-          <span className="text-[#1A1815] text-[10.5px] font-mono font-semibold">{timeStr}</span>
+        {/* Clock — minimal */}
+        <div
+          className="hidden xl:flex items-center gap-1.5"
+          style={{
+            padding: '4px 8px',
+            border: '1px solid #D5CEC1',
+            borderRadius: '4px',
+            backgroundColor: 'transparent',
+          }}
+        >
+          <Clock style={{ width: 11, height: 11, color: '#77736C', flexShrink: 0 }} />
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10.5px', fontWeight: 500, color: '#1D1F1E', letterSpacing: '0.01em' }}>
+            {timeStr}
+          </span>
         </div>
 
         {/* Notifications */}
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="w-7 h-7 flex items-center justify-center border border-[#D8D1C5] bg-[#FFFFFF] hover:bg-[#F7F4EE] text-[#1A1815] rounded-[2px] transition-colors cursor-pointer relative"
+            style={{
+              width: 30,
+              height: 30,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid #D5CEC1',
+              borderRadius: '4px',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              position: 'relative',
+              transition: 'background-color 0.12s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0ECE4')}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            <Bell className="w-3.5 h-3.5 text-[#615A4F]" />
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#B91C1C] text-white text-[8.5px] font-mono font-bold flex items-center justify-center rounded-full">
-              3
-            </span>
+            <Bell style={{ width: 14, height: 14, color: '#4B4A46' }} />
+            <span style={{
+              position: 'absolute', top: -4, right: -4,
+              width: 14, height: 14, borderRadius: '50%',
+              backgroundColor: '#C84B43', color: '#FFFFFF',
+              fontSize: '8.5px', fontWeight: 600,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: "'Inter', sans-serif",
+            }}>3</span>
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-[#FFFFFF] border border-[#1A1815] shadow-xl rounded-[2px] p-3 z-50">
-              <div className="flex items-center justify-between border-b border-[#D8D1C5] pb-2 mb-2">
-                <span className="font-mono font-semibold text-[11px] text-[#1A1815] flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-[#B91C1C]" />
-                  OPERATIONAL ALERTS
+            <div
+              className="absolute right-0 mt-2 z-50"
+              style={{
+                width: 300,
+                backgroundColor: '#FBF9F4',
+                border: '1px solid #D5CEC1',
+                borderRadius: '6px',
+                boxShadow: '0px 4px 16px rgba(29,31,30,0.10)',
+                padding: '12px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E8E2D8', paddingBottom: '8px', marginBottom: '8px' }}>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: '12px', color: '#1D1F1E', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Activity style={{ width: 13, height: 13, color: '#C84B43' }} />
+                  Operational Alerts
                 </span>
-                <span className="text-[10px] text-[#B91C1C] font-mono font-semibold">3 CRITICAL</span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#C84B43' }}>3 critical</span>
               </div>
-              <div className="space-y-1.5 max-h-60 overflow-y-auto">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: 220, overflowY: 'auto' }}>
                 {[
-                  { title: 'KM 127/4 Turnout PT-227-II', body: 'TGI dropped to 68.2. OMS Lateral G: 0.28g.', border: '#B91C1C' },
-                  { title: 'OHE Feeder Span 42 Hotspot', body: '+18.4°C thermal delta recorded by SCADA.', border: '#B45309' },
-                  { title: 'Shadow Block Opportunity', body: 'Club Civil Tamping with OHE Jumper at 02:00.', border: '#15803D' },
+                  { title: 'KM 127/4 Turnout PT-227-II', body: 'TGI dropped to 68.2. Lateral G: 0.28g.', color: '#C84B43' },
+                  { title: 'OHE Feeder Span 42 Hotspot', body: '+18.4°C thermal delta recorded by SCADA.', color: '#D49A32' },
+                  { title: 'Shadow Block Opportunity', body: 'Club Civil Tamping with OHE Jumper at 02:00.', color: '#4D8B68' },
                 ].map((n, i) => (
-                  <div key={i} className="p-2 bg-[#F7F4EE] border-l-2 rounded-[1px]" style={{ borderLeftColor: n.border }}>
-                    <div className="text-[#1A1815] font-sans font-semibold text-[11px]">{n.title}</div>
-                    <div className="text-[10px] text-[#615A4F] mt-0.5">{n.body}</div>
+                  <div key={i} style={{ padding: '8px 10px', backgroundColor: '#F0ECE4', borderLeft: `2px solid ${n.color}`, borderRadius: '3px' }}>
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '12px', color: '#1D1F1E' }}>{n.title}</div>
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: '#4B4A46', marginTop: '2px' }}>{n.body}</div>
                   </div>
                 ))}
               </div>
@@ -183,83 +275,139 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
 
-        {/* Role Selector */}
+        {/* Role selector */}
         <div className="relative">
           <button
             onClick={() => setShowRoleMenu(!showRoleMenu)}
-            className="flex items-center gap-1.5 px-2 py-0.5 border border-[#D8D1C5] bg-[#FFFFFF] hover:bg-[#F7F4EE] rounded-[2px] cursor-pointer transition-colors"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '4px 8px',
+              border: '1px solid #D5CEC1',
+              borderRadius: '4px',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              transition: 'background-color 0.12s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0ECE4')}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            <div className="w-5 h-5 bg-[#1A1815] text-[#FFFFFF] flex items-center justify-center font-mono font-bold text-[9.5px] rounded-sm shrink-0">
+            {/* User monogram */}
+            <div style={{
+              width: 22, height: 22,
+              backgroundColor: '#1D1F1E',
+              color: '#F2EADF',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 600, fontSize: '10px',
+              borderRadius: '3px', flexShrink: 0,
+            }}>
               {currentUser.name[0]}
             </div>
             <div className="hidden md:flex flex-col text-left">
-              <span className="text-[10.5px] font-sans font-semibold text-[#1A1815] leading-tight">
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', fontWeight: 500, color: '#1D1F1E', lineHeight: 1.2 }}>
                 {currentUser.name}
               </span>
-              <span className="text-[8.5px] text-[#615A4F] leading-tight font-mono">
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', color: '#77736C', lineHeight: 1.2 }}>
                 {currentUser.roleTitle.split('(')[0].trim()}
               </span>
             </div>
-            <ChevronDown className="w-3 h-3 text-[#615A4F]" />
+            <ChevronDown style={{ width: 12, height: 12, color: '#77736C' }} />
           </button>
 
           {showRoleMenu && (
-            <div className="absolute right-0 mt-2 w-72 bg-[#FFFFFF] border border-[#1A1815] shadow-xl rounded-[2px] p-2 z-50">
-              <div className="px-2 py-1.5 border-b border-[#D8D1C5] mb-1">
-                <span className="block text-[9px] font-mono font-semibold text-[#615A4F] tracking-wider uppercase">
-                  Switch Operational Role
+            <div
+              className="absolute right-0 mt-2 z-50"
+              style={{
+                width: 280,
+                backgroundColor: '#FBF9F4',
+                border: '1px solid #D5CEC1',
+                borderRadius: '6px',
+                boxShadow: '0px 4px 16px rgba(29,31,30,0.10)',
+                padding: '8px',
+              }}
+            >
+              <div style={{ padding: '4px 8px 8px', borderBottom: '1px solid #E8E2D8', marginBottom: '4px' }}>
+                <span style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '2px' }}>
+                  Switch operational role
                 </span>
-                <span className="text-[11px] text-[#1A1815] font-sans font-semibold">
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1D1F1E' }}>
                   6 Railway Stakeholder Portals
                 </span>
               </div>
-              <div className="space-y-0.5">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
                 {roles.map(r => (
                   <button
                     key={r.role}
                     onClick={() => { onRoleChange(r.role); setShowRoleMenu(false); }}
-                    className={`w-full text-left px-2 py-1.5 flex items-center justify-between rounded-[2px] transition-colors cursor-pointer ${
-                      currentRole === r.role
-                        ? 'bg-[#1A1815] text-[#FFFFFF]'
-                        : 'text-[#1A1815] hover:bg-[#F7F4EE]'
-                    }`}
+                    style={{
+                      width: '100%', textAlign: 'left',
+                      padding: '7px 8px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      borderRadius: '4px',
+                      backgroundColor: currentRole === r.role ? '#1D1F1E' : 'transparent',
+                      cursor: 'pointer',
+                      border: 'none',
+                      transition: 'background-color 0.1s ease',
+                    }}
+                    onMouseEnter={e => { if (currentRole !== r.role) e.currentTarget.style.backgroundColor = '#F0ECE4'; }}
+                    onMouseLeave={e => { if (currentRole !== r.role) e.currentTarget.style.backgroundColor = 'transparent'; }}
                   >
                     <div>
-                      <div className="text-[11px] font-sans font-medium">{r.title}</div>
-                      <div className={`text-[9px] font-mono ${currentRole === r.role ? 'text-[#D8D1C5]' : 'text-[#615A4F]'}`}>
+                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 500, color: currentRole === r.role ? '#F2EADF' : '#1D1F1E' }}>
+                        {r.title}
+                      </div>
+                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', color: currentRole === r.role ? '#A8A29E' : '#77736C', marginTop: '1px' }}>
                         {r.dept}
                       </div>
                     </div>
                     {currentRole === r.role && (
-                      <CheckCircle className="w-3 h-3 text-[#4ADE80] shrink-0" />
+                      <CheckCircle style={{ width: 13, height: 13, color: '#4D8B68', flexShrink: 0 }} />
                     )}
                   </button>
                 ))}
               </div>
-              <div className="border-t border-[#D8D1C5] mt-1.5 pt-1.5">
+              <div style={{ borderTop: '1px solid #E8E2D8', marginTop: '6px', paddingTop: '6px' }}>
                 <button
                   onClick={() => { setShowRoleMenu(false); onOpenLogin(); }}
-                  className="w-full text-center py-1 bg-[#F7F4EE] hover:bg-[#EDE7DC] text-[#1A1815] border border-[#D8D1C5] text-[10px] font-mono font-semibold uppercase tracking-wider rounded-[2px] transition-colors cursor-pointer"
+                  style={{
+                    width: '100%', textAlign: 'center',
+                    padding: '6px',
+                    backgroundColor: 'transparent',
+                    border: '1px solid #D5CEC1',
+                    borderRadius: '4px',
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '11px', fontWeight: 500,
+                    color: '#4B4A46',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.12s ease',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EDE5D8')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  Switch User / Re-authenticate
+                  Switch user / re-authenticate
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* Presentation Focus Mode Button */}
+        {/* Presentation mode toggle */}
         {onTogglePresentationMode && (
           <button
             onClick={onTogglePresentationMode}
-            className={`p-1 border rounded-[2px] transition-colors cursor-pointer ${
-              isPresentationMode
-                ? 'bg-[#1A1815] text-[#FFFFFF] border-[#1A1815]'
-                : 'bg-[#FFFFFF] text-[#615A4F] hover:text-[#1A1815] border-[#D8D1C5]'
-            }`}
-            title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Focus Mode'}
+            style={{
+              width: 30, height: 30,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              border: '1px solid #D5CEC1',
+              borderRadius: '4px',
+              backgroundColor: isPresentationMode ? '#1D1F1E' : 'transparent',
+              color: isPresentationMode ? '#F2EADF' : '#4B4A46',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Mode'}
           >
-            {isPresentationMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            {isPresentationMode ? <Minimize2 style={{ width: 13, height: 13 }} /> : <Maximize2 style={{ width: 13, height: 13 }} />}
           </button>
         )}
       </div>

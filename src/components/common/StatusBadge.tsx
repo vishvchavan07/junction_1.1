@@ -23,58 +23,66 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, className = '' }) => {
-  let barColor  = '#15803D';   // restrained signal green
-  let textColor = '#15803D';
-  let bgColor   = '#F0FDF4';
-  let borderColor = '#BBF7D0';
-  let defaultLabel = 'OPR';
+  // Muted industrial railway status palette
+  let barColor    = '#4D8B68';
+  let textColor   = '#4D8B68';
+  let bgColor     = '#EDF5F0';
+  let borderColor = '#96C4AE';
+  let defaultLabel = 'Operational';
 
   switch (status) {
     case 'OPERATIONAL':
-      barColor = '#15803D'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
-      defaultLabel = label || 'OPR'; break;
+      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      defaultLabel = label || 'Operational'; break;
     case 'APPROVED':
     case 'COMPLETED':
-      barColor = '#15803D'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
-      defaultLabel = label || (status === 'COMPLETED' ? 'COMPLETED' : 'APPROVED'); break;
+      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      defaultLabel = label || (status === 'COMPLETED' ? 'Completed' : 'Approved'); break;
     case 'RESOLVED_BY_AI':
-      barColor = '#15803D'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
-      defaultLabel = label || 'AI RESOLVED'; break;
+      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      defaultLabel = label || 'AI Resolved'; break;
     case 'WARNING':
     case 'PENDING':
     case 'REQUESTED':
     case 'MODIFIED':
-      barColor = '#B45309'; textColor = '#B45309'; bgColor = '#FFFBEB'; borderColor = '#FDE68A';
-      defaultLabel = label || (status === 'MODIFIED' ? 'MODIFIED' : status === 'REQUESTED' ? 'REQUESTED' : status === 'PENDING' ? 'PENDING' : 'WARNING'); break;
+      barColor = '#D49A32'; textColor = '#C4891F'; bgColor = '#FBF5E6'; borderColor = '#E0BF7A';
+      defaultLabel = label || (status === 'MODIFIED' ? 'Modified' : status === 'REQUESTED' ? 'Requested' : status === 'PENDING' ? 'Pending' : 'Warning'); break;
     case 'CRITICAL':
     case 'BLOCKED':
-      barColor = '#B91C1C'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
-      defaultLabel = label || (status === 'BLOCKED' ? 'BLOCKED' : 'CRITICAL'); break;
+      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      defaultLabel = label || (status === 'BLOCKED' ? 'Blocked' : 'Critical'); break;
     case 'ACTIVE':
-      barColor = '#B91C1C'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
-      defaultLabel = label || 'ACTIVE'; break;
+      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      defaultLabel = label || 'Active'; break;
     case 'REJECTED':
-      barColor = '#B91C1C'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
-      defaultLabel = label || 'REJECTED'; break;
+      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      defaultLabel = label || 'Rejected'; break;
     case 'AI_RECOMMENDED':
-      barColor = '#1E3A5F'; textColor = '#1E3A5F'; bgColor = '#EFF6FF'; borderColor = '#BFDBFE';
-      defaultLabel = label || 'AI REC'; break;
+      barColor = '#1E3A5F'; textColor = '#1E3A5F'; bgColor = '#EEF2F8'; borderColor = '#B0C4DC';
+      defaultLabel = label || 'AI Rec'; break;
     case 'OVERRIDDEN':
-      barColor = '#785D3F'; textColor = '#785D3F'; bgColor = '#F7F3EE'; borderColor = '#E5DFD5';
-      defaultLabel = label || 'OVERRIDDEN'; break;
+      barColor = '#A9674B'; textColor = '#A9674B'; bgColor = '#F5EDE8'; borderColor = '#C4957E';
+      defaultLabel = label || 'Overridden'; break;
     default:
-      barColor = '#615A4F'; textColor = '#615A4F'; bgColor = '#F0EBE1'; borderColor = '#D8D1C5';
+      barColor = '#77736C'; textColor = '#4B4A46'; bgColor = '#F0ECE4'; borderColor = '#D5CEC1';
       defaultLabel = label || status;
   }
 
   return (
     <div
-      className={`inline-flex items-center px-2 py-0.5 text-[10px] font-mono font-semibold tracking-wider border rounded-[2px] ${className}`}
-      style={{ backgroundColor: bgColor, borderColor: borderColor }}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 border ${className}`}
+      style={{
+        backgroundColor: bgColor,
+        borderColor: borderColor,
+        borderRadius: '3px',
+        fontFamily: "'Inter', sans-serif",
+        fontSize: '10.5px',
+        fontWeight: 500,
+        letterSpacing: '0.02em',
+      }}
     >
       <span
-        className="w-1.5 h-1.5 rounded-full mr-1.5 shrink-0"
-        style={{ backgroundColor: barColor }}
+        style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: barColor, display: 'inline-block', flexShrink: 0 }}
       />
       <span style={{ color: textColor }}>{label || defaultLabel}</span>
     </div>
