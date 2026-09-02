@@ -341,214 +341,286 @@ interface LocoBodyProps {
 const LocoBody: React.FC<LocoBodyProps> = ({
   x, railY, compact, wheelAngle, suspensionOffset, pitchAngle, accelState, speed, isSelected = false,
 }) => {
-  // Locomotive dimensions — full / compact
-  const locoW  = compact ? 96  : 138;     // locomotive width
-  const locoH  = compact ? 22  : 32;      // cab height (not counting roof)
-  const roofH  = compact ? 4   : 5;       // roof sill
-  const skirtH = compact ? 5   : 7;       // underframe skirt
-  const wheelR = compact ? 5.5 : 8;       // bogie wheel radius
-  const bogieH = wheelR * 2 + 10;         // bogie total height
-  const totalH = locoH + roofH + skirtH + bogieH;
+  // ── DIMENSIONS ────────────────────────────────────────────
+  const locoW  = compact ? 110 : 160;   // wider for more mass
+  const locoH  = compact ? 26  : 38;   // taller body
+  const roofSH = compact ? 5   : 7;    // roof sill height
+  const skirtH = compact ? 6   : 9;    // underframe skirt
+  const wheelR = compact ? 6   : 9;    // larger wheels for visibility
+  const bogieH = wheelR * 2 + 12;
 
-  // Reference Y: bottom of bogie = rail top
   const bogieBaseY = railY;
   const skirtBaseY = bogieBaseY - bogieH;
   const bodyBaseY  = skirtBaseY - skirtH;
-  const roofY      = bodyBaseY - locoH - roofH;
+  const roofBaseY  = bodyBaseY - locoH;
+  const roofTopY   = roofBaseY - roofSH;
   const leftX      = x - locoW / 2;
 
-  // Body pitch transform (extremely subtle, ±1.5° max)
+  // Body pitch (extremely subtle)
   const pitch = Math.max(-1.5, Math.min(1.5, pitchAngle));
 
-  // Nose/cab proportions
-  const noseW    = compact ? 18 : 26;     // nose slant width at front
-  const cabW     = compact ? 28 : 40;     // full cab section width
-  const locoRest = locoW - noseW;         // behind-nose body
+  // ── LIVERY PALETTE — Indian Railways WAP-7 inspired ───────
+  // Primary body zones
+  const maroonDark    = '#6B1A1A';  // deep maroon (lower body + cab face)
+  const maroonMain    = '#8B2020';  // main body red/maroon
+  const maroonLight   = '#A02828';  // lighter red zone (upper side)
+  const creamBand     = '#E8D4A0';  // warm cream/yellow stripe
+  const creamDark     = '#C8B870';  // slightly darker yellow-cream (secondary)
+  const charcoalRoof  = '#2E3030';  // dark charcoal roof
+  const charcoalSkirt = '#222424';  // near-black underframe
+  const charcoalMid   = '#3A3C3A';  // mid underframe
+  const windowGlass   = '#1A2530';  // very dark smoked glass
+  const windowFrame   = '#4A3A3A';  // window frame
+  const metalDark     = '#2A2D2B';  // dark steel
+  const metalMid      = '#4B4A46';  // mid steel
+  const stroke        = '#1D1F1E';
 
-  // Color palette — restrained railway graphite with subtle maroon cab
-  const bodyFill     = '#F8F5EF';   // warm parchment body
-  const bodyStroke   = '#1D1F1E';
-  const cabFill      = '#2A2D2B';   // dark graphite cab nose
-  const roofFill     = '#3C3E3C';   // slightly darker roof
-  const skirtFill    = '#4B4A46';   // dark underframe skirt
-  const windowFill   = '#D9E8EE';   // pale glass blue-grey
-  const accentStripe = '#8B1A1A';   // maroon accent stripe (very restrained)
-  const grilleFill   = '#3C3E3C';
+  // ── BODY ZONE HEIGHTS ─────────────────────────────────────
+  // Divide body into 3 horizontal zones:
+  // Zone A (top): locoH * 0-0.30 → lighter maroon, carries cream band
+  // Zone B (mid): locoH * 0.30-0.72 → main maroon with windows
+  // Zone C (bot): locoH * 0.72-1.0 → dark maroon lower body
+  const zA_h = locoH * 0.28;
+  const zB_h = locoH * 0.44;
+  const zC_h = locoH * 0.28;
+  const zA_y = bodyBaseY;
+  const zB_y = bodyBaseY + zA_h;
+  const zC_y = bodyBaseY + zA_h + zB_h;
 
-  // Bogie positions (2 bogies under loco)
-  const bogie1X = leftX + locoW * 0.22;
-  const bogie2X = leftX + locoW * 0.78;
+  // WAP-7 style front: nearly vertical with slight taper
+  // Front cab section occupies the first 30% of locomotive length
+  const cabW   = compact ? 32  : 46;   // cab section
+  const bodyW  = locoW - cabW;         // equipment/hood section
 
-  // Pantograph position
-  const pantoX = leftX + locoW * 0.55;
-  const pantoBaseY = roofY;
-  const oheWireY = roofY - (compact ? 26 : 40);
+  // Bogie positions
+  const bogie1X = leftX + locoW * 0.2;
+  const bogie2X = leftX + locoW * 0.8;
 
-  // Headlight state
+  // Pantograph position (over equipment hood)
+  const pantoX    = leftX + cabW + bodyW * 0.45;
+  const pantoBaseY = roofTopY;
+  const oheWireY  = roofTopY - (compact ? 26 : 42);
+
   const isMoving = accelState !== 'STOPPED';
-  const headlightOpacity = isMoving ? 0.85 : 0.45;
 
   return (
-    <g transform={`rotate(${pitch}, ${x}, ${railY - bogieH - locoH / 2})`}>
+    <g transform={`rotate(${pitch}, ${x}, ${bogieBaseY - bogieH / 2})`}>
+
       {/* ── BOGIES ── */}
-      <BogieFrame
-        x={bogie1X} y={bogieBaseY}
-        wheelR={wheelR} wheelAngle={wheelAngle}
-        wheelCount={4} compact={compact}
-      />
-      <BogieFrame
-        x={bogie2X} y={bogieBaseY}
-        wheelR={wheelR} wheelAngle={wheelAngle}
-        wheelCount={4} compact={compact}
-      />
+      <BogieFrame x={bogie1X} y={bogieBaseY} wheelR={wheelR} wheelAngle={wheelAngle} wheelCount={4} compact={compact} />
+      <BogieFrame x={bogie2X} y={bogieBaseY} wheelR={wheelR} wheelAngle={wheelAngle} wheelCount={4} compact={compact} />
 
-      {/* ── UNDERFRAME / DRAWBAR ── */}
-      <rect
-        x={leftX + 4} y={skirtBaseY}
-        width={locoW - 8} height={skirtH}
-        fill={skirtFill} stroke={bodyStroke} strokeWidth="0.8" rx="1"
-      />
-      {/* Bogie pivot bolsters */}
-      <rect x={bogie1X - 5} y={skirtBaseY - 2} width={10} height={5} fill="#3C3E3C" stroke={bodyStroke} strokeWidth="0.6" />
-      <rect x={bogie2X - 5} y={skirtBaseY - 2} width={10} height={5} fill="#3C3E3C" stroke={bodyStroke} strokeWidth="0.6" />
-      {/* Coupler / draw gear at front */}
-      <rect x={leftX + locoW - 2} y={skirtBaseY + 1} width={compact ? 6 : 8} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.8" />
-      <rect x={leftX - (compact ? 5 : 7)} y={skirtBaseY + 1} width={compact ? 5 : 7} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.8" />
+      {/* ── UNDERFRAME / SOLEBARS ── */}
+      {/* Main solebars */}
+      <rect x={leftX} y={skirtBaseY} width={locoW} height={skirtH} fill={charcoalSkirt} stroke={stroke} strokeWidth="0.9" />
+      {/* Bogie pivot pins */}
+      <rect x={bogie1X - 6} y={skirtBaseY - 3} width={12} height={4} fill={charcoalMid} stroke={stroke} strokeWidth="0.7" />
+      <rect x={bogie2X - 6} y={skirtBaseY - 3} width={12} height={4} fill={charcoalMid} stroke={stroke} strokeWidth="0.7" />
+      {/* Brake cylinder / air pipe underframe details */}
+      <rect x={leftX + locoW * 0.35} y={skirtBaseY + 2} width={locoW * 0.3} height={skirtH - 3} fill={charcoalMid} stroke={stroke} strokeWidth="0.5" rx="0.5" />
+      {/* Coupler at front */}
+      <rect x={leftX - (compact ? 7 : 10)} y={skirtBaseY + 2} width={compact ? 8 : 11} height={compact ? 4 : 5} fill={metalDark} stroke={stroke} strokeWidth="0.9" />
+      {/* Buffer beams */}
+      <rect x={leftX - (compact ? 5 : 7)} y={skirtBaseY} width={compact ? 5 : 6} height={compact ? 2 : 3} fill={metalMid} stroke={stroke} strokeWidth="0.6" />
 
-      {/* ── MAIN BODY ── */}
-      {/* Body shell — full-length rect with rounded ends */}
-      <rect
-        x={leftX + noseW} y={bodyBaseY}
-        width={locoRest - 2} height={locoH}
-        fill={bodyFill} stroke={bodyStroke} strokeWidth="1.5" rx="1"
-      />
+      {/* ── MAIN BODY — EQUIPMENT HOOD (rear 70%) ── */}
+      {/* Lower dark zone */}
+      <rect x={leftX + cabW} y={zC_y} width={bodyW} height={zC_h} fill={maroonDark} stroke={stroke} strokeWidth="0.8" />
+      {/* Main zone */}
+      <rect x={leftX + cabW} y={zB_y} width={bodyW} height={zB_h} fill={maroonMain} stroke={stroke} strokeWidth="0.8" />
+      {/* Upper zone */}
+      <rect x={leftX + cabW} y={zA_y} width={bodyW} height={zA_h} fill={maroonLight} stroke={stroke} strokeWidth="0.8" />
 
-      {/* ── NOSE / FRONT CAB ── */}
-      {/* Swept nose — polygon for slanted front */}
+      {/* LIVERY BAND 1 — Cream/yellow band at waist (between zone A and B) */}
+      <rect x={leftX + cabW} y={zB_y - (compact ? 2.5 : 3.5)} width={bodyW} height={compact ? 2.5 : 3.5}
+        fill={creamBand} stroke="none" />
+      {/* LIVERY BAND 2 — Cream/yellow band at lower waist (between zone B and C) */}
+      <rect x={leftX + cabW} y={zC_y - (compact ? 1.5 : 2)} width={bodyW} height={compact ? 1.5 : 2}
+        fill={creamDark} stroke="none" />
+
+      {/* Hood top outline */}
+      <rect x={leftX + cabW} y={zA_y} width={bodyW} height={locoH} fill="none" stroke={stroke} strokeWidth="1.2" />
+
+      {/* ── HOOD SIDE DETAILS — Ventilation / access panels ── */}
+      {/* Main ventilation grille section on equipment hood */}
+      {!compact && (
+        <>
+          {/* Large vent grille — center-rear of hood */}
+          <rect x={leftX + cabW + bodyW * 0.15} y={zB_y + 2} width={bodyW * 0.35} height={zB_h - 4}
+            fill={charcoalMid} stroke={stroke} strokeWidth="0.8" rx="1" />
+          {Array.from({ length: 8 }, (_, i) => (
+            <line key={i}
+              x1={leftX + cabW + bodyW * 0.15 + 3 + i * (bodyW * 0.35 - 6) / 8}
+              y1={zB_y + 4}
+              x2={leftX + cabW + bodyW * 0.15 + 3 + i * (bodyW * 0.35 - 6) / 8}
+              y2={zB_y + zB_h - 3}
+              stroke="#77736C" strokeWidth="0.7" opacity="0.6"
+            />
+          ))}
+          {/* Access door / side panel */}
+          <rect x={leftX + cabW + bodyW * 0.55} y={zB_y + 3} width={bodyW * 0.18} height={zB_h - 5}
+            fill={maroonMain} stroke={metalMid} strokeWidth="0.7" rx="0.5" />
+          <circle cx={leftX + cabW + bodyW * 0.64} cy={zB_y + zB_h / 2} r="1.5" fill={metalMid} />
+          {/* Rear equipment box */}
+          <rect x={leftX + cabW + bodyW * 0.76} y={zA_y + 2} width={bodyW * 0.2} height={locoH - 4}
+            fill={maroonDark} stroke={stroke} strokeWidth="0.7" rx="0.5" />
+        </>
+      )}
+      {compact && (
+        <>
+          <rect x={leftX + cabW + 4} y={zB_y + 2} width={bodyW * 0.4} height={zB_h - 4}
+            fill={charcoalMid} stroke={stroke} strokeWidth="0.7" rx="0.5" />
+          {Array.from({ length: 4 }, (_, i) => (
+            <line key={i}
+              x1={leftX + cabW + 7 + i * (bodyW * 0.4 - 6) / 4}
+              y1={zB_y + 4}
+              x2={leftX + cabW + 7 + i * (bodyW * 0.4 - 6) / 4}
+              y2={zB_y + zB_h - 3}
+              stroke="#77736C" strokeWidth="0.8"
+            />
+          ))}
+        </>
+      )}
+
+      {/* ── CAB SECTION (front ~30%) ── */}
+      {/* Lower dark cab zone */}
+      <rect x={leftX} y={zC_y} width={cabW} height={zC_h} fill={maroonDark} stroke={stroke} strokeWidth="1.2" />
+      {/* Main cab body */}
+      <rect x={leftX} y={zB_y} width={cabW} height={zB_h} fill={maroonMain} stroke={stroke} strokeWidth="1.2" />
+      {/* Upper cab zone */}
+      <rect x={leftX} y={zA_y} width={cabW} height={zA_h} fill={maroonLight} stroke={stroke} strokeWidth="1.2" />
+      {/* Cab livery bands (continue from hood) */}
+      <rect x={leftX} y={zB_y - (compact ? 2.5 : 3.5)} width={cabW} height={compact ? 2.5 : 3.5} fill={creamBand} />
+      <rect x={leftX} y={zC_y - (compact ? 1.5 : 2)}   width={cabW} height={compact ? 1.5 : 2} fill={creamDark} />
+
+      {/* Cab front face — slightly angled top corner (WAP-7 style) */}
+      {/* Main front face */}
       <polygon
         points={`
-          ${leftX + noseW},${bodyBaseY}
-          ${leftX + noseW},${bodyBaseY + locoH}
-          ${leftX + 4},${bodyBaseY + locoH - 4}
-          ${leftX},${bodyBaseY + locoH - 8}
-          ${leftX},${bodyBaseY + 6}
-          ${leftX + 6},${bodyBaseY + 2}
+          ${leftX},${bodyBaseY + 3}
+          ${leftX - (compact ? 3 : 5)},${bodyBaseY + locoH * 0.35}
+          ${leftX - (compact ? 3 : 5)},${bodyBaseY + locoH - 2}
+          ${leftX},${bodyBaseY + locoH}
         `}
-        fill={cabFill} stroke={bodyStroke} strokeWidth="1.5"
+        fill={maroonDark} stroke={stroke} strokeWidth="1.3"
       />
-      {/* Cab nose grille / coupler cover */}
-      <rect
-        x={leftX + 2} y={bodyBaseY + locoH * 0.55}
-        width={noseW - 4} height={locoH * 0.38}
-        fill={grilleFill} stroke={bodyStroke} strokeWidth="0.8" rx="0.5"
-      />
-      {/* Grille bars */}
-      {Array.from({ length: compact ? 3 : 5 }, (_, i) => {
-        const gx = leftX + 4 + i * (compact ? 4 : 3.5);
-        return (
-          <line key={i}
-            x1={gx} y1={bodyBaseY + locoH * 0.57}
-            x2={gx} y2={bodyBaseY + locoH * 0.91}
-            stroke="#6B6766" strokeWidth="0.7"
-          />
-        );
-      })}
+      {/* Front face main rectangle (vertical face of cab) */}
+      <rect x={leftX - (compact ? 0 : 0)} y={bodyBaseY} width={compact ? 3 : 4} height={locoH}
+        fill={maroonDark} stroke={stroke} strokeWidth="0.8" />
 
-      {/* ── FRONT WINDOWS / CAB GLAZING ── */}
-      {/* Left windshield (angled) */}
+      {/* ── FRONT FACE / NOSE — WAP-7 distinctive features ── */}
+      {/* Cab front panel (the actual visible face) - leftX is the cab front edge */}
+      {/* Top angled visor */}
       <polygon
         points={`
-          ${leftX + 5},${bodyBaseY + 4}
-          ${leftX + noseW - 2},${bodyBaseY + 2}
-          ${leftX + noseW - 2},${bodyBaseY + locoH * 0.48}
-          ${leftX + 5},${bodyBaseY + locoH * 0.52}
+          ${leftX + (compact ? 3 : 5)},${zA_y}
+          ${leftX - (compact ? 3 : 4)},${zA_y + (compact ? 5 : 7)}
+          ${leftX - (compact ? 3 : 4)},${zA_y + (compact ? 3 : 4)}
+          ${leftX + (compact ? 3 : 5)},${zA_y - (compact ? 1 : 2)}
         `}
-        fill={windowFill} stroke={bodyStroke} strokeWidth="0.9" opacity="0.8"
-      />
-      {/* Small number plate area */}
-      <rect
-        x={leftX + 2} y={bodyBaseY + 2}
-        width={compact ? 10 : 14} height={compact ? 5 : 6}
-        fill="#1D1F1E" stroke={bodyStroke} strokeWidth="0.6" rx="0.5"
+        fill={charcoalRoof} stroke={stroke} strokeWidth="0.8"
       />
 
-      {/* ── HEADLIGHT / MARKER LIGHT ── */}
-      {/* Main headlight cluster */}
-      <ellipse
-        cx={leftX + 4} cy={bodyBaseY + locoH * 0.35}
-        rx={compact ? 4 : 5.5} ry={compact ? 2.8 : 3.8}
-        fill="#F8F5EF" stroke={bodyStroke} strokeWidth="0.9"
-        opacity={headlightOpacity}
+      {/* ── DUAL FRONT WINDOWS — Most visible feature of WAP-7 ── */}
+      {/* Left windshield (full height glazing, large) */}
+      <rect
+        x={leftX + (compact ? 4 : 5)} y={bodyBaseY + (compact ? 2 : 3)}
+        width={compact ? 12 : 18} height={compact ? locoH * 0.45 : locoH * 0.5}
+        fill={windowGlass} stroke={windowFrame} strokeWidth="1.2" rx="0.5"
       />
-      {/* Headlight glow (subtle, not neon) */}
+      {/* Windshield wiper line */}
+      <line
+        x1={leftX + (compact ? 5 : 6)} y1={bodyBaseY + (compact ? 3 : 4)}
+        x2={leftX + (compact ? 14 : 21)} y2={bodyBaseY + (compact ? locoH * 0.38 : locoH * 0.45)}
+        stroke={metalMid} strokeWidth="0.7" opacity="0.5"
+      />
+
+      {/* ── HEADLIGHT / LAMP CLUSTER — lower front ── */}
+      {/* Main rectangular headlight housing */}
+      <rect
+        x={leftX + (compact ? 2 : 3)} y={bodyBaseY + locoH * 0.58}
+        width={compact ? 16 : 22} height={compact ? locoH * 0.32 : locoH * 0.3}
+        fill={charcoalMid} stroke={stroke} strokeWidth="0.8" rx="0.5"
+      />
+      {/* Circular headlamp */}
+      <circle
+        cx={leftX + (compact ? 10 : 14)} cy={bodyBaseY + locoH * 0.73}
+        r={compact ? 5 : 7}
+        fill="#E8D870" stroke={stroke} strokeWidth="0.9"
+        opacity={isMoving ? 0.9 : 0.6}
+      />
+      {/* Headlight inner filament glow */}
+      <circle
+        cx={leftX + (compact ? 10 : 14)} cy={bodyBaseY + locoH * 0.73}
+        r={compact ? 3 : 4.5}
+        fill="#F5EFA0"
+        opacity={isMoving ? 0.95 : 0.5}
+      />
+      {/* Headlight glow (extremely subtle) */}
       {isMoving && (
-        <ellipse
-          cx={leftX + 4} cy={bodyBaseY + locoH * 0.35}
-          rx={compact ? 7 : 9} ry={compact ? 4.5 : 6}
-          fill="#F5F0D8" opacity="0.18"
+        <circle
+          cx={leftX + (compact ? 10 : 14)} cy={bodyBaseY + locoH * 0.73}
+          r={compact ? 9 : 12}
+          fill="#F5EFA0" opacity="0.08"
         />
       )}
-      {/* Marker lights (top & bottom) */}
-      <circle cx={leftX + 5} cy={bodyBaseY + 6} r={compact ? 1.5 : 2} fill="#E8E2C8" opacity="0.7" />
-      <circle cx={leftX + 5} cy={bodyBaseY + locoH - 8} r={compact ? 1.5 : 2} fill="#E8E2C8" opacity="0.7" />
+      {/* Classification lamps */}
+      <circle cx={leftX + (compact ? 4 : 5)} cy={bodyBaseY + locoH * 0.63} r={compact ? 1.8 : 2.5} fill="#E8D870" stroke={stroke} strokeWidth="0.6" opacity="0.85" />
+      <circle cx={leftX + (compact ? 4 : 5)} cy={bodyBaseY + locoH * 0.85} r={compact ? 1.8 : 2.5} fill="#C84B43" stroke={stroke} strokeWidth="0.6" opacity="0.8" />
 
-      {/* ── SIDE BODY DETAILS ── */}
-      {/* Maroon waist-level accent stripe */}
+      {/* ── FRONT HANDRAILS ── */}
+      {!compact && (
+        <>
+          <line x1={leftX + 8} y1={bodyBaseY + 3} x2={leftX + 8} y2={bodyBaseY + locoH - 6} stroke={metalMid} strokeWidth="0.8" />
+          <circle cx={leftX + 8} cy={bodyBaseY + 4} r="1.2" fill={metalMid} />
+          <circle cx={leftX + 8} cy={bodyBaseY + locoH - 7} r="1.2" fill={metalMid} />
+        </>
+      )}
+
+      {/* ── NUMBER BOARD ── */}
       <rect
-        x={leftX + noseW} y={bodyBaseY + locoH * 0.52}
-        width={locoRest - 2} height={compact ? 2 : 3}
-        fill={accentStripe} stroke="none" opacity="0.75"
-      />
-      {/* Body side windows */}
-      {Array.from({ length: compact ? 3 : 5 }, (_, i) => {
-        const wSpacing = (locoRest - noseW - 16) / (compact ? 3 : 5);
-        const wx = leftX + noseW + 8 + i * wSpacing;
-        const ww = compact ? 9  : 13;
-        const wh = compact ? 6  : 9;
-        const wy = bodyBaseY + 3;
-        return (
-          <rect key={i}
-            x={wx} y={wy} width={ww} height={wh}
-            fill={windowFill} stroke={bodyStroke} strokeWidth="0.8" rx="0.5"
-            opacity="0.9"
-          />
-        );
-      })}
-      {/* Equipment louvres (ventilation grilles on body side) */}
-      {Array.from({ length: compact ? 2 : 4 }, (_, i) => {
-        const lx = leftX + noseW + 6 + i * (compact ? 24 : 20);
-        return (
-          <g key={i}>
-            {Array.from({ length: compact ? 2 : 4 }, (_, j) => (
-              <line key={j}
-                x1={lx + j * 3.5} y1={bodyBaseY + locoH * 0.6}
-                x2={lx + j * 3.5} y2={bodyBaseY + locoH * 0.88}
-                stroke="#77736C" strokeWidth="0.8" opacity="0.6"
-              />
-            ))}
-          </g>
-        );
-      })}
-      {/* Equipment box / loco number panel */}
-      <rect
-        x={leftX + noseW + (compact ? 4 : 6)} y={bodyBaseY + locoH * 0.68}
-        width={compact ? 22 : 32} height={compact ? 7 : 10}
-        fill="#FBF9F4" stroke="#4B4A46" strokeWidth="0.7" rx="0.5"
+        x={leftX + (compact ? 16 : 22)} y={bodyBaseY + locoH * 0.6}
+        width={compact ? 14 : 20} height={compact ? 8 : 11}
+        fill="#E8D4A0" stroke={maroonDark} strokeWidth="0.9" rx="0.5"
       />
 
-      {/* ── ROOF ── */}
+      {/* ── ROOF SILL ── */}
       <rect
-        x={leftX + noseW - 2} y={roofY}
-        width={locoRest} height={roofH}
-        fill={roofFill} stroke={bodyStroke} strokeWidth="1.2" rx="0.5"
+        x={leftX} y={roofBaseY}
+        width={locoW} height={roofSH}
+        fill={charcoalRoof} stroke={stroke} strokeWidth="1.1"
       />
+      {/* Roof walkway handrail line */}
+      <line x1={leftX + cabW + 4} y1={roofBaseY + 2} x2={leftX + locoW - 4} y2={roofBaseY + 2}
+        stroke={metalMid} strokeWidth="0.8" opacity="0.7" />
+
+      {/* ── ROOF EQUIPMENT (on hood section) ── */}
+      {/* Air blast circuit breaker (ABCB) box */}
+      <rect
+        x={leftX + cabW + (compact ? 4 : 8)} y={roofTopY - (compact ? 4 : 6)}
+        width={compact ? 10 : 14} height={compact ? 5 : 7}
+        fill={charcoalMid} stroke={stroke} strokeWidth="0.7" rx="0.5"
+      />
+      {/* Second roof equipment box */}
+      {!compact && (
+        <rect
+          x={leftX + cabW + bodyW * 0.6} y={roofTopY - 5}
+          width={12} height={6}
+          fill={charcoalMid} stroke={stroke} strokeWidth="0.7" rx="0.5"
+        />
+      )}
       {/* Roof insulators */}
-      {[0.2, 0.45, 0.7].map((rx, i) => (
+      {[0.25, 0.45, 0.65, 0.82].map((rx, i) => (
         <g key={i}>
           <rect
-            x={leftX + noseW + locoRest * rx - 1.5} y={roofY - (compact ? 4 : 5)}
-            width={3} height={compact ? 4 : 5}
-            fill="#D5CEC1" stroke={bodyStroke} strokeWidth="0.6"
+            x={leftX + cabW + bodyW * rx - 2} y={roofTopY - (compact ? 6 : 8)}
+            width={4} height={compact ? 6 : 8}
+            fill="#D9CCBC" stroke={stroke} strokeWidth="0.6" rx="0.5"
+          />
+          <rect
+            x={leftX + cabW + bodyW * rx - 3} y={roofTopY - (compact ? 9 : 12)}
+            width={6} height={compact ? 3 : 4}
+            fill="#C5B89A" stroke={stroke} strokeWidth="0.5"
           />
         </g>
       ))}
@@ -556,8 +628,8 @@ const LocoBody: React.FC<LocoBodyProps> = ({
       {/* ── PANTOGRAPH ── */}
       <Pantograph
         x={pantoX}
-        baseY={pantoBaseY}
-        height={compact ? 22 : 36}
+        baseY={roofTopY}
+        height={compact ? 24 : 40}
         wireY={oheWireY}
         extended={true}
       />
@@ -565,18 +637,20 @@ const LocoBody: React.FC<LocoBodyProps> = ({
       {/* ── SELECTION HIGHLIGHT ── */}
       {isSelected && (
         <rect
-          x={leftX - 2} y={roofY - 2}
-          width={locoW + 4} height={bogieBaseY - roofY + bogieH + 4}
+          x={leftX - 3} y={roofTopY - 4}
+          width={locoW + 6} height={bogieBaseY - roofTopY + bogieH + 8}
           fill="none"
           stroke="#A9674B"
           strokeWidth="1.5"
-          strokeDasharray="5 3"
+          strokeDasharray="6 3"
           rx="2"
         />
       )}
     </g>
   );
 };
+
+
 
 // ─────────────────────────────────────────────────────────
 // COACH RENDERER — Simplified but proportional IR Coach
@@ -591,12 +665,12 @@ interface CoachProps {
 }
 
 const Coach: React.FC<CoachProps> = ({ x, railY, compact, wheelAngle, suspensionOffset, index }) => {
-  const coachW  = compact ? 76  : 110;
-  const coachH  = compact ? 18  : 26;
-  const roofH   = compact ? 3   : 4;
-  const skirtH  = compact ? 4   : 6;
-  const wheelR  = compact ? 4.5 : 6.5;
-  const bogieH  = wheelR * 2 + 8;
+  const coachW  = compact ? 82  : 118;  // slightly wider for mass
+  const coachH  = compact ? 20  : 29;
+  const roofH   = compact ? 3   : 5;
+  const skirtH  = compact ? 5   : 7;
+  const wheelR  = compact ? 5   : 7.5;
+  const bogieH  = wheelR * 2 + 10;
 
   const bogieBaseY = railY;
   const skirtBaseY = bogieBaseY - bogieH;
@@ -604,18 +678,26 @@ const Coach: React.FC<CoachProps> = ({ x, railY, compact, wheelAngle, suspension
   const roofY      = bodyBaseY - coachH - roofH;
   const leftX      = x - coachW / 2;
 
-  // Alternating slight suspension offset
-  const sus = suspensionOffset * (index % 2 === 0 ? 1 : -0.6);
+  const sus = suspensionOffset * (index % 2 === 0 ? 0.8 : -0.5);
 
-  const bodyFill   = '#F5F0E8';
-  const bodyStroke = '#1D1F1E';
-  const windowFill = '#D9E8EE';
-  const roofFill   = '#3C3E3C';
-  const skirtFill  = '#4B4A46';
-  const stripe     = '#8B1A1A';
+  // ── IR Coach Livery: cream upper, maroon lower (classic IR ICF/LHB scheme)
+  const stroke      = '#1D1F1E';
+  const creamUpper  = '#E8D9A8';  // warm cream — upper coach body
+  const maroonLower = '#7A1F1F';  // deep maroon — lower coach body
+  const maroonMid   = '#8B2020';  // mid maroon
+  const windowGlass = '#1A2530';  // dark smoked glass
+  const roofColor   = '#2E3030';  // charcoal roof
+  const skirtColor  = '#1E2020';  // near-black underframe
+  const metalMid    = '#4B4A46';
 
-  const bogie1X = leftX + coachW * 0.2;
-  const bogie2X = leftX + coachW * 0.8;
+  // Divide coach body: upper 45% cream, lower 55% maroon
+  const upperH = coachH * 0.42;
+  const lowerH = coachH - upperH;
+  const upperY = bodyBaseY;
+  const lowerY = bodyBaseY + upperH;
+
+  const bogie1X = leftX + coachW * 0.19;
+  const bogie2X = leftX + coachW * 0.81;
 
   return (
     <g transform={`translate(0, ${sus})`}>
@@ -624,38 +706,51 @@ const Coach: React.FC<CoachProps> = ({ x, railY, compact, wheelAngle, suspension
       <BogieFrame x={bogie2X} y={bogieBaseY} wheelR={wheelR} wheelAngle={wheelAngle} wheelCount={4} compact={compact} />
 
       {/* Underframe */}
-      <rect x={leftX + 3} y={skirtBaseY} width={coachW - 6} height={skirtH} fill={skirtFill} stroke={bodyStroke} strokeWidth="0.7" />
+      <rect x={leftX} y={skirtBaseY} width={coachW} height={skirtH} fill={skirtColor} stroke={stroke} strokeWidth="0.8" />
+      {/* Sole bar detail */}
+      <rect x={leftX + 4} y={skirtBaseY + 2} width={coachW - 8} height={skirtH - 3} fill="#2A2C2A" stroke={stroke} strokeWidth="0.4" />
       {/* Couplers */}
-      <rect x={leftX - (compact ? 3 : 5)} y={skirtBaseY + 1} width={compact ? 4 : 6} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.7" />
-      <rect x={leftX + coachW} y={skirtBaseY + 1} width={compact ? 3 : 5} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.7" />
+      <rect x={leftX - (compact ? 4 : 6)} y={skirtBaseY + 2} width={compact ? 5 : 7} height={compact ? 3 : 5} fill={metalMid} stroke={stroke} strokeWidth="0.8" />
+      <rect x={leftX + coachW} y={skirtBaseY + 2} width={compact ? 4 : 6} height={compact ? 3 : 5} fill={metalMid} stroke={stroke} strokeWidth="0.8" />
 
-      {/* Coach body */}
-      <rect x={leftX} y={bodyBaseY} width={coachW} height={coachH} fill={bodyFill} stroke={bodyStroke} strokeWidth="1.2" rx="0.5" />
+      {/* ── COACH BODY: 2-zone livery ── */}
+      {/* Lower maroon zone */}
+      <rect x={leftX} y={lowerY} width={coachW} height={lowerH} fill={maroonLower} stroke={stroke} strokeWidth="1.1" />
+      {/* Upper cream zone */}
+      <rect x={leftX} y={upperY} width={coachW} height={upperH} fill={creamUpper} stroke={stroke} strokeWidth="1.1" />
 
-      {/* Maroon accent stripe */}
-      <rect x={leftX} y={bodyBaseY + coachH * 0.5} width={coachW} height={compact ? 2 : 3} fill={stripe} opacity="0.7" />
+      {/* Horizontal body outline (full coach) */}
+      <rect x={leftX} y={bodyBaseY} width={coachW} height={coachH} fill="none" stroke={stroke} strokeWidth="1.1" />
 
-      {/* Windows — regular rhythm */}
+      {/* Dividing stripe between cream and maroon */}
+      <rect x={leftX} y={lowerY - (compact ? 1 : 1.5)} width={coachW} height={compact ? 1 : 1.5} fill="#C8A840" />
+
+      {/* ── WINDOWS in cream zone ── */}
       {Array.from({ length: compact ? 5 : 8 }, (_, i) => {
-        const wSpacing = coachW / (compact ? 5 : 8);
-        const wx = leftX + wSpacing * i + wSpacing * 0.12;
-        const ww = wSpacing * 0.65;
-        const wh = compact ? 6 : 9;
+        const wCount = compact ? 5 : 8;
+        const wSpacing = (coachW - 8) / wCount;
+        const wx = leftX + 4 + i * wSpacing + wSpacing * 0.08;
+        const ww = wSpacing * 0.72;
+        const wh = compact ? upperH * 0.62 : upperH * 0.65;
+        const wy = upperY + upperH * 0.2;
         return (
           <rect key={i}
-            x={wx} y={bodyBaseY + 3}
-            width={ww} height={wh}
-            fill={windowFill} stroke={bodyStroke} strokeWidth="0.7" rx="0.5" opacity="0.85"
+            x={wx} y={wy} width={ww} height={wh}
+            fill={windowGlass} stroke={stroke} strokeWidth="0.7" rx="0.5"
           />
         );
       })}
 
-      {/* Door panels */}
-      <rect x={leftX + coachW * 0.1 - 3} y={bodyBaseY + 1} width={compact ? 5 : 7} height={coachH - 2} fill={bodyFill} stroke={bodyStroke} strokeWidth="0.9" />
-      <rect x={leftX + coachW * 0.9 - 2} y={bodyBaseY + 1} width={compact ? 5 : 7} height={coachH - 2} fill={bodyFill} stroke={bodyStroke} strokeWidth="0.9" />
+      {/* Door openings — in maroon zone */}
+      <rect x={leftX + (compact ? 5 : 8)} y={lowerY + (compact ? 2 : 3)}
+        width={compact ? 7 : 10} height={lowerH - (compact ? 3 : 5)}
+        fill={maroonMid} stroke={stroke} strokeWidth="0.8" rx="0.5" />
+      <rect x={leftX + coachW - (compact ? 12 : 18)} y={lowerY + (compact ? 2 : 3)}
+        width={compact ? 7 : 10} height={lowerH - (compact ? 3 : 5)}
+        fill={maroonMid} stroke={stroke} strokeWidth="0.8" rx="0.5" />
 
-      {/* Roof */}
-      <rect x={leftX} y={roofY} width={coachW} height={roofH} fill={roofFill} stroke={bodyStroke} strokeWidth="0.9" rx="0.3" />
+      {/* ── ROOF ── */}
+      <rect x={leftX} y={roofY} width={coachW} height={roofH} fill={roofColor} stroke={stroke} strokeWidth="0.9" />
     </g>
   );
 };
