@@ -4,7 +4,6 @@ import {
   Play,
   Pause,
   RotateCcw,
-  ShieldAlert,
   CheckCircle2,
   Wrench,
   Zap,
@@ -73,6 +72,7 @@ export interface LiveTrainPhysics {
   accelState: 'ACCELERATING' | 'CRUISING' | 'BRAKING' | 'STOPPED';
   wheelAngle: number;
   suspensionOffset: number;
+  pitchAngle: number;           // body pitch during accel/brake
   assignedTrack: 'UP' | 'DN' | 'LOOP_1' | 'LOOP_2';
   nextSignalAspect: 'GREEN' | 'YELLOW' | 'RED';
   nextSignalDistanceKm: number;
@@ -92,104 +92,54 @@ export interface DemoStepInfo {
 
 export const DEMO_STORY_STEPS: DemoStepInfo[] = [
   {
-    id: 0,
-    phaseName: 'NORMAL OPERATION',
-    shortTitle: 'Normal Line Speed',
+    id: 0, phaseName: 'NORMAL OPERATION', shortTitle: 'Normal Line Speed',
     narrative: 'Corridor operating under full line speed (130 km/h). Signals GREEN, automatic headway clearance normal.',
-    cameraPreset: 'WIDE',
-    signalAspect: 'GREEN',
-    activeDept: null,
-    durationMs: 3500,
+    cameraPreset: 'WIDE', signalAspect: 'GREEN', activeDept: null, durationMs: 3500,
   },
   {
-    id: 1,
-    phaseName: 'TASK DETECTED',
-    shortTitle: 'Flaw Detected (KM 126)',
+    id: 1, phaseName: 'TASK DETECTED', shortTitle: 'Flaw Detected (KM 126)',
     narrative: 'TMS ultrasonic sensor detects lateral wear and TGI degradation on Turnout PT-227 at KM 126.',
-    cameraPreset: 'CIVIL',
-    signalAspect: 'GREEN',
-    activeDept: 'CIVIL',
-    durationMs: 3000,
+    cameraPreset: 'CIVIL', signalAspect: 'GREEN', activeDept: 'CIVIL', durationMs: 3000,
   },
   {
-    id: 2,
-    phaseName: 'TRACK RESTRICTED',
-    shortTitle: 'Section Restricted',
+    id: 2, phaseName: 'TRACK RESTRICTED', shortTitle: 'Section Restricted',
     narrative: 'AI Block Planner establishes a possession zone. Up line track possession locked.',
-    cameraPreset: 'ROUTE',
-    signalAspect: 'YELLOW',
-    activeDept: 'CIVIL',
-    durationMs: 2500,
+    cameraPreset: 'ROUTE', signalAspect: 'YELLOW', activeDept: 'CIVIL', durationMs: 2500,
   },
   {
-    id: 3,
-    phaseName: 'SIGNAL RED',
-    shortTitle: 'Protection Signal Red',
+    id: 3, phaseName: 'SIGNAL RED', shortTitle: 'Protection Signal Red',
     narrative: 'Protection Signal S-126 flips to RED aspect to safeguard maintenance crews.',
-    cameraPreset: 'SIGNAL',
-    signalAspect: 'RED',
-    activeDept: 'CIVIL',
-    durationMs: 2500,
+    cameraPreset: 'SIGNAL', signalAspect: 'RED', activeDept: 'CIVIL', durationMs: 2500,
   },
   {
-    id: 4,
-    phaseName: 'TRAIN BRAKING',
-    shortTitle: 'Kavach Braking Applied',
+    id: 4, phaseName: 'TRAIN BRAKING', shortTitle: 'Kavach Braking Applied',
     narrative: 'Approaching Vande Bharat 20901 detects downstream red aspect. Automatic service air brakes engage.',
-    cameraPreset: 'TRAIN',
-    signalAspect: 'RED',
-    activeDept: 'CIVIL',
-    durationMs: 3500,
+    cameraPreset: 'TRAIN', signalAspect: 'RED', activeDept: 'CIVIL', durationMs: 3500,
   },
   {
-    id: 5,
-    phaseName: 'TRAIN STOPPED',
-    shortTitle: 'Train Halted',
+    id: 5, phaseName: 'TRAIN STOPPED', shortTitle: 'Train Halted',
     narrative: 'Train comes to a complete halt 150m ahead of Signal S-126. Wheels stop rotating (0 RPM).',
-    cameraPreset: 'TRAIN',
-    signalAspect: 'RED',
-    activeDept: 'CIVIL',
-    durationMs: 2500,
+    cameraPreset: 'TRAIN', signalAspect: 'RED', activeDept: 'CIVIL', durationMs: 2500,
   },
   {
-    id: 6,
-    phaseName: 'CIVIL WORK IN PROGRESS',
-    shortTitle: 'Civil Track Tamping (0-100%)',
+    id: 6, phaseName: 'CIVIL WORK IN PROGRESS', shortTitle: 'Civil Track Tamping (0-100%)',
     narrative: 'Civil maintenance lines drawn. Safety barricades, track crew, and hydraulic tamping tools active.',
-    cameraPreset: 'CIVIL',
-    signalAspect: 'RED',
-    activeDept: 'CIVIL',
-    durationMs: 5000,
+    cameraPreset: 'CIVIL', signalAspect: 'RED', activeDept: 'CIVIL', durationMs: 5000,
   },
   {
-    id: 7,
-    phaseName: 'TRACTION CLEARANCE',
-    shortTitle: 'OHE Catenary Verified',
+    id: 7, phaseName: 'TRACTION CLEARANCE', shortTitle: 'OHE Catenary Verified',
     narrative: 'TRD electrical linesman inspects 25kV catenary droppers and cantilever. Power re-energized.',
-    cameraPreset: 'TRACTION',
-    signalAspect: 'RED',
-    activeDept: 'TRACTION',
-    durationMs: 3500,
+    cameraPreset: 'TRACTION', signalAspect: 'RED', activeDept: 'TRACTION', durationMs: 3500,
   },
   {
-    id: 8,
-    phaseName: 'SIGNAL VERIFICATION',
-    shortTitle: 'Route Interlocked',
+    id: 8, phaseName: 'SIGNAL VERIFICATION', shortTitle: 'Route Interlocked',
     narrative: 'S&T electronic interlocking verifies track circuit TC-126A and point machine lock. Signal clears to GREEN.',
-    cameraPreset: 'SIGNAL',
-    signalAspect: 'GREEN',
-    activeDept: 'SIGNAL',
-    durationMs: 3000,
+    cameraPreset: 'SIGNAL', signalAspect: 'GREEN', activeDept: 'SIGNAL', durationMs: 3000,
   },
   {
-    id: 9,
-    phaseName: 'TRAIN ACCELERATES',
-    shortTitle: 'Operations Resumed',
+    id: 9, phaseName: 'TRAIN ACCELERATES', shortTitle: 'Operations Resumed',
     narrative: 'Brakes release. Vande Bharat 20901 accelerates smoothly back to 130 km/h. Normal headway restored.',
-    cameraPreset: 'WIDE',
-    signalAspect: 'GREEN',
-    activeDept: null,
-    durationMs: 4000,
+    cameraPreset: 'WIDE', signalAspect: 'GREEN', activeDept: null, durationMs: 4000,
   },
 ];
 
@@ -220,6 +170,556 @@ const TRACK_SECTIONS: TrackSectionInfo[] = [
   { sectionId: 'SEC-145-160', kmStart: 145, kmEnd: 160, track: 'UP', railType: '60kg 90UTS Continuous Welded', tgiScore: 88.4, omsPeakG: 0.11, speedLimitKmph: 130, activeWork: false },
 ];
 
+// ─────────────────────────────────────────────────────────
+// INDIAN RAILWAYS LOCOMOTIVE SVG — Premium Technical Illustration
+// Inspired by WAP-7 / Vande Bharat proportions
+// ─────────────────────────────────────────────────────────
+
+interface LocoWheelProps {
+  cx: number;
+  cy: number;
+  r: number;
+  angle: number;       // rotation angle driven by velocity
+  variant?: 'driving' | 'bogie';
+}
+
+const LocoWheel: React.FC<LocoWheelProps> = ({ cx, cy, r, angle, variant = 'bogie' }) => {
+  const spoke = variant === 'driving' ? 8 : 6;
+  const spokeAngles = Array.from({ length: spoke }, (_, i) => (i * 360) / spoke);
+  return (
+    <g transform={`rotate(${angle}, ${cx}, ${cy})`}>
+      {/* Tyre / rim */}
+      <circle cx={cx} cy={cy} r={r} fill="#2A2D2B" stroke="#1D1F1E" strokeWidth="1.4" />
+      {/* Wheel face / web */}
+      <circle cx={cx} cy={cy} r={r * 0.72} fill="#3C3E3C" stroke="#1D1F1E" strokeWidth="0.8" />
+      {/* Spokes */}
+      {spokeAngles.map((a, i) => {
+        const rad = (a * Math.PI) / 180;
+        const x2 = cx + Math.cos(rad) * r * 0.68;
+        const y2 = cy + Math.sin(rad) * r * 0.68;
+        return <line key={i} x1={cx} y1={cy} x2={x2} y2={y2} stroke="#1D1F1E" strokeWidth={variant === 'driving' ? '0.9' : '0.7'} strokeOpacity="0.85" />;
+      })}
+      {/* Counter weight disc (driving wheels only) */}
+      {variant === 'driving' && (
+        <ellipse cx={cx + r * 0.35} cy={cy} rx={r * 0.28} ry={r * 0.18} fill="#1D1F1E" opacity="0.7" />
+      )}
+      {/* Hub */}
+      <circle cx={cx} cy={cy} r={r * 0.18} fill="#D5CEC1" stroke="#1D1F1E" strokeWidth="0.9" />
+      {/* Axle dot */}
+      <circle cx={cx} cy={cy} r={r * 0.07} fill="#1D1F1E" />
+    </g>
+  );
+};
+
+interface BogieFrameProps {
+  x: number;         // center x of bogie
+  y: number;         // bottom of rail
+  wheelR: number;
+  wheelAngle: number;
+  wheelCount?: 2 | 4;
+  compact?: boolean;
+}
+
+const BogieFrame: React.FC<BogieFrameProps> = ({ x, y, wheelR, wheelAngle, wheelCount = 4, compact = false }) => {
+  const spacing = compact ? 18 : 22;
+  const half = ((wheelCount - 1) * spacing) / 2;
+  const bogieBaseY = y - wheelR - 2;    // top of wheel arc = bogie frame bottom
+  const frameH = compact ? 5 : 7;
+  const frameW = half * 2 + 14;
+
+  const wheelXs = Array.from({ length: wheelCount }, (_, i) => x - half + i * spacing);
+
+  return (
+    <g>
+      {/* Bogie side frames */}
+      <rect
+        x={x - frameW / 2} y={bogieBaseY - frameH}
+        width={frameW} height={frameH}
+        fill="#4B4A46" stroke="#1D1F1E" strokeWidth="0.9" rx="1"
+      />
+      {/* Bolster / pivot boss */}
+      <rect
+        x={x - 4} y={bogieBaseY - frameH - 4}
+        width={8} height={5}
+        fill="#3C3E3C" stroke="#1D1F1E" strokeWidth="0.8" rx="0.5"
+      />
+      {/* Axle boxes */}
+      {wheelXs.map((wx, i) => (
+        <g key={i}>
+          <rect x={wx - 4} y={bogieBaseY - frameH - 2} width={8} height={3}
+            fill="#D5CEC1" stroke="#1D1F1E" strokeWidth="0.6" rx="0.5" />
+        </g>
+      ))}
+      {/* Coil spring indicators */}
+      {wheelXs.map((wx, i) => (
+        <g key={`spring-${i}`}>
+          <line x1={wx - 1.5} y1={bogieBaseY - 1} x2={wx - 1.5} y2={bogieBaseY + 4}
+            stroke="#77736C" strokeWidth="0.8" strokeDasharray="1.5 1" />
+          <line x1={wx + 1.5} y1={bogieBaseY - 1} x2={wx + 1.5} y2={bogieBaseY + 4}
+            stroke="#77736C" strokeWidth="0.8" strokeDasharray="1.5 1" />
+        </g>
+      ))}
+      {/* Wheels */}
+      {wheelXs.map((wx, i) => (
+        <LocoWheel
+          key={i}
+          cx={wx} cy={y - wheelR}
+          r={wheelR}
+          angle={wheelAngle}
+          variant={wheelCount === 4 ? 'driving' : 'bogie'}
+        />
+      ))}
+      {/* Brake rigging between wheels */}
+      {wheelXs.length > 1 && wheelXs.slice(0, -1).map((wx, i) => (
+        <line key={`rig-${i}`}
+          x1={wx + wheelR * 0.6} y1={y - wheelR * 0.5}
+          x2={wheelXs[i + 1] - wheelR * 0.6} y2={y - wheelR * 0.5}
+          stroke="#4B4A46" strokeWidth="0.8" strokeOpacity="0.7"
+        />
+      ))}
+    </g>
+  );
+};
+
+interface PantographProps {
+  x: number;
+  baseY: number;
+  height: number;
+  wireY: number;
+  extended?: boolean;
+}
+
+const Pantograph: React.FC<PantographProps> = ({ x, baseY, height, wireY, extended = true }) => {
+  const ph = extended ? height : height * 0.4;
+  const armSpread = 14;
+  const baseWidth = 20;
+  const midY = baseY - ph * 0.55;
+  const topY = wireY + 1;
+
+  return (
+    <g>
+      {/* Base shoe on roof */}
+      <rect x={x - baseWidth / 2} y={baseY - 3} width={baseWidth} height={4}
+        fill="#3C3E3C" stroke="#1D1F1E" strokeWidth="0.8" />
+      {/* Lower diamond arms */}
+      <line x1={x - armSpread / 2} y1={baseY - 3}   x2={x} y2={midY}
+        stroke="#1D1F1E" strokeWidth="1.6" strokeLinecap="round" />
+      <line x1={x + armSpread / 2} y1={baseY - 3}   x2={x} y2={midY}
+        stroke="#1D1F1E" strokeWidth="1.6" strokeLinecap="round" />
+      {/* Upper arms */}
+      <line x1={x - armSpread * 0.6} y1={midY} x2={x - 4} y2={topY}
+        stroke="#1D1F1E" strokeWidth="1.3" strokeLinecap="round" />
+      <line x1={x + armSpread * 0.6} y1={midY} x2={x + 4} y2={topY}
+        stroke="#1D1F1E" strokeWidth="1.3" strokeLinecap="round" />
+      {/* Contact strip */}
+      <line x1={x - 8} y1={topY} x2={x + 8} y2={topY}
+        stroke="#A9674B" strokeWidth="2.4" strokeLinecap="round" />
+      {/* Knuckle joints */}
+      <circle cx={x - armSpread / 2} cy={baseY - 3} r="1.8" fill="#D5CEC1" stroke="#1D1F1E" strokeWidth="0.7" />
+      <circle cx={x + armSpread / 2} cy={baseY - 3} r="1.8" fill="#D5CEC1" stroke="#1D1F1E" strokeWidth="0.7" />
+      <circle cx={x} cy={midY}                      r="2.2" fill="#D5CEC1" stroke="#1D1F1E" strokeWidth="0.7" />
+    </g>
+  );
+};
+
+// ─────────────────────────────────────────────────────────
+// MAIN LOCOMOTIVE RENDERER
+// Indian Railways WAP-7 / Vande Bharat-inspired electric locomotive
+// ─────────────────────────────────────────────────────────
+interface LocoBodyProps {
+  x: number;          // center x of locomotive
+  railY: number;      // y of rail top surface
+  compact: boolean;
+  wheelAngle: number;
+  suspensionOffset: number;
+  pitchAngle: number;
+  accelState: string;
+  speed: number;
+  isSelected?: boolean;
+}
+
+const LocoBody: React.FC<LocoBodyProps> = ({
+  x, railY, compact, wheelAngle, suspensionOffset, pitchAngle, accelState, speed, isSelected = false,
+}) => {
+  // Locomotive dimensions — full / compact
+  const locoW  = compact ? 96  : 138;     // locomotive width
+  const locoH  = compact ? 22  : 32;      // cab height (not counting roof)
+  const roofH  = compact ? 4   : 5;       // roof sill
+  const skirtH = compact ? 5   : 7;       // underframe skirt
+  const wheelR = compact ? 5.5 : 8;       // bogie wheel radius
+  const bogieH = wheelR * 2 + 10;         // bogie total height
+  const totalH = locoH + roofH + skirtH + bogieH;
+
+  // Reference Y: bottom of bogie = rail top
+  const bogieBaseY = railY;
+  const skirtBaseY = bogieBaseY - bogieH;
+  const bodyBaseY  = skirtBaseY - skirtH;
+  const roofY      = bodyBaseY - locoH - roofH;
+  const leftX      = x - locoW / 2;
+
+  // Body pitch transform (extremely subtle, ±1.5° max)
+  const pitch = Math.max(-1.5, Math.min(1.5, pitchAngle));
+
+  // Nose/cab proportions
+  const noseW    = compact ? 18 : 26;     // nose slant width at front
+  const cabW     = compact ? 28 : 40;     // full cab section width
+  const locoRest = locoW - noseW;         // behind-nose body
+
+  // Color palette — restrained railway graphite with subtle maroon cab
+  const bodyFill     = '#F8F5EF';   // warm parchment body
+  const bodyStroke   = '#1D1F1E';
+  const cabFill      = '#2A2D2B';   // dark graphite cab nose
+  const roofFill     = '#3C3E3C';   // slightly darker roof
+  const skirtFill    = '#4B4A46';   // dark underframe skirt
+  const windowFill   = '#D9E8EE';   // pale glass blue-grey
+  const accentStripe = '#8B1A1A';   // maroon accent stripe (very restrained)
+  const grilleFill   = '#3C3E3C';
+
+  // Bogie positions (2 bogies under loco)
+  const bogie1X = leftX + locoW * 0.22;
+  const bogie2X = leftX + locoW * 0.78;
+
+  // Pantograph position
+  const pantoX = leftX + locoW * 0.55;
+  const pantoBaseY = roofY;
+  const oheWireY = roofY - (compact ? 26 : 40);
+
+  // Headlight state
+  const isMoving = accelState !== 'STOPPED';
+  const headlightOpacity = isMoving ? 0.85 : 0.45;
+
+  return (
+    <g transform={`rotate(${pitch}, ${x}, ${railY - bogieH - locoH / 2})`}>
+      {/* ── BOGIES ── */}
+      <BogieFrame
+        x={bogie1X} y={bogieBaseY}
+        wheelR={wheelR} wheelAngle={wheelAngle}
+        wheelCount={4} compact={compact}
+      />
+      <BogieFrame
+        x={bogie2X} y={bogieBaseY}
+        wheelR={wheelR} wheelAngle={wheelAngle}
+        wheelCount={4} compact={compact}
+      />
+
+      {/* ── UNDERFRAME / DRAWBAR ── */}
+      <rect
+        x={leftX + 4} y={skirtBaseY}
+        width={locoW - 8} height={skirtH}
+        fill={skirtFill} stroke={bodyStroke} strokeWidth="0.8" rx="1"
+      />
+      {/* Bogie pivot bolsters */}
+      <rect x={bogie1X - 5} y={skirtBaseY - 2} width={10} height={5} fill="#3C3E3C" stroke={bodyStroke} strokeWidth="0.6" />
+      <rect x={bogie2X - 5} y={skirtBaseY - 2} width={10} height={5} fill="#3C3E3C" stroke={bodyStroke} strokeWidth="0.6" />
+      {/* Coupler / draw gear at front */}
+      <rect x={leftX + locoW - 2} y={skirtBaseY + 1} width={compact ? 6 : 8} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.8" />
+      <rect x={leftX - (compact ? 5 : 7)} y={skirtBaseY + 1} width={compact ? 5 : 7} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.8" />
+
+      {/* ── MAIN BODY ── */}
+      {/* Body shell — full-length rect with rounded ends */}
+      <rect
+        x={leftX + noseW} y={bodyBaseY}
+        width={locoRest - 2} height={locoH}
+        fill={bodyFill} stroke={bodyStroke} strokeWidth="1.5" rx="1"
+      />
+
+      {/* ── NOSE / FRONT CAB ── */}
+      {/* Swept nose — polygon for slanted front */}
+      <polygon
+        points={`
+          ${leftX + noseW},${bodyBaseY}
+          ${leftX + noseW},${bodyBaseY + locoH}
+          ${leftX + 4},${bodyBaseY + locoH - 4}
+          ${leftX},${bodyBaseY + locoH - 8}
+          ${leftX},${bodyBaseY + 6}
+          ${leftX + 6},${bodyBaseY + 2}
+        `}
+        fill={cabFill} stroke={bodyStroke} strokeWidth="1.5"
+      />
+      {/* Cab nose grille / coupler cover */}
+      <rect
+        x={leftX + 2} y={bodyBaseY + locoH * 0.55}
+        width={noseW - 4} height={locoH * 0.38}
+        fill={grilleFill} stroke={bodyStroke} strokeWidth="0.8" rx="0.5"
+      />
+      {/* Grille bars */}
+      {Array.from({ length: compact ? 3 : 5 }, (_, i) => {
+        const gx = leftX + 4 + i * (compact ? 4 : 3.5);
+        return (
+          <line key={i}
+            x1={gx} y1={bodyBaseY + locoH * 0.57}
+            x2={gx} y2={bodyBaseY + locoH * 0.91}
+            stroke="#6B6766" strokeWidth="0.7"
+          />
+        );
+      })}
+
+      {/* ── FRONT WINDOWS / CAB GLAZING ── */}
+      {/* Left windshield (angled) */}
+      <polygon
+        points={`
+          ${leftX + 5},${bodyBaseY + 4}
+          ${leftX + noseW - 2},${bodyBaseY + 2}
+          ${leftX + noseW - 2},${bodyBaseY + locoH * 0.48}
+          ${leftX + 5},${bodyBaseY + locoH * 0.52}
+        `}
+        fill={windowFill} stroke={bodyStroke} strokeWidth="0.9" opacity="0.8"
+      />
+      {/* Small number plate area */}
+      <rect
+        x={leftX + 2} y={bodyBaseY + 2}
+        width={compact ? 10 : 14} height={compact ? 5 : 6}
+        fill="#1D1F1E" stroke={bodyStroke} strokeWidth="0.6" rx="0.5"
+      />
+
+      {/* ── HEADLIGHT / MARKER LIGHT ── */}
+      {/* Main headlight cluster */}
+      <ellipse
+        cx={leftX + 4} cy={bodyBaseY + locoH * 0.35}
+        rx={compact ? 4 : 5.5} ry={compact ? 2.8 : 3.8}
+        fill="#F8F5EF" stroke={bodyStroke} strokeWidth="0.9"
+        opacity={headlightOpacity}
+      />
+      {/* Headlight glow (subtle, not neon) */}
+      {isMoving && (
+        <ellipse
+          cx={leftX + 4} cy={bodyBaseY + locoH * 0.35}
+          rx={compact ? 7 : 9} ry={compact ? 4.5 : 6}
+          fill="#F5F0D8" opacity="0.18"
+        />
+      )}
+      {/* Marker lights (top & bottom) */}
+      <circle cx={leftX + 5} cy={bodyBaseY + 6} r={compact ? 1.5 : 2} fill="#E8E2C8" opacity="0.7" />
+      <circle cx={leftX + 5} cy={bodyBaseY + locoH - 8} r={compact ? 1.5 : 2} fill="#E8E2C8" opacity="0.7" />
+
+      {/* ── SIDE BODY DETAILS ── */}
+      {/* Maroon waist-level accent stripe */}
+      <rect
+        x={leftX + noseW} y={bodyBaseY + locoH * 0.52}
+        width={locoRest - 2} height={compact ? 2 : 3}
+        fill={accentStripe} stroke="none" opacity="0.75"
+      />
+      {/* Body side windows */}
+      {Array.from({ length: compact ? 3 : 5 }, (_, i) => {
+        const wSpacing = (locoRest - noseW - 16) / (compact ? 3 : 5);
+        const wx = leftX + noseW + 8 + i * wSpacing;
+        const ww = compact ? 9  : 13;
+        const wh = compact ? 6  : 9;
+        const wy = bodyBaseY + 3;
+        return (
+          <rect key={i}
+            x={wx} y={wy} width={ww} height={wh}
+            fill={windowFill} stroke={bodyStroke} strokeWidth="0.8" rx="0.5"
+            opacity="0.9"
+          />
+        );
+      })}
+      {/* Equipment louvres (ventilation grilles on body side) */}
+      {Array.from({ length: compact ? 2 : 4 }, (_, i) => {
+        const lx = leftX + noseW + 6 + i * (compact ? 24 : 20);
+        return (
+          <g key={i}>
+            {Array.from({ length: compact ? 2 : 4 }, (_, j) => (
+              <line key={j}
+                x1={lx + j * 3.5} y1={bodyBaseY + locoH * 0.6}
+                x2={lx + j * 3.5} y2={bodyBaseY + locoH * 0.88}
+                stroke="#77736C" strokeWidth="0.8" opacity="0.6"
+              />
+            ))}
+          </g>
+        );
+      })}
+      {/* Equipment box / loco number panel */}
+      <rect
+        x={leftX + noseW + (compact ? 4 : 6)} y={bodyBaseY + locoH * 0.68}
+        width={compact ? 22 : 32} height={compact ? 7 : 10}
+        fill="#FBF9F4" stroke="#4B4A46" strokeWidth="0.7" rx="0.5"
+      />
+
+      {/* ── ROOF ── */}
+      <rect
+        x={leftX + noseW - 2} y={roofY}
+        width={locoRest} height={roofH}
+        fill={roofFill} stroke={bodyStroke} strokeWidth="1.2" rx="0.5"
+      />
+      {/* Roof insulators */}
+      {[0.2, 0.45, 0.7].map((rx, i) => (
+        <g key={i}>
+          <rect
+            x={leftX + noseW + locoRest * rx - 1.5} y={roofY - (compact ? 4 : 5)}
+            width={3} height={compact ? 4 : 5}
+            fill="#D5CEC1" stroke={bodyStroke} strokeWidth="0.6"
+          />
+        </g>
+      ))}
+
+      {/* ── PANTOGRAPH ── */}
+      <Pantograph
+        x={pantoX}
+        baseY={pantoBaseY}
+        height={compact ? 22 : 36}
+        wireY={oheWireY}
+        extended={true}
+      />
+
+      {/* ── SELECTION HIGHLIGHT ── */}
+      {isSelected && (
+        <rect
+          x={leftX - 2} y={roofY - 2}
+          width={locoW + 4} height={bogieBaseY - roofY + bogieH + 4}
+          fill="none"
+          stroke="#A9674B"
+          strokeWidth="1.5"
+          strokeDasharray="5 3"
+          rx="2"
+        />
+      )}
+    </g>
+  );
+};
+
+// ─────────────────────────────────────────────────────────
+// COACH RENDERER — Simplified but proportional IR Coach
+// ─────────────────────────────────────────────────────────
+interface CoachProps {
+  x: number;
+  railY: number;
+  compact: boolean;
+  wheelAngle: number;
+  suspensionOffset: number;
+  index: number;
+}
+
+const Coach: React.FC<CoachProps> = ({ x, railY, compact, wheelAngle, suspensionOffset, index }) => {
+  const coachW  = compact ? 76  : 110;
+  const coachH  = compact ? 18  : 26;
+  const roofH   = compact ? 3   : 4;
+  const skirtH  = compact ? 4   : 6;
+  const wheelR  = compact ? 4.5 : 6.5;
+  const bogieH  = wheelR * 2 + 8;
+
+  const bogieBaseY = railY;
+  const skirtBaseY = bogieBaseY - bogieH;
+  const bodyBaseY  = skirtBaseY - skirtH;
+  const roofY      = bodyBaseY - coachH - roofH;
+  const leftX      = x - coachW / 2;
+
+  // Alternating slight suspension offset
+  const sus = suspensionOffset * (index % 2 === 0 ? 1 : -0.6);
+
+  const bodyFill   = '#F5F0E8';
+  const bodyStroke = '#1D1F1E';
+  const windowFill = '#D9E8EE';
+  const roofFill   = '#3C3E3C';
+  const skirtFill  = '#4B4A46';
+  const stripe     = '#8B1A1A';
+
+  const bogie1X = leftX + coachW * 0.2;
+  const bogie2X = leftX + coachW * 0.8;
+
+  return (
+    <g transform={`translate(0, ${sus})`}>
+      {/* Bogies */}
+      <BogieFrame x={bogie1X} y={bogieBaseY} wheelR={wheelR} wheelAngle={wheelAngle} wheelCount={4} compact={compact} />
+      <BogieFrame x={bogie2X} y={bogieBaseY} wheelR={wheelR} wheelAngle={wheelAngle} wheelCount={4} compact={compact} />
+
+      {/* Underframe */}
+      <rect x={leftX + 3} y={skirtBaseY} width={coachW - 6} height={skirtH} fill={skirtFill} stroke={bodyStroke} strokeWidth="0.7" />
+      {/* Couplers */}
+      <rect x={leftX - (compact ? 3 : 5)} y={skirtBaseY + 1} width={compact ? 4 : 6} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.7" />
+      <rect x={leftX + coachW} y={skirtBaseY + 1} width={compact ? 3 : 5} height={compact ? 3 : 4} fill="#4B4A46" stroke={bodyStroke} strokeWidth="0.7" />
+
+      {/* Coach body */}
+      <rect x={leftX} y={bodyBaseY} width={coachW} height={coachH} fill={bodyFill} stroke={bodyStroke} strokeWidth="1.2" rx="0.5" />
+
+      {/* Maroon accent stripe */}
+      <rect x={leftX} y={bodyBaseY + coachH * 0.5} width={coachW} height={compact ? 2 : 3} fill={stripe} opacity="0.7" />
+
+      {/* Windows — regular rhythm */}
+      {Array.from({ length: compact ? 5 : 8 }, (_, i) => {
+        const wSpacing = coachW / (compact ? 5 : 8);
+        const wx = leftX + wSpacing * i + wSpacing * 0.12;
+        const ww = wSpacing * 0.65;
+        const wh = compact ? 6 : 9;
+        return (
+          <rect key={i}
+            x={wx} y={bodyBaseY + 3}
+            width={ww} height={wh}
+            fill={windowFill} stroke={bodyStroke} strokeWidth="0.7" rx="0.5" opacity="0.85"
+          />
+        );
+      })}
+
+      {/* Door panels */}
+      <rect x={leftX + coachW * 0.1 - 3} y={bodyBaseY + 1} width={compact ? 5 : 7} height={coachH - 2} fill={bodyFill} stroke={bodyStroke} strokeWidth="0.9" />
+      <rect x={leftX + coachW * 0.9 - 2} y={bodyBaseY + 1} width={compact ? 5 : 7} height={coachH - 2} fill={bodyFill} stroke={bodyStroke} strokeWidth="0.9" />
+
+      {/* Roof */}
+      <rect x={leftX} y={roofY} width={coachW} height={roofH} fill={roofFill} stroke={bodyStroke} strokeWidth="0.9" rx="0.3" />
+    </g>
+  );
+};
+
+// ─────────────────────────────────────────────────────────
+// COMPLETE TRAIN ASSEMBLY (Loco + 3 Coaches)
+// ─────────────────────────────────────────────────────────
+interface IRTrainProps {
+  centerX: number;
+  railY: number;
+  compact: boolean;
+  wheelAngle: number;
+  suspensionOffset: number;
+  pitchAngle: number;
+  accelState: string;
+  speed: number;
+  isSelected?: boolean;
+  direction?: 1 | -1;  // 1 = right-moving, -1 = left-moving
+}
+
+const IRTrain: React.FC<IRTrainProps> = ({
+  centerX, railY, compact, wheelAngle, suspensionOffset, pitchAngle,
+  accelState, speed, isSelected = false, direction = 1,
+}) => {
+  const locoW   = compact ? 96  : 138;
+  const coachW  = compact ? 76  : 110;
+  const coupling = compact ? 4  : 6;
+
+  // When direction = 1 (right), loco is at LEFT of consist (front = right side)
+  // When direction = -1 (left), flip horizontally
+  const locoX   = centerX - (compact ? 40 : 70);
+  const coach1X  = locoX + locoW / 2 + coupling + coachW / 2;
+  const coach2X  = coach1X + coachW + coupling;
+  const coach3X  = coach2X + coachW + coupling;
+
+  // Suspension oscillation for body
+  const sus = suspensionOffset;
+
+  return (
+    <g transform={direction === -1 ? `scale(-1,1) translate(${-(centerX * 2)}, 0)` : ''}>
+      <g transform={`translate(0, ${sus})`}>
+        {/* Coaches (behind loco) */}
+        {!compact && (
+          <>
+            <Coach x={coach3X} railY={railY} compact={compact} wheelAngle={wheelAngle} suspensionOffset={suspensionOffset} index={3} />
+            <Coach x={coach2X} railY={railY} compact={compact} wheelAngle={wheelAngle} suspensionOffset={suspensionOffset} index={2} />
+          </>
+        )}
+        <Coach x={coach1X} railY={railY} compact={compact} wheelAngle={wheelAngle} suspensionOffset={suspensionOffset} index={1} />
+      </g>
+      {/* Locomotive (always rendered after coaches so it overlaps couplers) */}
+      <LocoBody
+        x={locoX} railY={railY} compact={compact}
+        wheelAngle={wheelAngle} suspensionOffset={sus}
+        pitchAngle={pitchAngle} accelState={accelState} speed={speed}
+        isSelected={isSelected}
+      />
+    </g>
+  );
+};
+
+// ─────────────────────────────────────────────────────────
+// Main Props & Component
+// ─────────────────────────────────────────────────────────
 interface RailwaySceneCanvasProps {
   trains: TrainEntity[];
   blocks: MaintenanceBlock[];
@@ -277,28 +777,17 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     }
 
     switch (preset) {
-      case 'WIDE':
-        targetViewBoxRef.current = defaultViewBox;
-        break;
-      case 'CIVIL':
-        targetViewBoxRef.current = { x: 440, y: 155, w: 440, h: 220 };
-        break;
-      case 'SIGNAL':
-        targetViewBoxRef.current = { x: 200, y: 95, w: 400, h: 200 };
-        break;
-      case 'TRACTION':
-        targetViewBoxRef.current = { x: 680, y: 48, w: 450, h: 220 };
-        break;
-      case 'ROUTE':
-        targetViewBoxRef.current = { x: 300, y: 105, w: 640, h: 300 };
-        break;
-      case 'TRAIN':
-        break;
+      case 'WIDE':    targetViewBoxRef.current = defaultViewBox; break;
+      case 'CIVIL':   targetViewBoxRef.current = { x: 440, y: 155, w: 440, h: 220 }; break;
+      case 'SIGNAL':  targetViewBoxRef.current = { x: 200, y:  95, w: 400, h: 200 }; break;
+      case 'TRACTION':targetViewBoxRef.current = { x: 680, y:  48, w: 450, h: 220 }; break;
+      case 'ROUTE':   targetViewBoxRef.current = { x: 300, y: 105, w: 640, h: 300 }; break;
+      case 'TRAIN':   break;
     }
   };
 
   // ─────────────────────────────────────────────────────────
-  // HACKATHON DEMO NARRATIVE STORY ENGINE (30s Story)
+  // HACKATHON DEMO NARRATIVE STORY ENGINE
   // ─────────────────────────────────────────────────────────
   const [isDemoActive, setIsDemoActive] = useState<boolean>(false);
   const [isDemoPaused, setIsDemoPaused] = useState<boolean>(false);
@@ -317,7 +806,6 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     setCameraPreset(step.cameraPreset);
     setSignals(prev => prev.map(s => (s.id === 'SIG-UP-126' ? { ...s, aspect: step.signalAspect } : s)));
 
-    // Handle Civil Work Sub-Progress (Step 6)
     if (step.id === 6) {
       setDemoWorkProgress(0);
       if (demoWorkTimerRef.current) clearInterval(demoWorkTimerRef.current);
@@ -353,7 +841,6 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
           applyDemoStep(current);
           runNext();
         } else {
-          // Completed full narrative
           setTimeout(() => {
             setIsDemoActive(false);
             setCameraPreset('WIDE');
@@ -365,40 +852,22 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     runNext();
   };
 
-  const pauseDemoStory = () => {
-    setIsDemoPaused(true);
-    if (demoTimerRef.current) clearTimeout(demoTimerRef.current);
-    if (demoWorkTimerRef.current) clearInterval(demoWorkTimerRef.current);
-  };
-
-  const resumeDemoStory = () => {
-    setIsDemoPaused(false);
-    startDemoStory(demoStepIdx);
-  };
-
-  const restartDemoStory = () => {
-    startDemoStory(0);
-  };
-
+  const pauseDemoStory  = () => { setIsDemoPaused(true); if (demoTimerRef.current) clearTimeout(demoTimerRef.current); if (demoWorkTimerRef.current) clearInterval(demoWorkTimerRef.current); };
+  const resumeDemoStory = () => { setIsDemoPaused(false); startDemoStory(demoStepIdx); };
+  const restartDemoStory = () => startDemoStory(0);
   const exitDemoStory = () => {
     if (demoTimerRef.current) clearTimeout(demoTimerRef.current);
     if (demoWorkTimerRef.current) clearInterval(demoWorkTimerRef.current);
-    setIsDemoActive(false);
-    setIsDemoPaused(false);
-    setDemoStepIdx(0);
-    setDemoWorkProgress(0);
-    setCameraPreset('WIDE');
-    setSignals(INITIAL_SIGNALS);
+    setIsDemoActive(false); setIsDemoPaused(false); setDemoStepIdx(0); setDemoWorkProgress(0);
+    setCameraPreset('WIDE'); setSignals(INITIAL_SIGNALS);
   };
 
   useEffect(() => {
-    if (externalDemoTrigger) {
-      startDemoStory(0);
-    }
+    if (externalDemoTrigger) startDemoStory(0);
   }, [externalDemoTrigger]);
 
   // ─────────────────────────────────────────────────────────
-  // Dynamic Signal & Physics Simulation State
+  // Dynamic Signal & Physics State
   // ─────────────────────────────────────────────────────────
   const [signals, setSignals] = useState<SignalInfo[]>(INITIAL_SIGNALS);
   const [trainPhysics, setTrainPhysics] = useState<Record<string, LiveTrainPhysics>>({});
@@ -409,19 +878,12 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     const initial: Record<string, LiveTrainPhysics> = {};
     trains.forEach(t => {
       initial[t.id] = {
-        id: t.id,
-        trainNumber: t.trainNumber,
-        trainName: t.trainName,
-        currentKm: t.currentKm,
-        speedKmH: t.speedKmH,
-        targetSpeedKmH: t.speedKmH,
+        id: t.id, trainNumber: t.trainNumber, trainName: t.trainName,
+        currentKm: t.currentKm, speedKmH: t.speedKmH, targetSpeedKmH: t.speedKmH,
         accelState: t.speedKmH > 0 ? 'CRUISING' : 'STOPPED',
-        wheelAngle: 0,
-        suspensionOffset: 0,
-        assignedTrack: t.assignedTrack,
-        nextSignalAspect: 'GREEN',
-        nextSignalDistanceKm: 10,
-        entity: t,
+        wheelAngle: 0, suspensionOffset: 0, pitchAngle: 0,
+        assignedTrack: t.assignedTrack, nextSignalAspect: 'GREEN',
+        nextSignalDistanceKm: 10, entity: t,
       };
     });
     setTrainPhysics(initial);
@@ -440,8 +902,10 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     }));
   };
 
+  const [selectedTrainId, setSelectedTrainId] = useState<string | null>(null);
+
   // ─────────────────────────────────────────────────────────
-  // Kinematic & Cinematic Camera Loop
+  // Kinematic Loop — Velocity, Wheel, Pitch, Camera Follow
   // ─────────────────────────────────────────────────────────
   useEffect(() => {
     const updatePhysics = (time: number) => {
@@ -475,13 +939,10 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
             if (sigAspect === 'RED') {
               const stopPoint = isUp ? nextSig.km - 0.15 : nextSig.km + 0.15;
               const distToStop = Math.abs(stopPoint - tp.currentKm);
-              if (distToStop < 1.8) {
-                targetSpeed = 0;
-              }
+              if (distToStop < 2.0) { targetSpeed = 0; }
+              else if (distToStop < 4.0) { targetSpeed = Math.min(targetSpeed, 25); }
             } else if (sigAspect === 'YELLOW') {
-              if (distToSignal < 2.5) {
-                targetSpeed = 45;
-              }
+              if (distToSignal < 2.5) { targetSpeed = 45; }
             }
           }
 
@@ -489,45 +950,53 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
           tp.nextSignalDistanceKm = distToSignal;
           tp.targetSpeedKmH = targetSpeed;
 
-          const maxAccel = 18;
-          const maxBrake = 32;
+          const prevSpeed = tp.speedKmH;
+          const maxAccel = 14;    // km/h per second (gradual)
+          const maxBrake = 28;    // km/h per second (firm but realistic)
 
           if (tp.speedKmH < targetSpeed) {
             tp.speedKmH = Math.min(targetSpeed, tp.speedKmH + maxAccel * dt);
             tp.accelState = 'ACCELERATING';
           } else if (tp.speedKmH > targetSpeed) {
             tp.speedKmH = Math.max(targetSpeed, tp.speedKmH - maxBrake * dt);
-            tp.accelState = 'BRAKING';
+            tp.accelState = tp.speedKmH === 0 ? 'STOPPED' : 'BRAKING';
           } else {
             tp.accelState = tp.speedKmH === 0 ? 'STOPPED' : 'CRUISING';
           }
 
+          // Pitch: slight forward pitch during braking, rearward during acceleration
+          const accelG = (tp.speedKmH - prevSpeed) / dt / 30;  // normalize
+          const targetPitch = Math.max(-1.5, Math.min(1.5, -accelG * 0.8));
+          tp.pitchAngle = tp.pitchAngle + (targetPitch - tp.pitchAngle) * Math.min(1, dt * 2.5);
+
           const dKm = (tp.speedKmH / 3600) * dt * direction;
           tp.currentKm = tp.currentKm + dKm;
 
-          if (isUp && tp.currentKm > KM_MAX) {
-            tp.currentKm = KM_MIN;
-          } else if (!isUp && tp.currentKm < KM_MIN) {
-            tp.currentKm = KM_MAX;
-          }
+          // Wrap-around at corridor ends
+          if (isUp && tp.currentKm > KM_MAX) tp.currentKm = KM_MIN;
+          else if (!isUp && tp.currentKm < KM_MIN) tp.currentKm = KM_MAX;
 
-          const wheelRotationsPerSec = (tp.speedKmH / 3.6) / 3.43;
+          // Wheel rotation: wheelRotationsPerSec from speed & wheel circumference
+          // WAP-7 driving wheel diameter ≈ 1.092m → r ≈ 0.546m → circumference ≈ 3.43m
+          const wheelCircumferenceM = 3.43;
+          const wheelRotationsPerSec = (tp.speedKmH / 3.6) / wheelCircumferenceM;
           const dAngle = wheelRotationsPerSec * 360 * dt * direction;
           tp.wheelAngle = (tp.wheelAngle + dAngle) % 360;
 
+          // Suspension sway (speed-dependent oscillation)
           if (tp.speedKmH > 0) {
-            tp.suspensionOffset = Math.sin(time * 0.015) * 0.75 * (tp.speedKmH / 130);
+            const sway = Math.sin(time * 0.012 + (isUp ? 0 : Math.PI)) * 0.6 * (tp.speedKmH / 130);
+            tp.suspensionOffset = sway;
           } else {
-            tp.suspensionOffset = 0;
+            tp.suspensionOffset = tp.suspensionOffset * 0.93; // damp to rest
           }
 
+          // Camera follow in TRAIN mode
           if (cameraMode === 'TRAIN' && (trackedTrainId === id || (!trackedTrainId && isUp))) {
             const trainX = kmToX(tp.currentKm, W);
             targetViewBoxRef.current = {
-              x: Math.max(0, Math.min(W - 360, trainX - 180)),
-              y: 135,
-              w: 360,
-              h: 190,
+              x: Math.max(0, Math.min(W - 420, trainX - 220)),
+              y: 130, w: 420, h: 210,
             };
           }
 
@@ -538,14 +1007,15 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
         return changed ? next : prev;
       });
 
+      // Damped camera lerp
       setCurrentViewBox(prevVb => {
         const target = targetViewBoxRef.current;
-        const lerpFactor = 0.055;
+        const lp = 0.055;
         return {
-          x: prevVb.x + (target.x - prevVb.x) * lerpFactor,
-          y: prevVb.y + (target.y - prevVb.y) * lerpFactor,
-          w: prevVb.w + (target.w - prevVb.w) * lerpFactor,
-          h: prevVb.h + (target.h - prevVb.h) * lerpFactor,
+          x: prevVb.x + (target.x - prevVb.x) * lp,
+          y: prevVb.y + (target.y - prevVb.y) * lp,
+          w: prevVb.w + (target.w - prevVb.w) * lp,
+          h: prevVb.h + (target.h - prevVb.h) * lp,
         };
       });
 
@@ -561,84 +1031,89 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
     return departmentFilter === dept;
   };
 
-  const civilWorkX = kmToX(126, W);
+  const civilWorkX  = kmToX(126, W);
   const signalWorkX = kmToX(114, W);
   const tractionWorkX = kmToX(138, W);
 
   const bgParallaxX = -currentViewBox.x * 0.15;
   const cloudDriftX = (envTime * 0.008) % 1200;
 
-  const isCivilDrawn = isDemoActive && demoStepIdx >= 1 && demoStepIdx <= 6;
+  const isCivilDrawn   = isDemoActive && demoStepIdx >= 1 && demoStepIdx <= 6;
   const isTractionDrawn = isDemoActive && demoStepIdx === 7;
-  const isSignalDrawn = isDemoActive && demoStepIdx === 8;
+  const isSignalDrawn  = isDemoActive && demoStepIdx === 8;
 
   return (
-    <div className="w-full relative overflow-hidden select-none bg-[#F7F4EE] border border-[#1A1815] rounded-[2px]">
-
-      {/* ── TOP PRIMARY DEMO & CAMERA TOOLBAR ── */}
-      <div className="p-2.5 px-3.5 border-b border-[#D8D1C5] bg-[#FFFFFF] flex flex-wrap items-center justify-between gap-2.5">
-
-        {/* Primary Hackathon Demo Action */}
+    <div
+      className="w-full relative overflow-hidden select-none"
+      style={{ backgroundColor: '#F2EADF', border: '1px solid #D5CEC1', borderRadius: '6px' }}
+    >
+      {/* ── TOOLBAR ── */}
+      <div
+        className="p-2 px-3.5 flex flex-wrap items-center justify-between gap-2"
+        style={{ borderBottom: '1px solid #D5CEC1', backgroundColor: '#F8F5EF' }}
+      >
         <div className="flex items-center gap-2 flex-wrap">
           {!isDemoActive ? (
             <button
               onClick={() => startDemoStory(0)}
-              className="px-3.5 py-1.5 bg-[#8B1A1A] hover:bg-[#7F1D1D] text-[#FFFFFF] text-[11px] font-mono font-bold uppercase tracking-wider rounded-[2px] shadow-sm flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+              style={{
+                padding: '5px 12px',
+                backgroundColor: '#1D1F1E',
+                color: '#F2EADF',
+                border: '1px solid #1D1F1E',
+                borderRadius: '4px',
+                fontFamily: "'Inter', sans-serif",
+                fontSize: '12px', fontWeight: 500,
+                display: 'flex', alignItems: 'center', gap: '6px',
+                cursor: 'pointer', transition: 'background-color 0.15s ease',
+              }}
             >
-              <Play className="w-3.5 h-3.5 fill-current" />
-              <span>SIMULATE OPERATION (30s Story)</span>
+              <Play style={{ width: 13, height: 13, fill: 'currentColor' }} />
+              Simulate Operation
             </button>
           ) : (
-            <div className="flex items-center gap-1 bg-[#F7F4EE] border border-[#D8D1C5] p-0.5 rounded-[2px]">
-              <span className="text-[10px] font-mono font-bold text-[#8B1A1A] px-2 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#8B1A1A] animate-ping" />
-                LIVE DEMO (STEP {demoStepIdx + 1}/10)
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 6px', backgroundColor: '#F2EADF', border: '1px solid #D5CEC1', borderRadius: '4px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 600, color: '#C84B43' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#C84B43', display: 'inline-block' }} className="animate-pulse" />
+                Live · Step {demoStepIdx + 1}/10
               </span>
-
               {isDemoPaused ? (
-                <button
-                  onClick={resumeDemoStory}
-                  className="p-1 px-2 text-[10px] font-mono bg-[#1A1815] text-[#FFFFFF] rounded-[1px] flex items-center gap-1 cursor-pointer"
-                >
-                  <Play className="w-3 h-3 fill-current" /> Resume
+                <button onClick={resumeDemoStory} style={{ padding: '3px 8px', backgroundColor: '#1D1F1E', color: '#F2EADF', border: 'none', borderRadius: '3px', fontFamily: "'Inter', sans-serif", fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Play style={{ width: 11, height: 11, fill: 'currentColor' }} /> Resume
                 </button>
               ) : (
-                <button
-                  onClick={pauseDemoStory}
-                  className="p-1 px-2 text-[10px] font-mono bg-[#FFFFFF] hover:bg-[#EDE7DC] text-[#1A1815] border border-[#D8D1C5] rounded-[1px] flex items-center gap-1 cursor-pointer"
-                >
-                  <Pause className="w-3 h-3" /> Pause
+                <button onClick={pauseDemoStory} style={{ padding: '3px 8px', backgroundColor: 'transparent', color: '#1D1F1E', border: '1px solid #D5CEC1', borderRadius: '3px', fontFamily: "'Inter', sans-serif", fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Pause style={{ width: 11, height: 11 }} /> Pause
                 </button>
               )}
-
-              <button
-                onClick={restartDemoStory}
-                className="p-1 px-2 text-[10px] font-mono bg-[#FFFFFF] hover:bg-[#EDE7DC] text-[#1A1815] border border-[#D8D1C5] rounded-[1px] flex items-center gap-1 cursor-pointer"
-              >
-                <RotateCcw className="w-3 h-3" /> Restart
+              <button onClick={restartDemoStory} style={{ padding: '3px 8px', backgroundColor: 'transparent', color: '#1D1F1E', border: '1px solid #D5CEC1', borderRadius: '3px', fontFamily: "'Inter', sans-serif", fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <RotateCcw style={{ width: 11, height: 11 }} /> Restart
               </button>
-
-              <button
-                onClick={exitDemoStory}
-                className="p-1 px-1.5 text-[10px] font-mono text-[#615A4F] hover:text-[#B91C1C] rounded-[1px] cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
+              <button onClick={exitDemoStory} style={{ padding: '3px 5px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', color: '#77736C' }}>
+                <X style={{ width: 13, height: 13 }} />
               </button>
             </div>
           )}
 
           {/* Camera Presets */}
-          <div className="hidden sm:flex items-center gap-1 ml-2">
-            <span className="text-[9.5px] font-mono font-bold text-[#615A4F] uppercase mr-0.5">CAMERA:</span>
+          <div className="hidden sm:flex items-center gap-1">
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', textTransform: 'uppercase', letterSpacing: '0.07em', marginRight: 2 }}>View</span>
             {(['WIDE', 'TRAIN', 'CIVIL', 'SIGNAL', 'TRACTION', 'ROUTE'] as CameraPreset[]).map(cam => (
               <button
                 key={cam}
                 onClick={() => setCameraPreset(cam)}
-                className={`px-2 py-0.5 text-[9.5px] font-mono font-bold rounded-[1px] border transition-all cursor-pointer ${
-                  cameraMode === cam
-                    ? 'bg-[#1A1815] text-[#FFFFFF] border-[#1A1815]'
-                    : 'bg-[#F7F4EE] text-[#615A4F] hover:bg-[#EDE7DC] border-[#D8D1C5]'
-                }`}
+                style={{
+                  padding: '3px 8px',
+                  borderRadius: '3px',
+                  border: '1px solid',
+                  borderColor: cameraMode === cam ? '#1D1F1E' : '#D5CEC1',
+                  backgroundColor: cameraMode === cam ? '#1D1F1E' : 'transparent',
+                  color: cameraMode === cam ? '#F2EADF' : '#4B4A46',
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '10.5px', fontWeight: cameraMode === cam ? 600 : 400,
+                  cursor: 'pointer', transition: 'all 0.12s ease',
+                  letterSpacing: '0.02em',
+                }}
               >
                 {cam}
               </button>
@@ -646,29 +1121,33 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
           </div>
         </div>
 
-        {/* Speed & Signal Aspect Telemetry */}
-        <div className="flex items-center gap-3 text-xs font-mono">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-[#615A4F]">PROT. SIGNAL:</span>
-            <span className={`px-1.5 py-0.2 text-[9.5px] font-bold rounded-[1px] border ${
-              signals.find(s => s.id === 'SIG-UP-126')?.aspect === 'RED' ? 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]'
-              : signals.find(s => s.id === 'SIG-UP-126')?.aspect === 'YELLOW' ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-              : 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]'
-            }`}>
-              {signals.find(s => s.id === 'SIG-UP-126')?.aspect || 'GREEN'} (S-126)
-            </span>
+        {/* Signal & Speed Telemetry */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: "'Inter', sans-serif", fontSize: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ color: '#77736C' }}>Prot. Signal</span>
+            {(() => {
+              const asp = signals.find(s => s.id === 'SIG-UP-126')?.aspect || 'GREEN';
+              const c = asp === 'RED' ? { bg: '#F9EEEE', text: '#C84B43', border: '#DCA09C' } :
+                        asp === 'YELLOW' ? { bg: '#FBF5E6', text: '#D49A32', border: '#E0BF7A' } :
+                        { bg: '#EDF5F0', text: '#4D8B68', border: '#96C4AE' };
+              return (
+                <span style={{ padding: '1px 7px', backgroundColor: c.bg, color: c.text, border: `1px solid ${c.border}`, borderRadius: '3px', fontWeight: 500, fontSize: '11px' }}>
+                  {asp} (S-126)
+                </span>
+              );
+            })()}
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-[#615A4F]">LOCO 20901:</span>
-            <span className="font-bold text-[#1A1815]">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ color: '#77736C' }}>Loco 20901</span>
+            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, color: '#1D1F1E', fontSize: '13px' }}>
               {trainPhysics['TRN-20901'] ? Math.round(trainPhysics['TRN-20901'].speedKmH) : 130} km/h
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── THE LIVING CANVAS SVG WITH 2.5D CAMERA ── */}
+      {/* ── SVG CANVAS ── */}
       <div className="relative">
         <svg
           viewBox={`${currentViewBox.x} ${currentViewBox.y} ${currentViewBox.w} ${currentViewBox.h}`}
@@ -679,67 +1158,87 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
         >
           <defs>
             <pattern id="pen-hatch-track" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <line x1="0" y1="0" x2="0" y2="8" stroke="#1A1815" strokeWidth="1.2" strokeOpacity="0.4" />
+              <line x1="0" y1="0" x2="0" y2="8" stroke="#1D1F1E" strokeWidth="1.2" strokeOpacity="0.4" />
             </pattern>
+            {/* OHE wire catenary filter — subtle droop */}
           </defs>
 
-          {/* LAYER 1: BACKGROUND (0.15x Parallax + Ambient Cloud Drift) */}
+          {/* ── LAYER 1: BACKGROUND (parallax) ── */}
           <g transform={`translate(${bgParallaxX}, 0)`}>
-            <rect x="-300" y="0" width={W + 600} height={SKY_H} fill="#FAF7F2" />
-            <g transform={`translate(${cloudDriftX - 200}, 0)`} opacity="0.65">
-              <path d="M 50 28 Q 70 16 95 24 Q 120 18 140 28 Q 155 38 135 48 L 45 48 Z" fill="#F2ECE1" stroke="#D8D1C5" strokeWidth="0.8" />
-              <path d="M 420 22 Q 445 12 470 20 Q 500 14 525 24 Q 540 36 515 44 L 410 44 Z" fill="#F2ECE1" stroke="#D8D1C5" strokeWidth="0.8" />
-              <path d="M 820 26 Q 840 14 865 22 Q 890 16 910 26 Q 925 36 905 46 L 815 46 Z" fill="#F2ECE1" stroke="#D8D1C5" strokeWidth="0.8" />
+            <rect x="-300" y="0" width={W + 600} height={SKY_H} fill="#F8F5EF" />
+            {/* Clouds */}
+            <g transform={`translate(${cloudDriftX - 200}, 0)`} opacity="0.6">
+              <path d="M 50 28 Q 70 16 95 24 Q 120 18 140 28 Q 155 38 135 48 L 45 48 Z"  fill="#EFEBE3" stroke="#D5CEC1" strokeWidth="0.8" />
+              <path d="M 420 22 Q 445 12 470 20 Q 500 14 525 24 Q 540 36 515 44 L 410 44 Z" fill="#EFEBE3" stroke="#D5CEC1" strokeWidth="0.8" />
+              <path d="M 820 26 Q 840 14 865 22 Q 890 16 910 26 Q 925 36 905 46 L 815 46 Z" fill="#EFEBE3" stroke="#D5CEC1" strokeWidth="0.8" />
             </g>
-            <line x1="-300" y1="25" x2={W + 300} y2="25" stroke="#EAE4D9" strokeWidth="0.75" strokeDasharray="6 4" />
-            <line x1="-300" y1="55" x2={W + 300} y2="55" stroke="#EAE4D9" strokeWidth="0.75" strokeDasharray="6 4" />
+            {/* Horizon lines */}
+            <line x1="-300" y1="25" x2={W+300} y2="25" stroke="#E8E2D8" strokeWidth="0.6" strokeDasharray="6 4" />
+            <line x1="-300" y1="55" x2={W+300} y2="55" stroke="#E8E2D8" strokeWidth="0.6" strokeDasharray="6 4" />
+            {/* Terrain silhouette */}
             <path
-              d={`M -300 ${TERRAIN_Y} Q 180 ${TERRAIN_Y - 28} 380 ${TERRAIN_Y - 6} Q 600 ${TERRAIN_Y - 38} 820 ${TERRAIN_Y - 14} Q 1020 ${TERRAIN_Y - 32} ${W + 300} ${TERRAIN_Y} L ${W + 300} ${H} L -300 ${H} Z`}
-              fill="#F2ECE1"
-              stroke="#D8D1C5"
-              strokeWidth="1"
+              d={`M -300 ${TERRAIN_Y} Q 180 ${TERRAIN_Y - 28} 380 ${TERRAIN_Y - 6} Q 600 ${TERRAIN_Y - 38} 820 ${TERRAIN_Y - 14} Q 1020 ${TERRAIN_Y - 32} ${W+300} ${TERRAIN_Y} L ${W+300} ${H} L -300 ${H} Z`}
+              fill="#EDE5D8" stroke="#D5CEC1" strokeWidth="0.8"
             />
+            {/* Treeline */}
+            {[80, 200, 400, 620, 810, 980, 1100].map((tx, i) => (
+              <g key={i} opacity="0.5">
+                <rect x={tx - 4} y={TERRAIN_Y - 20} width={8} height={20} fill="#77736C" />
+                <ellipse cx={tx} cy={TERRAIN_Y - 22} rx={14} ry={16} fill="#4B4A46" />
+              </g>
+            ))}
           </g>
 
-          {/* LAYER 2: MIDGROUND (Stations, OHE Masts, 3-Light Signals) */}
+          {/* ── LAYER 2: MIDGROUND — Stations, OHE, Signals ── */}
           {STATIONS.map(st => {
             const x = kmToX(st.km, W);
             return (
               <g key={st.code}>
-                <rect x={x - 32} y={UP_Y - TRACK_H / 2 - 8} width="64" height="8" fill="#EDE7DC" stroke="#1A1815" strokeWidth="1" />
-                <rect x={x - 24} y={UP_Y - TRACK_H / 2 - 38} width="48" height="11" fill="#FFFFFF" stroke="#1A1815" strokeWidth="1.2" rx="1" />
-                <line x1={x} y1={UP_Y - TRACK_H / 2 - 27} x2={x} y2={UP_Y - TRACK_H / 2 - 8} stroke="#1A1815" strokeWidth="1" />
-                <text x={x} y={UP_Y - TRACK_H / 2 - 30} textAnchor="middle" fontSize="7.5" fontFamily="'Inter', sans-serif" fontWeight="700" fill="#1A1815">
-                  {st.name}
-                </text>
-                <text x={x} y={UP_Y - TRACK_H / 2 - 42} textAnchor="middle" fontSize="6.5" fontFamily="'JetBrains Mono', monospace" fill="#615A4F">
-                  KM {st.km}
-                </text>
+                <rect x={x - 36} y={UP_Y - TRACK_H / 2 - 10} width={72} height={10} fill="#EDE5D8" stroke="#1D1F1E" strokeWidth="0.9" />
+                <rect x={x - 26} y={UP_Y - TRACK_H / 2 - 42} width={52} height={12} fill="#FBF9F4" stroke="#1D1F1E" strokeWidth="1.1" rx="1" />
+                <line x1={x} y1={UP_Y - TRACK_H / 2 - 30} x2={x} y2={UP_Y - TRACK_H / 2 - 10} stroke="#1D1F1E" strokeWidth="0.9" />
+                <text x={x} y={UP_Y - TRACK_H / 2 - 33} textAnchor="middle" fontSize="7.5" fontFamily="'Inter', sans-serif" fontWeight="600" fill="#1D1F1E">{st.name}</text>
+                <text x={x} y={UP_Y - TRACK_H / 2 - 45} textAnchor="middle" fontSize="6" fontFamily="'JetBrains Mono', monospace" fill="#4B4A46">KM {st.km}</text>
               </g>
             );
           })}
 
-          {/* OHE Traction Network */}
+          {/* OHE Masts & Contact Wire */}
           <g opacity={isHighlighted('OHE') ? 1 : 0.4}>
             {[60, 160, 260, 360, 460, 560, 660, 760, 860, 960, 1060, 1160].map((mx, idx) => {
-              const mastTopY = UP_Y - TRACK_H / 2 - OHE_MAST_H;
+              const mastTopY  = UP_Y - TRACK_H / 2 - OHE_MAST_H;
               const mastBaseY = UP_Y - TRACK_H / 2;
+              const cantileverY = mastTopY + 14;
+              const wireOffsetX = 22;
               return (
-                <g key={`ohe-mast-${idx}`}>
-                  <line x1={mx} y1={mastTopY} x2={mx} y2={mastBaseY} stroke="#1A1815" strokeWidth="1.8" />
-                  <line x1={mx} y1={mastTopY + 14} x2={mx + 22} y2={mastTopY + 28} stroke="#1A1815" strokeWidth="1.2" />
-                  <line x1={mx + 22} y1={mastTopY + 28} x2={mx + 22} y2={mastTopY + 28} stroke="#1A1815" strokeWidth="1.2" />
-                  <circle cx={mx + 22} cy={mastTopY + 28} r="2.5" fill="#FFFFFF" stroke="#1A1815" strokeWidth="1" />
+                <g key={`ohe-${idx}`}>
+                  {/* Mast */}
+                  <line x1={mx} y1={mastTopY} x2={mx} y2={mastBaseY} stroke="#1D1F1E" strokeWidth="1.8" />
+                  {/* Cantilever arm */}
+                  <line x1={mx} y1={cantileverY} x2={mx + wireOffsetX} y2={cantileverY + 14} stroke="#1D1F1E" strokeWidth="1.2" />
+                  {/* Registration arm stay */}
+                  <line x1={mx} y1={cantileverY + 4} x2={mx + wireOffsetX} y2={cantileverY + 14} stroke="#4B4A46" strokeWidth="0.7" strokeDasharray="3 2" />
+                  {/* Porcelain insulator */}
+                  <circle cx={mx + wireOffsetX} cy={cantileverY + 14} r="2.8" fill="#FBF9F4" stroke="#1D1F1E" strokeWidth="0.9" />
                 </g>
               );
             })}
+            {/* Contact wire (catenary path) */}
             <path
-              d={`M 0 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 18} Q 300 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 28} 600 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 18} Q 900 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 28} ${W} ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 18}`}
-              fill="none"
-              stroke="#1A1815"
-              strokeWidth="1.2"
+              d={`M 0 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 28} Q 300 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 36} 600 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 28} Q 900 ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 36} ${W} ${UP_Y - TRACK_H / 2 - OHE_MAST_H + 28}`}
+              fill="none" stroke="#1D1F1E" strokeWidth="1.1" opacity="0.9"
             />
-            <line x1="0" y1={UP_Y - TRACK_H / 2 - 30} x2={W} y2={UP_Y - TRACK_H / 2 - 30} stroke="#1A1815" strokeWidth="1.4" />
+            {/* Messenger wire (above) */}
+            <line x1="0" y1={UP_Y - TRACK_H / 2 - OHE_MAST_H + 16} x2={W} y2={UP_Y - TRACK_H / 2 - OHE_MAST_H + 16}
+              stroke="#4B4A46" strokeWidth="0.8" opacity="0.6" />
+            {/* Droppers */}
+            {[60, 160, 260, 360, 460, 560, 660, 760, 860, 960, 1060, 1160].map((mx, idx) => (
+              <line key={`drop-${idx}`}
+                x1={mx + 22} y1={UP_Y - TRACK_H / 2 - OHE_MAST_H + 16}
+                x2={mx + 22} y2={UP_Y - TRACK_H / 2 - OHE_MAST_H + 28}
+                stroke="#4B4A46" strokeWidth="0.8" opacity="0.6"
+              />
+            ))}
           </g>
 
           {/* 3-Light Color Aspect Signals */}
@@ -747,234 +1246,298 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
             {signals.map(sig => {
               const sx = kmToX(sig.km, W);
               const mastBaseY = UP_Y - TRACK_H / 2 - 2;
-              const mastTopY = mastBaseY - 44;
-
-              const isRed = sig.aspect === 'RED';
+              const mastTopY  = mastBaseY - 50;
+              const isRed    = sig.aspect === 'RED';
               const isYellow = sig.aspect === 'YELLOW';
-              const isGreen = sig.aspect === 'GREEN';
+              const isGreen  = sig.aspect === 'GREEN';
 
               return (
-                <g
-                  key={sig.id}
-                  onClick={() => {
-                    handleToggleSignal(sig.id);
-                    setCameraPreset('SIGNAL');
-                  }}
-                  className="cursor-pointer"
-                >
-                  <line x1={sx} y1={mastTopY + 28} x2={sx} y2={mastBaseY} stroke="#1A1815" strokeWidth="2" />
-                  <rect x={sx - 5} y={mastTopY} width="10" height="28" rx="2" fill="#1A1815" stroke="#1A1815" strokeWidth="1.2" />
-
-                  <circle cx={sx} cy={mastTopY + 5} r="3" fill={isGreen ? '#15803D' : '#2D2A26'} />
-                  {isGreen && <circle cx={sx} cy={mastTopY + 5} r="5" fill="#15803D" fillOpacity="0.3" />}
-
-                  <circle cx={sx} cy={mastTopY + 14} r="3" fill={isYellow ? '#B45309' : '#2D2A26'} />
-                  {isYellow && <circle cx={sx} cy={mastTopY + 14} r="5" fill="#B45309" fillOpacity="0.3" />}
-
-                  <circle cx={sx} cy={mastTopY + 23} r="3" fill={isRed ? '#B91C1C' : '#2D2A26'} />
-                  {isRed && <circle cx={sx} cy={mastTopY + 23} r="6" fill="#B91C1C" fillOpacity="0.35" />}
-
-                  <rect x={sx - 10} y={mastTopY + 30} width="20" height="7" fill="#FFFFFF" stroke="#1A1815" strokeWidth="0.8" />
-                  <text x={sx} y={mastTopY + 35.5} textAnchor="middle" fontSize="5.5" fontFamily="'JetBrains Mono', monospace" fontWeight="700" fill="#1A1815">
-                    S-{sig.km}
-                  </text>
+                <g key={sig.id} onClick={() => { handleToggleSignal(sig.id); setCameraPreset('SIGNAL'); }} className="cursor-pointer">
+                  {/* Mast */}
+                  <line x1={sx} y1={mastTopY + 30} x2={sx} y2={mastBaseY} stroke="#1D1F1E" strokeWidth="2" />
+                  {/* Signal head */}
+                  <rect x={sx - 6} y={mastTopY} width={12} height={30} rx="2" fill="#1D1F1E" stroke="#1D1F1E" strokeWidth="1" />
+                  {/* Visors above each lamp */}
+                  {[5, 14, 23].map((ly, i) => (
+                    <line key={i} x1={sx - 7} y1={mastTopY + ly - 1} x2={sx + 7} y2={mastTopY + ly - 1} stroke="#1D1F1E" strokeWidth="1.2" />
+                  ))}
+                  {/* Green lamp */}
+                  <circle cx={sx} cy={mastTopY + 6}  r="3.5" fill={isGreen  ? '#4D8B68' : '#2A2D2B'} />
+                  {isGreen  && <circle cx={sx} cy={mastTopY + 6}  r="6.5" fill="#4D8B68" fillOpacity="0.28" />}
+                  {/* Yellow lamp */}
+                  <circle cx={sx} cy={mastTopY + 15} r="3.5" fill={isYellow ? '#D49A32' : '#2A2D2B'} />
+                  {isYellow && <circle cx={sx} cy={mastTopY + 15} r="6.5" fill="#D49A32" fillOpacity="0.28" />}
+                  {/* Red lamp */}
+                  <circle cx={sx} cy={mastTopY + 24} r="3.5" fill={isRed    ? '#C84B43' : '#2A2D2B'} />
+                  {isRed    && <circle cx={sx} cy={mastTopY + 24} r="7.5" fill="#C84B43" fillOpacity="0.32" />}
+                  {/* ID plate */}
+                  <rect x={sx - 10} y={mastTopY + 32} width={20} height={8} fill="#FBF9F4" stroke="#1D1F1E" strokeWidth="0.7" />
+                  <text x={sx} y={mastTopY + 38} textAnchor="middle" fontSize="5.5" fontFamily="'JetBrains Mono', monospace" fontWeight="700" fill="#1D1F1E">S-{sig.km}</text>
                 </g>
               );
             })}
           </g>
 
-          {/* LAYER 3: FOREGROUND (Rails, Sleepers, Maintenance Drawings) */}
+          {/* ── LAYER 3: TRACK FOREGROUND ── */}
+          {/* Ballast bed */}
+          {[UP_Y, DN_Y].map((lineY, lIdx) => (
+            <rect key={`ballast-${lIdx}`}
+              x={0} y={lineY - TRACK_H / 2 - 4}
+              width={W} height={TRACK_H + 8}
+              fill="#D9CCBC" opacity="0.35"
+            />
+          ))}
+
+          {/* Sleepers */}
           {[UP_Y, DN_Y].map((lineY, lIdx) => (
             <g key={`sleepers-line-${lIdx}`}>
               {Array.from({ length: 65 }, (_, i) => {
                 const sx = i * 18.5 + 4;
                 return (
-                  <rect
-                    key={`sp-${lIdx}-${i}`}
-                    x={sx}
-                    y={lineY - TRACK_H / 2 - 2}
-                    width="11"
-                    height={TRACK_H + 4}
-                    fill="#D8D1C5"
-                    stroke="#1A1815"
-                    strokeWidth="0.8"
-                    rx="0.5"
+                  <rect key={`sp-${lIdx}-${i}`}
+                    x={sx} y={lineY - TRACK_H / 2 - 2}
+                    width={11} height={TRACK_H + 4}
+                    fill="#C8BCA8" stroke="#1D1F1E" strokeWidth="0.7" rx="0.5"
                   />
                 );
               })}
             </g>
           ))}
 
-          <line x1="0" y1={UP_Y - TRACK_H / 2 + 2} x2={W} y2={UP_Y - TRACK_H / 2 + 2} stroke="#1A1815" strokeWidth="2.4" />
-          <line x1="0" y1={UP_Y + TRACK_H / 2 - 2} x2={W} y2={UP_Y + TRACK_H / 2 - 2} stroke="#1A1815" strokeWidth="2.4" />
-          <line x1="0" y1={DN_Y - TRACK_H / 2 + 2} x2={W} y2={DN_Y - TRACK_H / 2 + 2} stroke="#1A1815" strokeWidth="2.4" />
-          <line x1="0" y1={DN_Y + TRACK_H / 2 - 2} x2={W} y2={DN_Y + TRACK_H / 2 - 2} stroke="#1A1815" strokeWidth="2.4" />
+          {/* Rails — two per track */}
+          <line x1="0" y1={UP_Y - TRACK_H / 2 + 2} x2={W} y2={UP_Y - TRACK_H / 2 + 2} stroke="#1D1F1E" strokeWidth="2.8" />
+          <line x1="0" y1={UP_Y + TRACK_H / 2 - 2} x2={W} y2={UP_Y + TRACK_H / 2 - 2} stroke="#1D1F1E" strokeWidth="2.8" />
+          <line x1="0" y1={DN_Y - TRACK_H / 2 + 2} x2={W} y2={DN_Y - TRACK_H / 2 + 2} stroke="#1D1F1E" strokeWidth="2.8" />
+          <line x1="0" y1={DN_Y + TRACK_H / 2 - 2} x2={W} y2={DN_Y + TRACK_H / 2 - 2} stroke="#1D1F1E" strokeWidth="2.8" />
 
-          {/* DYNAMIC SCENARIO ELEMENT: CIVIL WORK DRAWINGS */}
+          {/* ── SCENARIO: CIVIL WORK ZONE ── */}
           {isCivilDrawn && (
-            <g transform={`translate(${civilWorkX - 45}, ${UP_Y - TRACK_H / 2 - 20})`} className="animate-fade-in">
-              <rect x="0" y="10" width="90" height="36" fill="url(#pen-hatch-track)" stroke="#B45309" strokeWidth="1.8" strokeDasharray="6 3" />
+            <g transform={`translate(${civilWorkX - 55}, ${UP_Y - TRACK_H / 2 - 28})`} className="animate-fade-in">
+              {/* Work zone boundary */}
+              <rect x={0} y={10} width={110} height={42} fill="url(#pen-hatch-track)" stroke="#D49A32" strokeWidth="1.8" strokeDasharray="7 3" />
+              {/* Barricades */}
+              {[0, 52, 104].map((bx, i) => (
+                <g key={i}>
+                  <line x1={bx + 3} y1={10} x2={bx + 3} y2={52} stroke="#C84B43" strokeWidth="1.5" />
+                  <line x1={bx + 3} y1={14} x2={bx + 8} y2={10} stroke="#F5F0E8" strokeWidth="1.5" />
+                  <line x1={bx + 3} y1={20} x2={bx + 8} y2={16} stroke="#F5F0E8" strokeWidth="1.5" />
+                  <line x1={bx + 3} y1={26} x2={bx + 8} y2={22} stroke="#F5F0E8" strokeWidth="1.5" />
+                </g>
+              ))}
+              {/* Worker figure */}
               {demoStepIdx >= 5 && (
-                <g transform="translate(36, -8)">
-                  <circle cx="6" cy="4" r="3" fill="#B45309" stroke="#1A1815" strokeWidth="0.8" />
-                  <rect x="3" y="7" width="6" height="10" fill="#FFFFFF" stroke="#1A1815" strokeWidth="1" />
-                  <line x1="3" y1="11" x2="9" y2="11" stroke="#B45309" strokeWidth="1.2" />
-                  <line x1="4" y1="17" x2="3" y2="24" stroke="#1A1815" strokeWidth="1.2" />
-                  <line x1="8" y1="17" x2="9" y2="24" stroke="#1A1815" strokeWidth="1.2" />
-                  <line x1="-3" y1="16" x2="-3" y2="28" stroke="#1A1815" strokeWidth="1.6" />
+                <g transform="translate(40, -16)">
+                  {/* Hard hat */}
+                  <ellipse cx={7} cy={3} rx={6} ry={3.5} fill="#D49A32" stroke="#1D1F1E" strokeWidth="0.8" />
+                  {/* Head */}
+                  <circle cx={7} cy={7} r={4} fill="#F5EDE8" stroke="#1D1F1E" strokeWidth="0.8" />
+                  {/* Hi-vis vest body */}
+                  <rect x={3} y={11} width={8} height={11} fill="#D49A32" stroke="#1D1F1E" strokeWidth="0.9" rx="0.5" />
+                  <line x1={3} y1={14} x2={11} y2={14} stroke="#1D1F1E" strokeWidth="0.8" />
+                  {/* Arms */}
+                  <line x1={3} y1={12} x2={-2} y2={18} stroke="#1D1F1E" strokeWidth="1.2" strokeLinecap="round" />
+                  <line x1={11} y1={12} x2={14} y2={20} stroke="#1D1F1E" strokeWidth="1.2" strokeLinecap="round" />
+                  {/* Tool (tamping bar) */}
+                  <line x1={14} y1={20} x2={14} y2={32} stroke="#4B4A46" strokeWidth="2.5" strokeLinecap="round" />
+                  {/* Legs */}
+                  <line x1={5} y1={22} x2={4} y2={34} stroke="#1D1F1E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1={9} y1={22} x2={10} y2={34} stroke="#1D1F1E" strokeWidth="1.5" strokeLinecap="round" />
+                </g>
+              )}
+              {/* Work progress label */}
+              {demoStepIdx === 6 && (
+                <g>
+                  <rect x={20} y={-10} width={70} height={12} fill="#FBF9F4" stroke="#D5CEC1" strokeWidth="0.8" rx="2" />
+                  <text x={55} y={-1} textAnchor="middle" fontSize="6.5" fontFamily="'Inter', sans-serif" fontWeight="600" fill="#4B4A46">
+                    Tamping {demoWorkProgress}%
+                  </text>
                 </g>
               )}
             </g>
           )}
 
-          {/* DYNAMIC SCENARIO ELEMENT: OHE TRACTION DRAWINGS */}
+          {/* ── SCENARIO: OHE TRACTION DRAWINGS ── */}
           {isTractionDrawn && (
-            <g transform={`translate(${tractionWorkX - 20}, ${UP_Y - TRACK_H / 2 - OHE_MAST_H - 10})`} className="animate-fade-in">
-              <line x1="8" y1="18" x2="4" y2="70" stroke="#1E3A5F" strokeWidth="1.5" />
-              <line x1="18" y1="18" x2="22" y2="70" stroke="#1E3A5F" strokeWidth="1.5" />
-              <g transform="translate(6, 4)">
-                <circle cx="6" cy="4" r="3" fill="#FFFFFF" stroke="#1A1815" strokeWidth="1" />
-                <rect x="3" y="7" width="6" height="10" fill="#1E3A5F" stroke="#1A1815" strokeWidth="1" />
-                <line x1="3" y1="11" x2="9" y2="11" stroke="#B45309" strokeWidth="1.2" />
-              </g>
+            <g transform={`translate(${tractionWorkX - 24}, ${UP_Y - TRACK_H / 2 - OHE_MAST_H - 16})`} className="animate-fade-in">
+              {/* Linesman at catenary level */}
+              <line x1={10} y1={22} x2={6} y2={76} stroke="#1D1F1E" strokeWidth="1.5" />
+              <line x1={22} y1={22} x2={26} y2={76} stroke="#1D1F1E" strokeWidth="1.5" />
+              <line x1={6} y1={44} x2={26} y2={44} stroke="#4B4A46" strokeWidth="0.9" strokeDasharray="3 2" />
+              {/* Linesman body */}
+              <circle cx={16} cy={6} r={3.5} fill="#FBF9F4" stroke="#1D1F1E" strokeWidth="0.9" />
+              <ellipse cx={16} cy={2} rx={5} ry={2.5} fill="#1E3A5F" stroke="#1D1F1E" strokeWidth="0.7" />
+              <rect x={12} y={9} width={8} height={10} fill="#1E3A5F" stroke="#1D1F1E" strokeWidth="0.9" rx="0.5" />
+              {/* Voltage annotation */}
+              <rect x={30} y={4} width={24} height={10} fill="#EEF2F8" stroke="#1E3A5F" strokeWidth="0.8" rx="2" />
+              <text x={42} y={12} textAnchor="middle" fontSize="6" fontFamily="'JetBrains Mono', monospace" fontWeight="700" fill="#1E3A5F">25kV AC</text>
             </g>
           )}
 
-          {/* DYNAMIC SCENARIO ELEMENT: SIGNAL DRAWINGS */}
+          {/* ── SCENARIO: SIGNAL ENGINEERING DRAWINGS ── */}
           {isSignalDrawn && (
-            <g transform={`translate(${signalWorkX + 6}, ${UP_Y - TRACK_H / 2 - 34})`} className="animate-fade-in">
-              <rect x="0" y="8" width="18" height="24" fill="#FFFFFF" stroke="#15803D" strokeWidth="1.4" />
-              <line x1="3" y1="13" x2="15" y2="13" stroke="#1A1815" strokeWidth="0.8" />
-              <line x1="3" y1="17" x2="15" y2="17" stroke="#1A1815" strokeWidth="0.8" />
+            <g transform={`translate(${signalWorkX + 8}, ${UP_Y - TRACK_H / 2 - 38})`} className="animate-fade-in">
+              {/* SSI relay panel sketch */}
+              <rect x={0} y={0} width={26} height={32} fill="#FBF9F4" stroke="#4D8B68" strokeWidth="1.4" rx="2" />
+              {[4, 9, 14, 19, 24].map((ly, i) => (
+                <line key={i} x1={3} y1={ly} x2={23} y2={ly} stroke="#D5CEC1" strokeWidth="0.7" />
+              ))}
+              {/* Status LEDs on panel */}
+              <circle cx={20} cy={4}  r="1.8" fill="#4D8B68" />
+              <circle cx={20} cy={9}  r="1.8" fill="#4D8B68" />
+              <circle cx={20} cy={14} r="1.8" fill="#D49A32" />
+              <text x={13} y={38} textAnchor="middle" fontSize="5.5" fontFamily="'Inter', sans-serif" fontWeight="600" fill="#4D8B68">TC CLEAR</text>
             </g>
           )}
 
-          {/* REAL-TIME KINEMATIC VECTOR TRAINS */}
+          {/* ── REAL-TIME KINEMATIC TRAINS ── */}
           {trains.map(train => {
             const phys = trainPhysics[train.id];
             const currentKm = phys ? phys.currentKm : train.currentKm;
-            const speed = phys ? Math.round(phys.speedKmH) : train.speedKmH;
+            const speed     = phys ? Math.round(phys.speedKmH) : train.speedKmH;
             const wheelAngle = phys ? phys.wheelAngle : 0;
             const suspension = phys ? phys.suspensionOffset : 0;
+            const pitchAngle = phys ? phys.pitchAngle : 0;
             const accelState = phys ? phys.accelState : 'CRUISING';
 
-            const tx = kmToX(currentKm, W);
-            const isUp = train.assignedTrack === 'UP';
+            const tx    = kmToX(currentKm, W);
+            const isUp  = train.assignedTrack === 'UP';
             const isLoop = train.assignedTrack === 'LOOP_1' || train.assignedTrack === 'LOOP_2';
             const lineY = isUp ? UP_Y : (isLoop ? LOOP_Y : DN_Y);
-            const isPassenger = train.priority <= 2;
-            const trainLength = compact ? 64 : 88;
-            const trainHeight = compact ? 16 : 22;
+            const dir   = (isUp ? 1 : -1) as 1 | -1;
+            const isSelected = selectedTrainId === train.id;
 
-            const frontWheel1 = trainLength * 0.74;
-            const frontWheel2 = trainLength * 0.86;
-            const rearWheel1  = trainLength * 0.16;
-            const rearWheel2  = trainLength * 0.28;
-            const wheelCenterY = trainHeight + 4;
-            const wheelRadius = 3.8;
+            // Rail top Y (locomotive sits on top of rail head)
+            const railTopY = lineY - TRACK_H / 2 + 2;
 
             return (
               <g
                 key={train.id}
                 onClick={() => {
+                  setSelectedTrainId(isSelected ? null : train.id);
                   onSelectTrain?.(train, phys);
                   setCameraPreset('TRAIN', train.id);
                 }}
-                className="cursor-pointer group"
+                className="cursor-pointer"
               >
-                <g transform={`translate(${tx - trainLength / 2}, ${lineY - TRACK_H / 2 - trainHeight - 2 + suspension})`}>
-                  <g>
-                    <line x1={trainLength * 0.25} y1="0" x2={trainLength * 0.35} y2="-10" stroke="#1A1815" strokeWidth="1.4" />
-                    <line x1={trainLength * 0.35} y1="-10" x2={trainLength * 0.28} y2="-18" stroke="#1A1815" strokeWidth="1.4" />
-                    <line x1={trainLength * 0.22} y1="-18" x2={trainLength * 0.38} y2="-18" stroke="#1A1815" strokeWidth="2" />
-                  </g>
+                {/* ── PREMIUM INDIAN RAILWAYS TRAIN ILLUSTRATION ── */}
+                <IRTrain
+                  centerX={tx}
+                  railY={railTopY}
+                  compact={compact}
+                  wheelAngle={wheelAngle}
+                  suspensionOffset={suspension}
+                  pitchAngle={pitchAngle}
+                  accelState={accelState}
+                  speed={speed}
+                  isSelected={isSelected}
+                  direction={dir}
+                />
 
-                  <rect x="0" y="0" width={trainLength} height={trainHeight} fill="#FFFFFF" stroke="#1A1815" strokeWidth="1.8" rx="2" />
-                  {isPassenger ? (
-                    <path d={`M ${trainLength - 16} 0 L ${trainLength} 4 L ${trainLength} ${trainHeight - 4} L ${trainLength - 16} ${trainHeight} Z`} fill="#1A1815" />
-                  ) : (
-                    <rect x={trainLength - 12} y="0" width="12" height={trainHeight} fill="#785D3F" stroke="#1A1815" strokeWidth="1" />
-                  )}
-                  <line x1="2" y1={trainHeight * 0.55} x2={trainLength - 16} y2={trainHeight * 0.55} stroke="#1A1815" strokeWidth="1.2" />
-
-                  <polygon points={`${trainLength - 14},3 ${trainLength - 3},6 ${trainLength - 3},${trainHeight * 0.45} ${trainLength - 14},${trainHeight * 0.45}`} fill="#EDE7DC" stroke="#1A1815" strokeWidth="1" />
-
-                  {[0.12, 0.26, 0.40, 0.54, 0.68].map((wRatio, wIdx) => (
-                    <rect key={`win-${wIdx}`} x={trainLength * wRatio} y="3.5" width="7" height={trainHeight * 0.35} fill="#EDE7DC" stroke="#1A1815" strokeWidth="0.8" rx="1" />
-                  ))}
-
-                  <rect x={trainLength * 0.7} y={trainHeight} width="18" height="4" fill="#615A4F" stroke="#1A1815" strokeWidth="0.8" />
-                  <rect x={trainLength * 0.12} y={trainHeight} width="18" height="4" fill="#615A4F" stroke="#1A1815" strokeWidth="0.8" />
-
-                  {[frontWheel1, frontWheel2, rearWheel1, rearWheel2].map((wx, wIdx) => (
-                    <g key={`wheel-${wIdx}`} transform={`rotate(${wheelAngle}, ${wx}, ${wheelCenterY})`}>
-                      <circle cx={wx} cy={wheelCenterY} r={wheelRadius} fill="#FFFFFF" stroke="#1A1815" strokeWidth="1.3" />
-                      <line x1={wx - wheelRadius + 0.5} y1={wheelCenterY} x2={wx + wheelRadius - 0.5} y2={wheelCenterY} stroke="#1A1815" strokeWidth="0.8" />
-                      <line x1={wx} y1={wheelCenterY - wheelRadius + 0.5} x2={wx} y2={wheelCenterY + wheelRadius - 0.5} stroke="#1A1815" strokeWidth="0.8" />
-                      <circle cx={wx} cy={wheelCenterY} r="1.2" fill="#1A1815" />
-                    </g>
-                  ))}
-                </g>
-
-                <g transform={`translate(${tx}, ${lineY - TRACK_H / 2 - trainHeight - 24})`}>
+                {/* Train label — restrained floating annotation */}
+                <g transform={`translate(${tx}, ${railTopY - (compact ? 68 : 108)})`}>
                   <rect
-                    x="-36"
-                    y="-8"
-                    width="72"
-                    height="13"
-                    fill="#FFFFFF"
-                    stroke={accelState === 'BRAKING' ? '#B91C1C' : accelState === 'STOPPED' ? '#B45309' : '#1A1815'}
-                    strokeWidth="1.2"
-                    rx="1"
+                    x="-32" y="-8" width="64" height="14"
+                    fill="#FBF9F4"
+                    stroke={accelState === 'BRAKING' ? '#C84B43' : accelState === 'STOPPED' ? '#D49A32' : '#D5CEC1'}
+                    strokeWidth="1"
+                    rx="2"
+                    opacity="0.92"
                   />
-                  <text x="-32" y="1" fontSize="6.5" fontFamily="'JetBrains Mono', monospace" fontWeight="700" fill="#1A1815">
+                  <text x="-28" y="2" fontSize="6" fontFamily="'Inter', sans-serif" fontWeight="600" fill="#1D1F1E">
                     {train.trainNumber}
                   </text>
                   <text
-                    x="30"
-                    y="1"
+                    x="28" y="2"
                     textAnchor="end"
                     fontSize="6.5"
-                    fontFamily="'JetBrains Mono', monospace"
+                    fontFamily="'Space Grotesk', sans-serif"
                     fontWeight="700"
-                    fill={accelState === 'BRAKING' ? '#B91C1C' : accelState === 'STOPPED' ? '#B45309' : '#15803D'}
+                    fill={accelState === 'BRAKING' ? '#C84B43' : accelState === 'STOPPED' ? '#D49A32' : '#4D8B68'}
                   >
-                    {speed}kph
+                    {speed}
+                  </text>
+                  <text
+                    x="28" y="2"
+                    textAnchor="end"
+                    fontSize="4.5"
+                    fontFamily="'Inter', sans-serif"
+                    dy="5"
+                    fill="#77736C"
+                  >
+                    km/h
                   </text>
                 </g>
+
+                {/* Selected train inspector panel */}
+                {isSelected && (
+                  <g transform={`translate(${Math.min(tx + (compact ? 50 : 80), W - 120)}, ${railTopY - (compact ? 40 : 55)})`}>
+                    <rect x="0" y="0" width="112" height="56" fill="#FBF9F4" stroke="#1D1F1E" strokeWidth="1" rx="4" opacity="0.96" />
+                    <rect x="0" y="0" width="112" height="12" fill="#1D1F1E" rx="3" />
+                    <text x="56" y="8.5" textAnchor="middle" fontSize="6.5" fontFamily="'Inter', sans-serif" fontWeight="600" fill="#F2EADF">
+                      {train.trainNumber} · {train.trainName.split(' ')[0]}
+                    </text>
+
+                    <text x="6" y="22" fontSize="6" fontFamily="'Inter', sans-serif" fill="#77736C">Status</text>
+                    <text x="106" y="22" textAnchor="end" fontSize="6" fontFamily="'Inter', sans-serif" fontWeight="600" fill={accelState === 'STOPPED' ? '#C84B43' : '#4D8B68'}>{accelState}</text>
+
+                    <text x="6" y="31" fontSize="6" fontFamily="'Inter', sans-serif" fill="#77736C">Speed</text>
+                    <text x="106" y="31" textAnchor="end" fontSize="7" fontFamily="'Space Grotesk', sans-serif" fontWeight="700" fill="#1D1F1E">{speed} km/h</text>
+
+                    <text x="6" y="40" fontSize="6" fontFamily="'Inter', sans-serif" fill="#77736C">Next signal</text>
+                    <text x="106" y="40" textAnchor="end" fontSize="6" fontFamily="'Inter', sans-serif" fontWeight="600"
+                      fill={phys?.nextSignalAspect === 'RED' ? '#C84B43' : phys?.nextSignalAspect === 'YELLOW' ? '#D49A32' : '#4D8B68'}>
+                      {phys?.nextSignalAspect || 'GREEN'}
+                    </text>
+
+                    <text x="6" y="49" fontSize="6" fontFamily="'Inter', sans-serif" fill="#77736C">Position</text>
+                    <text x="106" y="49" textAnchor="end" fontSize="6" fontFamily="'JetBrains Mono', monospace" fill="#1D1F1E">KM {currentKm.toFixed(1)}</text>
+                  </g>
+                )}
               </g>
             );
           })}
         </svg>
 
-        {/* ── CONTEXTUAL FLOATING STORY OVERLAY (When Demo Active) ── */}
+        {/* ── FLOATING DEMO STORY OVERLAY ── */}
         {isDemoActive && currentDemoStep && (
-          <div className="absolute top-3 left-3 max-w-sm sm:max-w-md bg-[#FFFFFF] border border-[#1A1815] p-3.5 rounded-[2px] shadow-xl z-20 animate-fade-in font-sans">
-            <div className="flex items-center justify-between border-b border-[#D8D1C5] pb-2 mb-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#8B1A1A] animate-pulse" />
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8B1A1A]">
-                  STEP {demoStepIdx + 1}/10: {currentDemoStep.phaseName}
+          <div
+            className="absolute top-3 left-3 z-20 animate-fade-in"
+            style={{
+              maxWidth: 340,
+              backgroundColor: '#FBF9F4',
+              border: '1px solid #D5CEC1',
+              borderRadius: '6px',
+              boxShadow: '0 4px 16px rgba(29,31,30,0.10)',
+              padding: '12px 14px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E8E2D8', paddingBottom: '8px', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#C84B43', display: 'inline-block' }} className="animate-pulse" />
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#C84B43' }}>
+                  Step {demoStepIdx + 1}/10
+                </span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C' }}>
+                  {currentDemoStep.phaseName}
                 </span>
               </div>
-              <span className="text-[9.5px] font-mono text-[#615A4F] bg-[#F7F4EE] border border-[#D8D1C5] px-1.5 py-0.2 rounded-[1px]">
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', color: '#77736C', backgroundColor: '#F0ECE4', border: '1px solid #D5CEC1', padding: '1px 6px', borderRadius: '2px' }}>
                 {currentDemoStep.shortTitle}
               </span>
             </div>
 
-            <p className="text-[12px] text-[#1A1815] font-medium leading-snug">
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12.5px', fontWeight: 400, color: '#1D1F1E', lineHeight: 1.55, margin: 0 }}>
               {currentDemoStep.narrative}
             </p>
 
-            {/* Sub-Progress for Civil Work */}
             {demoStepIdx === 6 && (
-              <div className="mt-2.5 space-y-1">
-                <div className="flex justify-between text-[10px] font-mono">
-                  <span className="text-[#615A4F]">Tamping & Flaw Weld Progress:</span>
-                  <span className="font-bold text-[#1A1815]">{demoWorkProgress}%</span>
+              <div style={{ marginTop: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Inter', sans-serif", fontSize: '10px', color: '#4B4A46', marginBottom: 4 }}>
+                  <span>Tamping progress</span>
+                  <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, color: '#1D1F1E' }}>{demoWorkProgress}%</span>
                 </div>
-                <div className="w-full bg-[#EDE7DC] h-1.5 rounded-[1px] overflow-hidden">
-                  <div className="h-full bg-[#1A1815] transition-all duration-100" style={{ width: `${demoWorkProgress}%` }} />
+                <div style={{ width: '100%', height: 3, backgroundColor: '#E8E2D8', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', backgroundColor: '#A9674B', borderRadius: '2px', width: `${demoWorkProgress}%`, transition: 'width 0.1s linear' }} />
                 </div>
               </div>
             )}
@@ -982,31 +1545,36 @@ export const RailwaySceneCanvas: React.FC<RailwaySceneCanvasProps> = ({
         )}
       </div>
 
-      {/* ── INTERACTIVE REPLAY TIMELINE (10 Clickable Milestone Nodes) ── */}
-      <div className="p-2 px-3 border-t border-[#D8D1C5] bg-[#FAF7F2] flex items-center justify-between gap-2 overflow-x-auto text-[10px] font-mono">
-        <span className="text-[#615A4F] font-bold shrink-0 uppercase flex items-center gap-1">
-          <Clock className="w-3.5 h-3.5 text-[#1A1815]" /> REPLAY TIMELINE:
+      {/* ── REPLAY TIMELINE ── */}
+      <div
+        className="flex items-center justify-between gap-2 overflow-x-auto"
+        style={{ padding: '8px 12px', borderTop: '1px solid #D5CEC1', backgroundColor: '#F8F5EF' }}
+      >
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', textTransform: 'uppercase', letterSpacing: '0.07em', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Clock style={{ width: 12, height: 12 }} /> Timeline
         </span>
 
-        <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-1 overflow-x-auto">
           {DEMO_STORY_STEPS.map((step, idx) => {
             const isCurrent = isDemoActive && demoStepIdx === idx;
-            const isPassed = isDemoActive && demoStepIdx > idx;
+            const isPassed  = isDemoActive && demoStepIdx > idx;
 
             return (
               <button
                 key={step.id}
-                onClick={() => {
-                  if (!isDemoActive) setIsDemoActive(true);
-                  applyDemoStep(idx);
+                onClick={() => { if (!isDemoActive) setIsDemoActive(true); applyDemoStep(idx); }}
+                style={{
+                  padding: '3px 8px',
+                  borderRadius: '3px',
+                  border: '1px solid',
+                  borderColor: isCurrent ? '#1D1F1E' : isPassed ? '#96C4AE' : '#D5CEC1',
+                  backgroundColor: isCurrent ? '#1D1F1E' : isPassed ? '#EDF5F0' : 'transparent',
+                  color: isCurrent ? '#F2EADF' : isPassed ? '#4D8B68' : '#4B4A46',
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '10px', fontWeight: isCurrent ? 600 : 400,
+                  cursor: 'pointer', transition: 'all 0.12s ease',
+                  flexShrink: 0,
                 }}
-                className={`px-2 py-1 rounded-[2px] border transition-all cursor-pointer shrink-0 ${
-                  isCurrent
-                    ? 'bg-[#1A1815] text-[#FFFFFF] border-[#1A1815] font-bold shadow-xs'
-                    : isPassed
-                    ? 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]'
-                    : 'bg-[#FFFFFF] text-[#615A4F] hover:bg-[#F7F4EE] border-[#D8D1C5]'
-                }`}
               >
                 {idx + 1}. {step.shortTitle}
               </button>
