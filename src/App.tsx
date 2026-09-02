@@ -8,7 +8,8 @@ import {
   INITIAL_USER_PROFILES 
 } from './data/mockData';
 import { Header } from './components/common/Header';
-import { Sidebar, NavTab } from './components/common/Sidebar';
+import { RailNav } from './components/common/RailNav';
+import { NavTab } from './components/common/Sidebar';
 import { LoginModal } from './components/auth/LoginModal';
 import { OperationsDashboard } from './components/dashboard/OperationsDashboard';
 import { LiveNetworkMap } from './components/map/LiveNetworkMap';
@@ -22,14 +23,14 @@ import { TrackDepartment } from './components/department/TrackDepartment';
 import { OheDepartment } from './components/department/OheDepartment';
 import { SntDepartment } from './components/department/SntDepartment';
 import { AdminPortal } from './components/admin/AdminPortal';
-import { AlertOctagon, CheckCircle, ShieldAlert } from 'lucide-react';
+import { CheckCircle, AlertTriangle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('controller');
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
-  const [collapsedSidebar, setCollapsedSidebar] = useState<boolean>(false);
   const [activeEmergency, setActiveEmergency] = useState<boolean>(false);
+  const [isPresentationMode, setIsPresentationMode] = useState<boolean>(false);
 
   // Application Data States
   const [assets, setAssets] = useState<FixedAsset[]>(INITIAL_ASSETS);
@@ -90,45 +91,43 @@ export const App: React.FC = () => {
     showToast('Applied emergency mitigation and diversion plan to live corridor.');
   };
 
+  const [demoTriggerTimestamp, setDemoTriggerTimestamp] = useState<number>(0);
+
+  const handleTriggerDemo = () => {
+    setDemoTriggerTimestamp(Date.now());
+    setActiveTab('dashboard');
+    showToast('Starting 30-Second Hackathon Live Demonstration...');
+  };
+
   return (
-    <div className="min-h-screen bg-[#0e150e] text-[#dce5d9] font-mono flex flex-col antialiased">
-      {/* Top HUD Header */}
+    <div className="min-h-screen bg-[#F7F4EE] text-[#1A1815] font-sans flex flex-col antialiased selection:bg-[#E2DBD1] selection:text-[#1A1815]">
+      {/* Top Minimal Header */}
       <Header
         currentRole={currentRole}
         onRoleChange={handleRoleChange}
         onOpenLogin={() => setIsLoginOpen(true)}
         activeEmergency={activeEmergency}
         onToggleEmergency={handleToggleEmergency}
+        isPresentationMode={isPresentationMode}
+        onTogglePresentationMode={() => setIsPresentationMode(!isPresentationMode)}
+        onTriggerDemo={handleTriggerDemo}
       />
 
-      {/* Side Navigation Bar */}
-      <Sidebar
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        currentRole={currentRole}
-        collapsed={collapsedSidebar}
-        onToggleCollapse={() => setCollapsedSidebar(!collapsedSidebar)}
-      />
-
-      {/* Main Content Area */}
-      <main 
-        className={`flex-1 mt-14 p-4 lg:p-6 transition-all duration-300 ${
-          collapsedSidebar ? 'ml-16' : 'ml-60 lg:ml-64'
-        }`}
-      >
+      {/* Main Spatial Operations Viewport */}
+      <main className={`flex-1 ${isPresentationMode ? 'mt-14 mb-16 px-3 sm:px-6' : 'mt-14 mb-16 px-3 sm:px-6 py-2'} max-w-7xl w-full mx-auto transition-all duration-200`}>
         {/* Emergency Alert Header (if triggered) */}
         {activeEmergency && (
-          <div className="mb-4 p-3 bg-[#7c2d12]/40 border-2 border-[#ef4444] text-[#ffdad6] flex items-center justify-between animate-pulse">
-            <div className="flex items-center gap-2">
-              <ShieldAlert className="w-5 h-5 text-[#ef4444]" />
+          <div className="mb-3 p-3 bg-[#FEF2F2] border border-[#B91C1C] rounded-[2px] text-[#1A1815] flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-[#B91C1C] shrink-0" />
               <div>
-                <span className="font-bold text-xs">EMERGENCY INCIDENT ACTIVE ON CORRIDOR: </span>
-                <span className="text-xs">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
+                <span className="font-mono font-bold text-xs text-[#B91C1C]">EMERGENCY INCIDENT ACTIVE ON CORRIDOR: </span>
+                <span className="font-sans text-xs text-[#615A4F]">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
               </div>
             </div>
             <button
               onClick={() => setActiveTab('simulation')}
-              className="px-3 py-1 bg-[#ef4444] hover:bg-[#93000a] text-white text-xs font-bold uppercase transition-colors"
+              className="btn-pen-danger text-[10px] font-mono font-semibold uppercase px-2 py-1"
             >
               VIEW MITIGATION
             </button>
@@ -148,6 +147,7 @@ export const App: React.FC = () => {
               setActiveTab('assets');
             }}
             onRunOptimization={() => setActiveTab('planner')}
+            externalDemoTrigger={demoTriggerTimestamp}
           />
         )}
 
@@ -172,6 +172,7 @@ export const App: React.FC = () => {
             selectedAsset={selectedAsset}
             onSelectAsset={setSelectedAsset}
             onRequestBlock={handleRequestBlockForAsset}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -181,6 +182,7 @@ export const App: React.FC = () => {
             assets={assets}
             trains={trains}
             onUpdateBlock={handleUpdateBlock}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -188,6 +190,7 @@ export const App: React.FC = () => {
           <TrainOperations
             trains={trains}
             onRerouteTrain={(id) => showToast(`Rerouted train ${id} via alternative loop`)}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -195,6 +198,7 @@ export const App: React.FC = () => {
           <ConflictCenter
             conflicts={conflicts}
             onResolveConflict={(id) => showToast(`Conflict ${id} resolved by AI Shadow Block Clubbing`)}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -203,6 +207,7 @@ export const App: React.FC = () => {
             blocks={blocks}
             trains={trains}
             onApplySimulationResult={handleApplySimulationResult}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -212,6 +217,7 @@ export const App: React.FC = () => {
           <TrackDepartment
             assets={assets}
             onRequestBlock={handleRequestBlockForAsset}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -219,6 +225,7 @@ export const App: React.FC = () => {
           <OheDepartment
             assets={assets}
             onRequestBlock={handleRequestBlockForAsset}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
@@ -226,16 +233,25 @@ export const App: React.FC = () => {
           <SntDepartment
             assets={assets}
             onRequestBlock={handleRequestBlockForAsset}
+            onNavigateToOverview={() => setActiveTab('dashboard')}
           />
         )}
 
         {activeTab === 'admin' && <AdminPortal />}
       </main>
 
+      {/* Sleek Bottom Railway Navigation Dock */}
+      <RailNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        isPresentationMode={isPresentationMode}
+        onTogglePresentationMode={() => setIsPresentationMode(!isPresentationMode)}
+      />
+
       {/* Global Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#161d16] border-2 border-primary text-primary px-4 py-2.5 text-xs font-bold shadow-2xl flex items-center gap-2 animate-bounce">
-          <CheckCircle className="w-4 h-4 text-primary" />
+        <div className="fixed bottom-16 right-6 z-50 bg-[#1A1815] border border-[#1A1815] text-[#F7F4EE] px-3.5 py-2 text-[11px] font-mono font-semibold rounded-[2px] shadow-xl flex items-center gap-2 animate-fade-in">
+          <CheckCircle className="w-4 h-4 text-[#4ADE80]" />
           <span>{toastMessage}</span>
         </div>
       )}

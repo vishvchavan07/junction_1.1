@@ -1,125 +1,120 @@
 import React from 'react';
 import { FixedAsset } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
-import { FileSpreadsheet, Activity, Wrench, ShieldCheck, TrendingUp, AlertTriangle } from 'lucide-react';
+import { FileSpreadsheet, AlertTriangle, Train, Wrench } from 'lucide-react';
 
 interface TrackDepartmentProps {
   assets: FixedAsset[];
   onRequestBlock: (asset: FixedAsset) => void;
+  onNavigateToOverview?: () => void;
 }
 
-export const TrackDepartment: React.FC<TrackDepartmentProps> = ({ assets, onRequestBlock }) => {
+export const TrackDepartment: React.FC<TrackDepartmentProps> = ({
+  assets,
+  onRequestBlock,
+  onNavigateToOverview
+}) => {
   const trackAssets = assets.filter(a => a.department === 'TRACK');
 
   return (
-    <div className="space-y-6 select-none font-mono">
-      {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#161d16] border border-[#3d4a3d] p-4 gap-4">
+    <div className="space-y-4 select-none font-sans">
+
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#FFFFFF] border border-[#1A1815] p-4 rounded-[2px] shadow-sm gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-primary font-headline font-bold text-xl">
-              TRACK MANAGEMENT SYSTEM (TMS) PORTAL
+            <span className="font-sans font-bold text-lg text-[#1A1815] tracking-tight">
+              Track Management System (TMS) Portal
             </span>
-            <span className="bg-primary/20 text-primary text-[10px] px-2 py-0.5 border border-primary/40 font-bold">
+            <span className="bg-[#FAF7F2] text-[#B45309] text-[10px] px-2 py-0.5 border border-[#FDE68A] font-mono font-bold rounded-[2px]">
               CIVIL ENGINEERING
             </span>
           </div>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            Track Geometry Index (TGI), Oscillation Monitoring System (OMS) accelerations, USFD rail flaw tests, and TTM machine tamping.
+          <p className="text-[11.5px] text-[#615A4F] mt-0.5">
+            Track Geometry Index (TGI), OMS lateral accelerations, USFD rail flaw scans, and mechanized tamping schedules.
           </p>
         </div>
-
-        <div className="text-xs bg-[#0e150e] border border-[#3d4a3d] p-2.5 flex items-center gap-3">
-          <div>
-            <span className="text-[10px] text-on-surface-variant block">LEAD ENGINEER:</span>
-            <span className="text-primary font-bold">Sai Dhapte (Sr. DEN / Track)</span>
-          </div>
+        <div className="bg-[#F7F4EE] border border-[#D8D1C5] p-2.5 px-3 rounded-[2px] text-xs font-mono shrink-0">
+          <span className="text-[9px] text-[#615A4F] font-bold block uppercase">LEAD CIVIL ENGINEER:</span>
+          <span className="text-[#1A1815] font-bold">Sai Dhapte (Sr. DEN / Track)</span>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">TRACK ASSETS</span>
-          <div className="text-2xl font-bold text-on-surface mt-1">842 Assets</div>
-          <div className="text-[9px] text-[#4be277] mt-1">94.1% In Tolerance</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">TGI COMPLIANCE</span>
-          <div className="text-2xl font-bold text-primary mt-1">Avg 82.4</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Good/Very Good Category</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">TTM TAMPING DUE</span>
-          <div className="text-2xl font-bold text-[#f97316] mt-1">17 km</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Duomatic 08-32 Assigned</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">USFD FLAW ALERTS</span>
-          <div className="text-2xl font-bold text-[#ef4444] mt-1">1 Flaw</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Turnout PT-227-II Observe</div>
-        </div>
+        {[
+          { label: 'Track Assets',     value: '842 Assets', sub: '94.1% In Tolerance',          color: '#15803D' },
+          { label: 'TGI Compliance',   value: 'Avg 82.4',   sub: 'Good / Very Good Category',   color: '#15803D' },
+          { label: 'TTM Tamping Due',  value: '17 km',      sub: 'Duomatic 08-32 Assigned',     color: '#B45309' },
+          { label: 'USFD Flaw Alerts', value: '1 Flaw',     sub: 'Turnout PT-227-II Observe',   color: '#B91C1C' },
+        ].map(k => (
+          <div key={k.label} className="bg-[#FFFFFF] border border-[#D8D1C5] hover:border-[#1A1815] rounded-[2px] p-3.5 transition-colors">
+            <div className="text-[9.5px] text-[#615A4F] font-mono font-bold uppercase">{k.label}</div>
+            <div className="text-xl font-bold mt-1 text-[#1A1815]">{k.value}</div>
+            <div className="text-[9.5px] font-mono mt-1 text-[#615A4F]">{k.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Track Assets Detailed List */}
-      <div className="bg-[#161d16] border border-[#3d4a3d] p-4 space-y-4">
-        <div className="flex justify-between items-center border-b border-[#3d4a3d] pb-2">
-          <span className="text-xs font-bold text-on-surface uppercase">
-            CIVIL INFRASTRUCTURE STATUS (RAILS, SLEEPERS, SWITCHES)
+      {/* Asset List */}
+      <div className="bg-[#FFFFFF] border border-[#1A1815] rounded-[2px] shadow-sm overflow-hidden">
+        <div className="border-b border-[#D8D1C5] bg-[#F7F4EE] px-4 py-2.5 flex justify-between items-center">
+          <span className="text-[11px] font-mono font-bold text-[#1A1815] uppercase flex items-center gap-2">
+            <FileSpreadsheet className="w-4 h-4 text-[#1A1815]" />
+            Civil Infrastructure Status (Rails, Sleepers, Switches)
           </span>
-          <span className="text-[10px] text-on-surface-variant">TMS Synchronized</span>
+          <span className="text-[9.5px] text-[#615A4F] font-mono">TMS Synchronized</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="divide-y divide-[#EDE7DC]">
           {trackAssets.map(asset => (
-            <div key={asset.id} className="p-3 bg-[#0e150e] border border-[#3d4a3d] space-y-2">
+            <div key={asset.id} className="p-4 space-y-2.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <div className="flex items-center gap-2">
                   <StatusBadge status={asset.status} />
-                  <span className="font-bold text-xs text-primary">{asset.code}</span>
-                  <span className="text-xs text-on-surface">{asset.name}</span>
+                  <span className="font-mono font-bold text-[11px] text-[#1A1815]">{asset.code}</span>
+                  <span className="text-[12px] text-[#1A1815] font-semibold">{asset.name}</span>
                 </div>
-                <div className="text-xs text-on-surface-variant">
-                  Location: <strong className="text-on-surface">{asset.section} ({asset.kmMarker})</strong>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-[#161d16] p-2 border border-[#3d4a3d]">
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">TRACK GEOMETRY (TGI):</span>
-                  <strong className={asset.tgiScore && asset.tgiScore < 75 ? 'text-[#f97316]' : 'text-primary'}>
-                    {asset.tgiScore || 'N/A'}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">OMS ACCELERATION:</span>
-                  <strong className={asset.omsPeakG && asset.omsPeakG > 0.25 ? 'text-[#ef4444]' : 'text-on-surface'}>
-                    {asset.omsPeakG ? `${asset.omsPeakG}g` : '0.12g'}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">USFD SCAN STATUS:</span>
-                  <strong className={asset.usfdFlawStatus === 'OBSERVE' ? 'text-[#f97316]' : 'text-primary'}>
-                    {asset.usfdFlawStatus || 'CLEAR'}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">GMT ACCUMULATION:</span>
-                  <strong className="text-on-surface">{asset.gmtAccumulated} GMT/yr</strong>
+                <div className="text-[10.5px] text-[#615A4F] font-mono">
+                  Location: <strong className="text-[#1A1815]">{asset.section} ({asset.kmMarker})</strong>
                 </div>
               </div>
 
-              <p className="text-[11px] text-on-surface-variant">
-                <strong className="text-primary">TMS Health Summary: </strong>
-                {asset.xaiReasoning}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10.5px] bg-[#F7F4EE] p-2.5 border border-[#D8D1C5] rounded-[2px] font-mono">
+                {[
+                  ['TRACK GEOMETRY (TGI):', asset.tgiScore || 'N/A', asset.tgiScore && asset.tgiScore < 75 ? '#B45309' : '#15803D'],
+                  ['OMS ACCELERATION:', asset.omsPeakG ? `${asset.omsPeakG}g` : '0.12g', asset.omsPeakG && asset.omsPeakG > 0.25 ? '#B91C1C' : '#1A1815'],
+                  ['USFD SCAN STATUS:', asset.usfdFlawStatus || 'CLEAR', asset.usfdFlawStatus === 'OBSERVE' ? '#B45309' : '#15803D'],
+                  ['GMT ACCUMULATION:', `${asset.gmtAccumulated} GMT/yr`, '#1A1815'],
+                ].map(([k, v, c]) => (
+                  <div key={k as string}>
+                    <span className="text-[9px] text-[#615A4F] font-bold block">{k as string}</span>
+                    <strong style={{ color: c as string }}>{v as any}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-[11.5px] text-[#615A4F] font-sans leading-snug">
+                <strong className="text-[#1A1815] font-mono">TMS Health Summary: </strong>{asset.xaiReasoning}
               </p>
 
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                {onNavigateToOverview && (
+                  <button
+                    onClick={onNavigateToOverview}
+                    className="px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#F7F4EE] text-[#1A1815] border border-[#D8D1C5] text-[10.5px] font-mono font-semibold rounded-[2px] flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Train className="w-3.5 h-3.5 text-[#1A1815]" />
+                    <span>Inspect on Railway Canvas</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => onRequestBlock(asset)}
-                  className="px-3 py-1.5 bg-[#242c24] hover:bg-primary hover:text-[#003915] text-primary text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                  className="btn-pen-primary px-3 py-1.5 text-[10.5px] font-mono uppercase cursor-pointer"
                 >
-                  REQUEST MACHINE TAMPING POSSESSION
+                  <Wrench className="w-3 h-3" />
+                  Request Tamping Possession
                 </button>
               </div>
             </div>

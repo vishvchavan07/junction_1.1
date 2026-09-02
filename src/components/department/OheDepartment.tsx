@@ -1,123 +1,119 @@
 import React from 'react';
 import { FixedAsset } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
-import { Zap, Activity, ShieldAlert, Thermometer, Radio, ArrowRight } from 'lucide-react';
+import { Zap, Train, Wrench } from 'lucide-react';
 
 interface OheDepartmentProps {
   assets: FixedAsset[];
   onRequestBlock: (asset: FixedAsset) => void;
+  onNavigateToOverview?: () => void;
 }
 
-export const OheDepartment: React.FC<OheDepartmentProps> = ({ assets, onRequestBlock }) => {
+export const OheDepartment: React.FC<OheDepartmentProps> = ({
+  assets,
+  onRequestBlock,
+  onNavigateToOverview
+}) => {
   const oheAssets = assets.filter(a => a.department === 'OHE');
 
   return (
-    <div className="space-y-6 select-none font-mono">
-      {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#161d16] border border-[#3d4a3d] p-4 gap-4">
+    <div className="space-y-4 select-none font-sans">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#FFFFFF] border border-[#1A1815] p-4 rounded-[2px] shadow-sm gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-primary font-headline font-bold text-xl">
-              TRACTION DISTRIBUTION & SCADA PORTAL (TDMS)
+            <span className="font-sans font-bold text-lg text-[#1A1815] tracking-tight">
+              Traction Distribution & SCADA Portal (TDMS)
             </span>
-            <span className="bg-[#f97316]/20 text-[#f97316] text-[10px] px-2 py-0.5 border border-[#f97316]/40 font-bold">
+            <span className="bg-[#FAF7F2] text-[#1E3A5F] text-[10px] px-2 py-0.5 border border-[#BFDBFE] font-mono font-bold rounded-[2px]">
               ELECTRICAL TRD
             </span>
           </div>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            25kV AC Catenary & Contact wire wear telemetry, SCADA thermal hotspot imaging, substation breaker status, and power blocks.
+          <p className="text-[11.5px] text-[#615A4F] mt-0.5">
+            25kV AC catenary & contact wire wear telemetry, SCADA thermal hotspots, substation breaker status, and power isolation matrices.
           </p>
         </div>
-
-        <div className="text-xs bg-[#0e150e] border border-[#3d4a3d] p-2.5 flex items-center gap-3">
-          <div>
-            <span className="text-[10px] text-on-surface-variant block">LEAD ELECTRICAL ENGINEER:</span>
-            <span className="text-[#f97316] font-bold">Suraj Kolpe (DEE / TRD)</span>
-          </div>
+        <div className="bg-[#F7F4EE] border border-[#D8D1C5] p-2.5 px-3 rounded-[2px] text-xs font-mono shrink-0">
+          <span className="text-[9px] text-[#615A4F] font-bold block uppercase">LEAD ELECTRICAL ENGINEER:</span>
+          <span className="text-[#1A1815] font-bold">Suraj Kolpe (DEE / TRD)</span>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">TOTAL OHE SPANS</span>
-          <div className="text-2xl font-bold text-on-surface mt-1">1,824 Spans</div>
-          <div className="text-[9px] text-[#4be277] mt-1">All 25kV Feeders Energized</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">SCADA THERMAL HOTSPOTS</span>
-          <div className="text-2xl font-bold text-[#ef4444] mt-1">1 Active</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">+18.4°C Span 42 Jumper</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">POWER BLOCKS SCHEDULED</span>
-          <div className="text-2xl font-bold text-[#f97316] mt-1">2 Blocks</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">1 Shadow Clubbed</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">TOWER WAGON UNITS</span>
-          <div className="text-2xl font-bold text-primary mt-1">3 Ready</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Bhilad & Valsad Depots</div>
-        </div>
+        {[
+          { label: 'Total OHE Spans',       value: '1,824 Spans', sub: 'All 25kV Feeders Energized',  color: '#15803D' },
+          { label: 'SCADA Thermal Hotspots', value: '1 Active',    sub: '+18.4°C Span 42 Jumper',      color: '#B91C1C' },
+          { label: 'Power Blocks Scheduled', value: '2 Blocks',    sub: '1 Shadow Clubbed',             color: '#B45309' },
+          { label: 'Tower Wagon Units',      value: '3 Ready',     sub: 'Bhilad & Valsad Depots',       color: '#15803D' },
+        ].map(k => (
+          <div key={k.label} className="bg-[#FFFFFF] border border-[#D8D1C5] hover:border-[#1A1815] rounded-[2px] p-3.5 transition-colors">
+            <div className="text-[9.5px] text-[#615A4F] font-mono font-bold uppercase">{k.label}</div>
+            <div className="text-xl font-bold mt-1 text-[#1A1815]">{k.value}</div>
+            <div className="text-[9.5px] font-mono mt-1 text-[#615A4F]">{k.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* OHE Assets List */}
-      <div className="bg-[#161d16] border border-[#3d4a3d] p-4 space-y-4">
-        <div className="flex justify-between items-center border-b border-[#3d4a3d] pb-2">
-          <span className="text-xs font-bold text-on-surface uppercase">
-            TRACTION ASSETS & SCADA REAL-TIME STATUS
+      {/* Asset List */}
+      <div className="bg-[#FFFFFF] border border-[#1A1815] rounded-[2px] shadow-sm overflow-hidden">
+        <div className="border-b border-[#D8D1C5] bg-[#F7F4EE] px-4 py-2.5 flex justify-between items-center">
+          <span className="text-[11px] font-mono font-bold text-[#1A1815] uppercase flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#1A1815]" />
+            Traction Assets & SCADA Real-Time Status
           </span>
-          <span className="text-[10px] text-on-surface-variant">SCADA Connected</span>
+          <span className="text-[9.5px] text-[#615A4F] font-mono">SCADA Connected</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="divide-y divide-[#EDE7DC]">
           {oheAssets.map(asset => (
-            <div key={asset.id} className="p-3 bg-[#0e150e] border border-[#3d4a3d] space-y-2">
+            <div key={asset.id} className="p-4 space-y-2.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <div className="flex items-center gap-2">
                   <StatusBadge status={asset.status} />
-                  <span className="font-bold text-xs text-[#f97316]">{asset.code}</span>
-                  <span className="text-xs text-on-surface">{asset.name}</span>
+                  <span className="font-mono font-bold text-[11px] text-[#1A1815]">{asset.code}</span>
+                  <span className="text-[12px] text-[#1A1815] font-semibold">{asset.name}</span>
                 </div>
-                <div className="text-xs text-on-surface-variant">
-                  Location: <strong className="text-on-surface">{asset.section} ({asset.kmMarker})</strong>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-[#161d16] p-2 border border-[#3d4a3d]">
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">WIRE WEAR PERCENT:</span>
-                  <strong className={asset.oheContactWireWearPercent && asset.oheContactWireWearPercent > 20 ? 'text-[#ef4444]' : 'text-primary'}>
-                    {asset.oheContactWireWearPercent ? `${asset.oheContactWireWearPercent}% wear` : 'Normal'}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">CANTILEVER STAGGER:</span>
-                  <strong className="text-on-surface">{asset.oheStaggerMm ? `${asset.oheStaggerMm} mm` : '200 mm'}</strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">FAILURE PROBABILITY:</span>
-                  <strong className={asset.failureRiskProbability > 70 ? 'text-[#ef4444]' : 'text-primary'}>
-                    {asset.failureRiskProbability}%
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">ISOLATION REQUIRED:</span>
-                  <strong className="text-[#f97316]">{asset.blockRequired ? 'YES (25kV CUT)' : 'NO'}</strong>
+                <div className="text-[10.5px] text-[#615A4F] font-mono">
+                  Location: <strong className="text-[#1A1815]">{asset.section} ({asset.kmMarker})</strong>
                 </div>
               </div>
 
-              <p className="text-[11px] text-on-surface-variant">
-                <strong className="text-[#f97316]">SCADA Telemetry Diagnosis: </strong>
-                {asset.xaiReasoning}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10.5px] bg-[#F7F4EE] p-2.5 border border-[#D8D1C5] rounded-[2px] font-mono">
+                {[
+                  ['WIRE WEAR PERCENT:', asset.oheContactWireWearPercent ? `${asset.oheContactWireWearPercent}% wear` : 'Normal', asset.oheContactWireWearPercent && asset.oheContactWireWearPercent > 20 ? '#B91C1C' : '#15803D'],
+                  ['CANTILEVER STAGGER:', asset.oheStaggerMm ? `${asset.oheStaggerMm} mm` : '200 mm', '#1A1815'],
+                  ['FAILURE PROBABILITY:', `${asset.failureRiskProbability}%`, asset.failureRiskProbability > 70 ? '#B91C1C' : '#15803D'],
+                  ['ISOLATION REQUIRED:', asset.blockRequired ? 'YES (25kV CUT)' : 'NO', asset.blockRequired ? '#B45309' : '#15803D'],
+                ].map(([k, v, c]) => (
+                  <div key={k as string}>
+                    <span className="text-[9px] text-[#615A4F] font-bold block">{k as string}</span>
+                    <strong style={{ color: c as string }}>{v as any}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-[11.5px] text-[#615A4F] font-sans leading-snug">
+                <strong className="text-[#1A1815] font-mono">SCADA Telemetry Diagnosis: </strong>{asset.xaiReasoning}
               </p>
 
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                {onNavigateToOverview && (
+                  <button
+                    onClick={onNavigateToOverview}
+                    className="px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#F7F4EE] text-[#1A1815] border border-[#D8D1C5] text-[10.5px] font-mono font-semibold rounded-[2px] flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Train className="w-3.5 h-3.5 text-[#1A1815]" />
+                    <span>Inspect on Railway Canvas</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => onRequestBlock(asset)}
-                  className="px-3 py-1.5 bg-[#242c24] hover:bg-[#f97316] hover:text-black text-[#f97316] text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                  className="btn-pen-primary px-3 py-1.5 text-[10.5px] font-mono uppercase cursor-pointer"
                 >
-                  REQUEST POWER ISOLATION BLOCK
+                  <Wrench className="w-3 h-3" />
+                  Request Power Isolation Block
                 </button>
               </div>
             </div>

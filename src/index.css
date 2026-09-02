@@ -2,151 +2,482 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================================================================
+   JUNCTION — PRECISION LINE-ART & WARM BEIGE DESIGN SYSTEM
+   ================================================================ */
+
+:root {
+  --rail-bg:               #F7F4EE;
+  --rail-line:             #1A1815;
+  --rail-line-muted:       #D8D1C5;
+  --rail-line-subtle:      #EAE4D9;
+  
+  --rail-surface:          #F0EBE1;
+  --rail-surface-card:     #FFFFFF;
+  --rail-surface-inset:    #EDE7DC;
+  --rail-surface-elevated: #FAF7F2;
+
+  --rail-text:             #1A1815;
+  --rail-text-secondary:   #615A4F;
+  --rail-text-muted:       #8A8275;
+
+  --rail-red:              #B91C1C;
+  --rail-red-tint:         #FEF2F2;
+  --rail-red-border:       #F87171;
+
+  --rail-yellow:           #B45309;
+  --rail-yellow-tint:      #FFFBEB;
+  --rail-yellow-border:    #FBBF24;
+
+  --rail-green:            #15803D;
+  --rail-green-tint:       #F0FDF4;
+  --rail-green-border:     #4ADE80;
+
+  --rail-accent:           #785D3F;
+  --rail-accent-tint:      #F7F3EE;
+  --rail-accent-muted:     #A38A6D;
+}
+
 @layer base {
   body {
-    background-color: #0e150e;
-    color: #dce5d9;
-    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--rail-bg);
+    color: var(--rail-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: #E2DBD1;
+    color: #1A1815;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    color: var(--rail-text);
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 }
 
-/* Material symbols */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-.material-symbols-outlined.filled {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+/* ================================================================
+   REUSABLE PRECISION PEN PANELS & SURFACES
+   ================================================================ */
+
+/* Main surface panel */
+.pen-panel {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }
 
-/* Custom HUD styling */
-.hud-panel {
-  background-color: #161d16;
-  border: 1px solid #3d4a3d;
+/* Primary card */
+.pen-card {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.hud-panel-alt {
-  background-color: #1E293B;
-  border: 1px solid #334155;
+.pen-card-accent {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line);
+  border-radius: 2px;
 }
 
-.hud-card {
-  background-color: #1a221a;
-  border: 1px solid #3d4a3d;
+/* Recessed / inset container */
+.pen-inset {
+  background-color: var(--rail-surface-inset);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }
 
-.hud-card-alt {
-  background-color: #334155;
-  border: 1px solid #475569;
+/* Warm surface container */
+.pen-surface-warm {
+  background-color: var(--rail-surface);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }
 
-/* Status Bars */
-.status-bar-opr {
-  border-left: 4px solid #4be277 !important;
-}
-
-.status-bar-wng {
-  border-left: 4px solid #f97316 !important;
-}
-
-.status-bar-blk {
-  border-left: 4px solid #ffb4ab !important;
-}
-
-.status-bar-blue {
-  border-left: 4px solid #3b82f6 !important;
-}
-
-/* Brutalist geometric borders */
-.brutalist-corner {
+/* Precise Line-Art Corner Markings */
+.pen-corner-mark {
   position: relative;
 }
-
-.brutalist-corner::before,
-.brutalist-corner::after {
+.pen-corner-mark::before {
   content: '';
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border: 1px solid #4be277;
+  top: -1px;
+  left: -1px;
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid var(--rail-line);
+  border-left: 1.5px solid var(--rail-line);
+  pointer-events: none;
+}
+.pen-corner-mark::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid var(--rail-line);
+  border-right: 1.5px solid var(--rail-line);
   pointer-events: none;
 }
 
-.brutalist-corner-tl::before {
-  top: -1px;
-  left: -1px;
-  border-right: none;
-  border-bottom: none;
+/* Technical Label */
+.text-tech-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rail-text-secondary);
 }
 
-.brutalist-corner-tr::after {
-  top: -1px;
-  right: -1px;
-  border-left: none;
-  border-bottom: none;
+/* ================================================================
+   PRECISION BUTTONS & CONTROLS
+   ================================================================ */
+
+.btn-pen-primary {
+  background-color: var(--rail-line);
+  color: #F7F4EE;
+  border: 1px solid var(--rail-line);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.12s ease, opacity 0.12s ease;
+  cursor: pointer;
+}
+.btn-pen-primary:hover {
+  background-color: #2D2A26;
+}
+.btn-pen-primary:active {
+  opacity: 0.9;
 }
 
-/* Custom Scrollbars */
-::-webkit-scrollbar {
+.btn-pen-secondary {
+  background-color: var(--rail-surface-card);
+  color: var(--rail-text);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  cursor: pointer;
+}
+.btn-pen-secondary:hover {
+  background-color: var(--rail-surface);
+  border-color: var(--rail-line);
+}
+
+.btn-pen-danger {
+  background-color: var(--rail-red-tint);
+  color: var(--rail-red);
+  border: 1px solid var(--rail-red-border);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.12s ease;
+  cursor: pointer;
+}
+.btn-pen-danger:hover {
+  background-color: #FEE2E2;
+}
+
+.btn-pen-ghost {
+  background-color: transparent;
+  color: var(--rail-text);
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+.btn-pen-ghost:hover {
+  background-color: var(--rail-surface);
+  border-color: var(--rail-line-muted);
+}
+
+/* Inputs & Form Controls */
+.input-pen,
+.select-pen {
+  background-color: var(--rail-surface-card);
+  color: var(--rail-text);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  outline: none;
+}
+.input-pen:focus,
+.select-pen:focus {
+  border-color: var(--rail-line);
+  box-shadow: 0 0 0 1px var(--rail-line);
+}
+
+/* ================================================================
+   RESTRAINED RAILWAY STATUS BADGES & PILLS
+   ================================================================ */
+
+.badge-pen-red {
+  background-color: var(--rail-red-tint);
+  color: var(--rail-red);
+  border: 1px solid var(--rail-red-border);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-pen-yellow {
+  background-color: var(--rail-yellow-tint);
+  color: var(--rail-yellow);
+  border: 1px solid var(--rail-yellow-border);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-pen-green {
+  background-color: var(--rail-green-tint);
+  color: var(--rail-green);
+  border: 1px solid var(--rail-green-border);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-pen-neutral {
+  background-color: var(--rail-surface);
+  color: var(--rail-text-secondary);
+  border: 1px solid var(--rail-line-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Status dots */
+.dot-pen-red {
   width: 6px;
   height: 6px;
+  border-radius: 50%;
+  background-color: var(--rail-red);
+  display: inline-block;
 }
 
+.dot-pen-yellow {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--rail-yellow);
+  display: inline-block;
+}
+
+.dot-pen-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--rail-green);
+  display: inline-block;
+}
+
+/* ================================================================
+   TABLE & GRID STYLES
+   ================================================================ */
+.table-pen {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.table-pen th {
+  background-color: var(--rail-surface);
+  color: var(--rail-text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rail-line-muted);
+  text-align: left;
+}
+.table-pen td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rail-line-subtle);
+  color: var(--rail-text);
+}
+.table-pen tr:hover td {
+  background-color: var(--rail-surface);
+}
+
+/* ================================================================
+   PRECISION SCROLLBARS
+   ================================================================ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
 ::-webkit-scrollbar-track {
-  background: #0e150e;
+  background: var(--rail-surface);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #3d4a3d;
-  border-radius: 0px;
+  background: var(--rail-line-muted);
+  border-radius: 1px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #869585;
+  background: var(--rail-text-secondary);
 }
 
-/* Gantt Background grid pattern */
-.gantt-grid {
-  background-image: linear-gradient(to right, #242c24 1px, transparent 1px);
-  background-size: 60px 100%;
+/* ================================================================
+   MATERIAL SYMBOLS ALIGNMENT
+   ================================================================ */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
 }
 
-/* Radar & Signal animation */
-@keyframes radar-sweep {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* ================================================================
+   BACKWARD COMPATIBILITY CLASSES (for existing modules)
+   ================================================================ */
+.railway-panel {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+}
+.railway-card {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+}
+.railway-card-inset {
+  background-color: var(--rail-surface-inset);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+}
+.railway-ink-panel {
+  background-color: var(--rail-line);
+  color: #F7F4EE;
+  border: 1px solid var(--rail-line);
+  border-radius: 2px;
+}
+.railway-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rail-text-secondary);
 }
 
-.radar-spinner {
-  animation: radar-sweep 4s linear infinite;
+.status-bar-opr  { border-left: 3px solid var(--rail-green) !important; }
+.status-bar-wng  { border-left: 3px solid var(--rail-yellow) !important; }
+.status-bar-blk  { border-left: 3px solid var(--rail-red) !important; }
+.status-bar-blue { border-left: 3px solid #1E3A5F !important; }
+.status-bar-ai   { border-left: 3px solid var(--rail-line) !important; }
+
+.text-railway-display {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+.text-railway-mono {
+  font-family: 'JetBrains Mono', monospace;
 }
 
-@keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+.railway-btn-primary {
+  background-color: var(--rail-line);
+  color: #F7F4EE;
+  border: 1px solid var(--rail-line);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+}
+.railway-btn-secondary {
+  background-color: var(--rail-surface-card);
+  color: var(--rail-text);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 12px;
 }
 
-.pulse-critical {
-  animation: pulse-red 2s infinite;
+.hud-panel {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }
-
-/* Hazard diagonal stripe for block overlay */
-.hazard-stripe {
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(249, 115, 22, 0.25),
-    rgba(249, 115, 22, 0.25) 8px,
-    rgba(147, 0, 10, 0.3) 8px,
-    rgba(147, 0, 10, 0.3) 16px
-  );
+.hud-panel-alt {
+  background-color: var(--rail-surface);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }
-
-.hazard-stripe-active {
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(239, 68, 68, 0.4),
-    rgba(239, 68, 68, 0.4) 8px,
-    rgba(15, 23, 42, 0.8) 8px,
-    rgba(15, 23, 42, 0.8) 16px
-  );
+.hud-card {
+  background-color: var(--rail-surface-card);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
+}
+.hud-card-alt {
+  background-color: var(--rail-surface-inset);
+  border: 1px solid var(--rail-line-muted);
+  border-radius: 2px;
 }

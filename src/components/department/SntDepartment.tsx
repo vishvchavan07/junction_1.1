@@ -1,123 +1,119 @@
 import React from 'react';
 import { FixedAsset } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
-import { Radio, Activity, CheckCircle2, ShieldCheck, Cpu } from 'lucide-react';
+import { Radio, Train, Wrench } from 'lucide-react';
 
 interface SntDepartmentProps {
   assets: FixedAsset[];
   onRequestBlock: (asset: FixedAsset) => void;
+  onNavigateToOverview?: () => void;
 }
 
-export const SntDepartment: React.FC<SntDepartmentProps> = ({ assets, onRequestBlock }) => {
+export const SntDepartment: React.FC<SntDepartmentProps> = ({
+  assets,
+  onRequestBlock,
+  onNavigateToOverview
+}) => {
   const sntAssets = assets.filter(a => a.department === 'SNT');
 
   return (
-    <div className="space-y-6 select-none font-mono">
-      {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#161d16] border border-[#3d4a3d] p-4 gap-4">
+    <div className="space-y-4 select-none font-sans">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#FFFFFF] border border-[#1A1815] p-4 rounded-[2px] shadow-sm gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-primary font-headline font-bold text-xl">
-              SIGNAL & TELECOM MAINTENANCE PORTAL (SMMS)
+            <span className="font-sans font-bold text-lg text-[#1A1815] tracking-tight">
+              Signal & Telecom Maintenance Portal (SMMS)
             </span>
-            <span className="bg-[#153ea3] text-[#9db2ff] text-[10px] px-2 py-0.5 font-bold">
-              ELECTRONIC INTERLOCKING & AXLE COUNTERS
+            <span className="bg-[#FAF7F2] text-[#15803D] text-[10px] px-2 py-0.5 border border-[#BBF7D0] font-mono font-bold rounded-[2px]">
+              ELECTRONIC INTERLOCKING
             </span>
           </div>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            Electric Point Machine current signatures, Multi-Section Digital Axle Counter (MSDAC) coil balance, and interlocking logs.
+          <p className="text-[11.5px] text-[#615A4F] mt-0.5">
+            Electric point machine stroke timing, MSDAC wheel sensor voltages, SSI interlocking telemetry, and disconnection notices.
           </p>
         </div>
-
-        <div className="text-xs bg-[#0e150e] border border-[#3d4a3d] p-2.5 flex items-center gap-3">
-          <div>
-            <span className="text-[10px] text-on-surface-variant block">LEAD S&T ENGINEER:</span>
-            <span className="text-[#9db2ff] font-bold">Vishv Chavan (Sr. DSTE)</span>
-          </div>
+        <div className="bg-[#F7F4EE] border border-[#D8D1C5] p-2.5 px-3 rounded-[2px] text-xs font-mono shrink-0">
+          <span className="text-[9px] text-[#615A4F] font-bold block uppercase">LEAD S&T ENGINEER:</span>
+          <span className="text-[#1A1815] font-bold">Vishv Chavan (Sr. DSTE)</span>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">POINT MACHINES</span>
-          <div className="text-2xl font-bold text-on-surface mt-1">142 Units</div>
-          <div className="text-[9px] text-[#4be277] mt-1">Siemens S700K Standard</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">MSDAC AXLE COUNTERS</span>
-          <div className="text-2xl font-bold text-primary mt-1">99.8% Sync</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">0 False Dropouts in 24h</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">EI INTERLOCKINGS</span>
-          <div className="text-2xl font-bold text-[#9db2ff] mt-1">6 Stations</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Dual Redundant Hot Standby</div>
-        </div>
-        <div className="bg-[#161d16] border border-[#3d4a3d] p-3">
-          <span className="text-[10px] text-on-surface-variant font-bold">DISCONNECTIONS DUE</span>
-          <div className="text-2xl font-bold text-[#f97316] mt-1">1 Point Adj</div>
-          <div className="text-[9px] text-on-surface-variant mt-1">Point 81B Friction Fix</div>
-        </div>
+        {[
+          { label: 'Point Machines',     value: '142 Units',  sub: 'Siemens S700K Standard',        color: '#15803D' },
+          { label: 'MSDAC Axle Counters',value: '99.8% Sync', sub: '0 False Dropouts in 24h',       color: '#15803D' },
+          { label: 'EI Interlockings',   value: '6 Stations', sub: 'Dual Redundant Hot Standby',     color: '#15803D' },
+          { label: 'Disconnections Due', value: '1 Point Adj',sub: 'Point 81B Friction Fix',         color: '#B45309' },
+        ].map(k => (
+          <div key={k.label} className="bg-[#FFFFFF] border border-[#D8D1C5] hover:border-[#1A1815] rounded-[2px] p-3.5 transition-colors">
+            <div className="text-[9.5px] text-[#615A4F] font-mono font-bold uppercase">{k.label}</div>
+            <div className="text-xl font-bold mt-1 text-[#1A1815]">{k.value}</div>
+            <div className="text-[9.5px] font-mono mt-1 text-[#615A4F]">{k.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* S&T Assets List */}
-      <div className="bg-[#161d16] border border-[#3d4a3d] p-4 space-y-4">
-        <div className="flex justify-between items-center border-b border-[#3d4a3d] pb-2">
-          <span className="text-xs font-bold text-on-surface uppercase">
-            SIGNALLING INFRASTRUCTURE & SMMS TELEMETRY
+      {/* Asset List */}
+      <div className="bg-[#FFFFFF] border border-[#1A1815] rounded-[2px] shadow-sm overflow-hidden">
+        <div className="border-b border-[#D8D1C5] bg-[#F7F4EE] px-4 py-2.5 flex justify-between items-center">
+          <span className="text-[11px] font-mono font-bold text-[#1A1815] uppercase flex items-center gap-2">
+            <Radio className="w-4 h-4 text-[#1A1815]" />
+            Signalling Infrastructure & SMMS Telemetry
           </span>
-          <span className="text-[10px] text-on-surface-variant">SMMS Connected</span>
+          <span className="text-[9.5px] text-[#615A4F] font-mono">SMMS Connected</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="divide-y divide-[#EDE7DC]">
           {sntAssets.map(asset => (
-            <div key={asset.id} className="p-3 bg-[#0e150e] border border-[#3d4a3d] space-y-2">
+            <div key={asset.id} className="p-4 space-y-2.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                 <div className="flex items-center gap-2">
                   <StatusBadge status={asset.status} />
-                  <span className="font-bold text-xs text-[#9db2ff]">{asset.code}</span>
-                  <span className="text-xs text-on-surface">{asset.name}</span>
+                  <span className="font-mono font-bold text-[11px] text-[#1A1815]">{asset.code}</span>
+                  <span className="text-[12px] text-[#1A1815] font-semibold">{asset.name}</span>
                 </div>
-                <div className="text-xs text-on-surface-variant">
-                  Location: <strong className="text-on-surface">{asset.section} ({asset.kmMarker})</strong>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-[#161d16] p-2 border border-[#3d4a3d]">
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">POINT STROKE TIME:</span>
-                  <strong className={asset.pointStrokeSeconds && asset.pointStrokeSeconds > 4.0 ? 'text-[#f97316]' : 'text-primary'}>
-                    {asset.pointStrokeSeconds ? `${asset.pointStrokeSeconds}s (Spec <4s)` : '3.2s'}
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">CONDITION SCORE:</span>
-                  <strong className="text-primary">{asset.conditionScore} / 100</strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">FAILURE RISK:</span>
-                  <strong className={asset.failureRiskProbability > 60 ? 'text-[#f97316]' : 'text-primary'}>
-                    {asset.failureRiskProbability}%
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] text-on-surface-variant block">DISCONNECTION REQUIRED:</span>
-                  <strong className="text-[#f97316]">{asset.blockRequired ? 'YES (S&T DISCONN)' : 'NO'}</strong>
+                <div className="text-[10.5px] text-[#615A4F] font-mono">
+                  Location: <strong className="text-[#1A1815]">{asset.section} ({asset.kmMarker})</strong>
                 </div>
               </div>
 
-              <p className="text-[11px] text-on-surface-variant">
-                <strong className="text-[#9db2ff]">SMMS Diagnostic Log: </strong>
-                {asset.xaiReasoning}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10.5px] bg-[#F7F4EE] p-2.5 border border-[#D8D1C5] rounded-[2px] font-mono">
+                {[
+                  ['POINT STROKE TIME:', asset.pointStrokeSeconds ? `${asset.pointStrokeSeconds}s (Spec <4s)` : '3.2s', asset.pointStrokeSeconds && asset.pointStrokeSeconds > 4.0 ? '#B45309' : '#15803D'],
+                  ['CONDITION SCORE:', `${asset.conditionScore} / 100`, '#1A1815'],
+                  ['FAILURE RISK:', `${asset.failureRiskProbability}%`, asset.failureRiskProbability > 60 ? '#B45309' : '#15803D'],
+                  ['DISCONNECTION REQ:', asset.blockRequired ? 'YES (S&T DISCONN)' : 'NO', asset.blockRequired ? '#B45309' : '#15803D'],
+                ].map(([k, v, c]) => (
+                  <div key={k as string}>
+                    <span className="text-[9px] text-[#615A4F] font-bold block">{k as string}</span>
+                    <strong style={{ color: c as string }}>{v as any}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-[11.5px] text-[#615A4F] font-sans leading-snug">
+                <strong className="text-[#1A1815] font-mono">SMMS Diagnostic Log: </strong>{asset.xaiReasoning}
               </p>
 
-              <div className="flex justify-end pt-1">
+              <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                {onNavigateToOverview && (
+                  <button
+                    onClick={onNavigateToOverview}
+                    className="px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#F7F4EE] text-[#1A1815] border border-[#D8D1C5] text-[10.5px] font-mono font-semibold rounded-[2px] flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Train className="w-3.5 h-3.5 text-[#1A1815]" />
+                    <span>Inspect on Railway Canvas</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => onRequestBlock(asset)}
-                  className="px-3 py-1.5 bg-[#242c24] hover:bg-[#3b82f6] hover:text-white text-[#9db2ff] text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                  className="btn-pen-primary px-3 py-1.5 text-[10.5px] font-mono uppercase cursor-pointer"
                 >
-                  REQUEST S&T DISCONNECTION NOTICE
+                  <Wrench className="w-3 h-3" />
+                  Request Disconnection Notice
                 </button>
               </div>
             </div>

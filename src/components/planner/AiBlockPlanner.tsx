@@ -28,13 +28,15 @@ interface AiBlockPlannerProps {
   assets: FixedAsset[];
   trains: TrainEntity[];
   onUpdateBlock: (updatedBlock: MaintenanceBlock) => void;
+  onNavigateToOverview?: () => void;
 }
 
 export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
   blocks: initialBlocks,
   assets,
   trains,
-  onUpdateBlock
+  onUpdateBlock,
+  onNavigateToOverview,
 }) => {
   const [blocks, setBlocks] = useState<MaintenanceBlock[]>(initialBlocks);
   const [horizon, setHorizon] = useState<'24h' | '7d' | '30d'>('24h');
@@ -156,45 +158,45 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
   const timelineHours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00'];
 
   return (
-    <div className="space-y-6 select-none font-mono">
+    <div className="space-y-5 select-none font-mono">
       {/* Top Header Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#161d16] border border-[#3d4a3d] p-4 gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#F5F0E8] border border-[#C4BAA8] p-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-primary font-headline font-bold text-xl">
-              AI MULTI-HORIZON BLOCK OPTIMIZATION ENGINE
+            <span className="font-display font-bold text-xl text-[#1A1208] tracking-tight">
+              AI Multi-Horizon Block Optimization Engine
             </span>
-            <span className="bg-[#153ea3] text-[#9db2ff] text-[10px] px-2 py-0.5 font-bold">
+            <span className="bg-[#EFF6FF] text-[#1E3A5F] text-[9px] px-2 py-0.5 border border-[#BFDBFE] font-mono font-bold">
               MILP / OR-TOOLS
             </span>
           </div>
-          <p className="text-xs text-on-surface-variant mt-0.5">
+          <p className="text-[11px] text-[#5C5347] mt-0.5">
             Automated conflict resolution, shadow block clustering, and passenger train punctuality preservation.
           </p>
         </div>
 
         {/* Horizon Tabs */}
-        <div className="flex items-center gap-1 bg-[#091009] border border-[#3d4a3d] p-1 text-xs">
+        <div className="flex items-center gap-0 bg-white border border-[#C4BAA8] overflow-hidden">
           <button
             onClick={() => setHorizon('24h')}
-            className={`px-3 py-1.5 font-bold cursor-pointer transition-colors ${
-              horizon === '24h' ? 'bg-primary text-[#003915]' : 'text-on-surface-variant hover:text-on-surface'
+            className={`px-3 py-2 text-[10px] font-mono font-bold cursor-pointer transition-colors ${
+              horizon === '24h' ? 'bg-[#1A1208] text-[#FAF7F2]' : 'text-[#5C5347] hover:bg-[#EDE7DA]'
             }`}
           >
             24H DYNAMIC
           </button>
           <button
             onClick={() => setHorizon('7d')}
-            className={`px-3 py-1.5 font-bold cursor-pointer transition-colors ${
-              horizon === '7d' ? 'bg-primary text-[#003915]' : 'text-on-surface-variant hover:text-on-surface'
+            className={`px-3 py-2 text-[10px] font-mono font-bold cursor-pointer transition-colors border-l border-[#C4BAA8] ${
+              horizon === '7d' ? 'bg-[#1A1208] text-[#FAF7F2]' : 'text-[#5C5347] hover:bg-[#EDE7DA]'
             }`}
           >
             7-DAY TACTICAL
           </button>
           <button
             onClick={() => setHorizon('30d')}
-            className={`px-3 py-1.5 font-bold cursor-pointer transition-colors ${
-              horizon === '30d' ? 'bg-primary text-[#003915]' : 'text-on-surface-variant hover:text-on-surface'
+            className={`px-3 py-2 text-[10px] font-mono font-bold cursor-pointer transition-colors border-l border-[#C4BAA8] ${
+              horizon === '30d' ? 'bg-[#1A1208] text-[#FAF7F2]' : 'text-[#5C5347] hover:bg-[#EDE7DA]'
             }`}
           >
             30-DAY STRATEGIC
@@ -202,28 +204,28 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
         </div>
       </div>
 
-      {/* Main Layout Grid: Left 4 cols (Parameters & Weights) / Right 8 cols (Gantt & Recommendation Cards) */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        {/* Left Column: 3-Step Configuration & Objective Function Tuning (4 cols) */}
+      {/* Main Layout Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        {/* Left Column: Parameters (4 cols) */}
         <div className="xl:col-span-4 space-y-4">
-          <div className="bg-[#161d16] border border-[#3d4a3d] p-4">
-            <div className="flex items-center gap-2 border-b border-[#3d4a3d] pb-2 mb-4">
-              <Sliders className="w-4 h-4 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-wider text-on-surface">
-                1. OPTIMIZATION PARAMETERS
+          <div className="bg-white border border-[#C4BAA8] p-4">
+            <div className="flex items-center gap-2 border-b border-[#EDE7DA] pb-2.5 mb-4">
+              <Sliders className="w-4 h-4 text-[#8B1A1A]" />
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#1A1208]">
+                1. Optimization Parameters
               </span>
             </div>
 
-            <div className="space-y-4 text-xs">
+            <div className="space-y-4 text-[11px] font-mono">
               {/* Corridor Selector */}
               <div>
-                <label className="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">
-                  TARGET RAILWAY CORRIDOR
+                <label className="block text-[9px] font-bold text-[#5C5347] uppercase tracking-wider mb-1">
+                  Target Railway Corridor
                 </label>
                 <select
                   value={corridor}
                   onChange={(e) => setCorridor(e.target.value)}
-                  className="w-full bg-[#0e150e] border border-[#3d4a3d] px-3 py-2 text-xs text-primary font-mono outline-none"
+                  className="w-full bg-[#FAF7F2] border border-[#C4BAA8] px-3 py-2 text-[11px] text-[#1A1208] font-mono outline-none focus:border-[#8B1A1A]"
                 >
                   <option value="Vapi – Udvada (KM 125–135)">Vapi – Udvada Sector (KM 125–135) [High Traffic]</option>
                   <option value="Valsad – Surat Main">Valsad – Surat Main Section (KM 140–180)</option>
@@ -231,92 +233,50 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
                 </select>
               </div>
 
-              {/* Multi-Department Clubbing Toggle */}
-              <div className="p-3 bg-[#0e150e] border border-[#3d4a3d] flex items-center justify-between">
+              {/* Shadow Block Clustering Toggle */}
+              <div className="p-3 bg-[#F5F0E8] border border-[#D9D0C0] flex items-center justify-between">
                 <div>
-                  <div className="text-[11px] font-bold text-on-surface">SHADOW BLOCK CLUSTERING</div>
-                  <div className="text-[9px] text-on-surface-variant">Auto-club Civil, OHE & S&T into shared windows</div>
+                  <div className="font-bold text-[#1A1208]">SHADOW BLOCK CLUSTERING</div>
+                  <div className="text-[9px] text-[#5C5347]">Auto-club Civil, OHE & S&T into shared windows</div>
                 </div>
-                <span className="text-primary font-bold text-[11px]">ENABLED</span>
+                <span className="text-[#166534] font-bold">ENABLED</span>
               </div>
 
-              {/* Objective Function Weights Sliders */}
-              <div className="space-y-3 pt-2 border-t border-[#3d4a3d]">
-                <div className="flex justify-between items-center text-[10px] font-bold text-on-surface-variant uppercase">
-                  <span>MILP OBJECTIVE WEIGHTS</span>
-                  <span className="text-primary">TOTAL: {delayWeight + assetRiskWeight + shadowClubWeight + crewAvailWeight}%</span>
+              {/* Objective Function Weights */}
+              <div className="space-y-3 pt-2 border-t border-[#EDE7DA]">
+                <div className="flex justify-between items-center text-[9px] font-bold text-[#5C5347] uppercase">
+                  <span>MILP Objective Weights</span>
+                  <span className="text-[#8B1A1A]">TOTAL: {delayWeight + assetRiskWeight + shadowClubWeight + crewAvailWeight}%</span>
                 </div>
 
-                {/* Train Delay Weight */}
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span>w₁: Train Delay Minimization</span>
-                    <strong className="text-primary">{delayWeight}%</strong>
+                {[['w₁: Train Delay Minimization', delayWeight, setDelayWeight, 10, 70, '#166534'],
+                  ['w₂: Asset Failure Risk Urgency', assetRiskWeight, setAssetRiskWeight, 10, 60, '#92400E'],
+                  ['w₃: Multi-Dept Clubbing Priority', shadowClubWeight, setShadowClubWeight, 10, 50, '#1E3A5F'],
+                  ['w₄: Machine/Crew Availability', crewAvailWeight, setCrewAvailWeight, 5, 30, '#5C5347'],
+                ].map(([label, val, setter, mn, mx, col]: any) => (
+                  <div key={label}>
+                    <div className="flex justify-between text-[10px] mb-1">
+                      <span className="text-[#1A1208]">{label}</span>
+                      <strong style={{ color: col }}>{val}%</strong>
+                    </div>
+                    <input
+                      type="range"
+                      min={mn}
+                      max={mx}
+                      value={val}
+                      onChange={(e) => setter(Number(e.target.value))}
+                      className="w-full h-1.5 cursor-pointer"
+                      style={{ accentColor: col }}
+                    />
                   </div>
-                  <input
-                    type="range"
-                    min="10"
-                    max="70"
-                    value={delayWeight}
-                    onChange={(e) => setDelayWeight(Number(e.target.value))}
-                    className="w-full accent-primary h-1 bg-[#242c24] cursor-pointer"
-                  />
-                </div>
-
-                {/* Asset Risk Urgency */}
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span>w₂: Asset Failure Risk Urgency</span>
-                    <strong className="text-[#f97316]">{assetRiskWeight}%</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="10"
-                    max="60"
-                    value={assetRiskWeight}
-                    onChange={(e) => setAssetRiskWeight(Number(e.target.value))}
-                    className="w-full accent-[#f97316] h-1 bg-[#242c24] cursor-pointer"
-                  />
-                </div>
-
-                {/* Shadow Block Clubbing */}
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span>w₃: Multi-Dept Clubbing Priority</span>
-                    <strong className="text-[#3b82f6]">{shadowClubWeight}%</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="10"
-                    max="50"
-                    value={shadowClubWeight}
-                    onChange={(e) => setShadowClubWeight(Number(e.target.value))}
-                    className="w-full accent-[#3b82f6] h-1 bg-[#242c24] cursor-pointer"
-                  />
-                </div>
-
-                {/* Machine Depot Availability */}
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span>w₄: Machine/Crew Availability</span>
-                    <strong className="text-on-surface">{crewAvailWeight}%</strong>
-                  </div>
-                  <input
-                    type="range"
-                    min="5"
-                    max="30"
-                    value={crewAvailWeight}
-                    onChange={(e) => setCrewAvailWeight(Number(e.target.value))}
-                    className="w-full accent-white h-1 bg-[#242c24] cursor-pointer"
-                  />
-                </div>
+                ))}
               </div>
 
-              {/* Execution CTA Button */}
+              {/* CTA */}
               <button
                 onClick={handleExecuteOptimization}
                 disabled={isOptimizing}
-                className="w-full py-3 bg-primary hover:bg-primary-fixed text-[#003915] font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-transform active:scale-98 shadow-md cursor-pointer disabled:opacity-50"
+                className="w-full py-3 bg-[#8B1A1A] hover:bg-[#7F1D1D] text-white font-mono font-bold text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors active:scale-98 cursor-pointer disabled:opacity-50 shadow"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>{isOptimizing ? 'COMPUTING MILP OPTIMIZATION...' : 'EXECUTE AI OPTIMIZER'}</span>
@@ -324,253 +284,211 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
             </div>
           </div>
 
-          {/* AI Optimization Impact Summary Card */}
-          <div className="bg-[#161d16] border border-primary/40 p-4">
-            <div className="flex items-center gap-2 border-b border-[#3d4a3d] pb-2 mb-3">
-              <TrendingDown className="w-4 h-4 text-primary" />
-              <span className="text-xs font-bold text-primary uppercase">
-                AI OPTIMIZATION EFFICIENCY GAINS
+          {/* Efficiency Gains Card */}
+          <div className="bg-white border border-[#C4BAA8] p-4" style={{ borderLeftWidth: '3px', borderLeftColor: '#166534' }}>
+            <div className="flex items-center gap-2 border-b border-[#EDE7DA] pb-2 mb-3">
+              <TrendingDown className="w-4 h-4 text-[#166534]" />
+              <span className="text-[10px] font-mono font-bold text-[#166534] uppercase">
+                AI Optimization Efficiency Gains
               </span>
             </div>
-
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between p-2 bg-[#0e150e] border border-[#3d4a3d]">
-                <span className="text-on-surface-variant">Train Delay Avoidance:</span>
-                <span className="text-primary font-bold">54 min saved</span>
-              </div>
-              <div className="flex justify-between p-2 bg-[#0e150e] border border-[#3d4a3d]">
-                <span className="text-on-surface-variant">Corridor Window Gained:</span>
-                <span className="text-[#9db2ff] font-bold">+3.5 hours</span>
-              </div>
-              <div className="flex justify-between p-2 bg-[#0e150e] border border-[#3d4a3d]">
-                <span className="text-on-surface-variant">Shadow Blocks Clubbed:</span>
-                <span className="text-[#4be277] font-bold">3 Depts Synchronized</span>
-              </div>
-              <div className="flex justify-between p-2 bg-[#0e150e] border border-[#3d4a3d]">
-                <span className="text-on-surface-variant">Tamping Machine ROI:</span>
-                <span className="text-on-surface font-bold">92.4% utilization</span>
-              </div>
+            <div className="space-y-1.5 text-[11px] font-mono">
+              {[
+                ['Train Delay Avoidance:',   '54 min saved',          '#166534'],
+                ['Corridor Window Gained:',  '+3.5 hours',            '#1E3A5F'],
+                ['Shadow Blocks Clubbed:',   '3 Depts Synchronized',  '#166534'],
+                ['Tamping Machine ROI:',     '92.4% utilization',     '#1A1208'],
+              ].map(([k, v, c]) => (
+                <div key={k as string} className="flex justify-between p-2 bg-[#F5F0E8] border border-[#D9D0C0]">
+                  <span className="text-[#5C5347]">{k as string}</span>
+                  <span className="font-bold" style={{ color: c as string }}>{v as string}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Gantt Timeline & AI Recommendations (8 cols) */}
-        <div className="xl:col-span-8 space-y-6">
+        {/* Right Column: Gantt + Block Cards (8 cols) */}
+        <div className="xl:col-span-8 space-y-5">
           {/* Interactive Gantt Multi-Horizon Timeline */}
-          <div className="bg-[#1E293B] border border-[#334155] p-4">
-            <div className="flex items-center justify-between border-b border-[#334155] pb-3 mb-4">
+          <div className="bg-white border border-[#C4BAA8] p-4">
+            <div className="flex items-center justify-between border-b border-[#EDE7DA] pb-2.5 mb-4">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-xs text-primary bg-[#0F172A] border border-primary px-2 py-0.5">
-                  GANTT_TIMELINE_VISUALIZER
+                <span className="font-mono font-bold text-[10px] text-[#8B1A1A] bg-[#FEF2F2] border border-[#8B1A1A]/30 px-2 py-0.5">
+                  GANTT TIMELINE VISUALIZER
                 </span>
-                <span className="text-xs text-on-surface-variant">
-                  COA TIMETABLES VS MULTI-DEPT BLOCK REQUESTS (00:00 ➔ 08:00)
+                <span className="text-[10px] text-[#5C5347] font-mono">
+                  COA Timetables vs Multi-Dept Block Requests (00:00 → 08:00)
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <div className="flex items-center gap-2 text-[9px] text-[#8B8073] font-mono">
+                <span className="w-2 h-2 rounded-full bg-[#166534] animate-pulse"></span>
                 <span>CURRENT TIME: 02:53</span>
               </div>
             </div>
 
-            {/* Gantt Chart Matrix Canvas */}
-            <div className="relative bg-[#0F172A] border border-[#334155] p-4 overflow-x-auto">
+            {/* Gantt Chart Matrix */}
+            <div className="relative bg-[#F5F0E8] border border-[#D9D0C0] p-4 overflow-x-auto">
               {/* Time scale header */}
-              <div className="grid grid-cols-8 border-b border-[#334155] pb-2 mb-4 text-[10px] text-on-surface-variant font-bold text-center">
+              <div className="grid grid-cols-8 border-b border-[#C4BAA8] pb-2 mb-4 text-[9px] text-[#8B8073] font-mono font-bold text-center">
                 {timelineHours.map(hour => (
-                  <div key={hour} className="border-l border-[#334155]">
-                    {hour}
-                  </div>
+                  <div key={hour} className="border-l border-[#C4BAA8]">{hour}</div>
                 ))}
               </div>
 
-              {/* Current Time Green Line (at ~02:53 -> ~36% across 8h) */}
-              <div 
-                className="absolute top-8 bottom-2 w-[2px] bg-primary z-20 shadow-[0_0_8px_#22c55e]"
+              {/* Current time red line */}
+              <div
+                className="absolute top-8 bottom-2 w-[2px] bg-[#8B1A1A] z-20"
                 style={{ left: '36.5%' }}
                 title="Current Real-time: 02:53 IST"
               >
-                <div className="absolute -top-3.5 -left-4 bg-primary text-[#003915] text-[8px] font-bold px-1">
+                <div className="absolute -top-3.5 -left-3 bg-[#8B1A1A] text-white text-[7px] font-mono font-bold px-1">
                   NOW
                 </div>
               </div>
 
-              {/* Row 1: Vande Bharat Express (TRN-20901) */}
-              <div className="relative my-2 py-1.5 flex items-center border-b border-[#1E293B]">
-                <div className="w-40 text-[10px] font-bold text-[#4be277] shrink-0 truncate">
-                  VB-20901 (SUPERFAST)
-                </div>
-                <div className="flex-1 relative h-5 bg-[#161d16] border border-[#334155]">
-                  <div 
-                    className="absolute top-0 bottom-0 bg-[#004b1e] border border-primary text-[8px] text-primary font-bold flex items-center justify-center px-1"
-                    style={{ left: '30%', width: '10%' }}
-                    title="Vande Bharat passing Vapi 02:25 to 02:50"
-                  >
-                    TRAIN PATH
-                  </div>
+              {/* Row 1: Vande Bharat */}
+              <div className="relative my-2 py-1.5 flex items-center border-b border-[#D9D0C0]">
+                <div className="w-40 text-[9px] font-mono font-bold text-[#1E3A5F] shrink-0 truncate">VB-20901 (SUPERFAST)</div>
+                <div className="flex-1 relative h-5 bg-white border border-[#D9D0C0]">
+                  <div className="absolute top-0 bottom-0 bg-[#DBEAFE] border border-[#1E3A5F] text-[7px] text-[#1E3A5F] font-mono font-bold flex items-center justify-center px-1"
+                    style={{ left: '30%', width: '10%' }}>TRAIN PATH</div>
                 </div>
               </div>
 
-              {/* Row 2: Rajdhani Express (TRN-12951) */}
-              <div className="relative my-2 py-1.5 flex items-center border-b border-[#1E293B]">
-                <div className="w-40 text-[10px] font-bold text-[#9db2ff] shrink-0 truncate">
-                  RAJ-12951 (SUPERFAST)
-                </div>
-                <div className="flex-1 relative h-5 bg-[#161d16] border border-[#334155]">
-                  <div 
-                    className="absolute top-0 bottom-0 bg-[#153ea3] border border-[#3b82f6] text-[8px] text-white font-bold flex items-center justify-center px-1"
-                    style={{ left: '38%', width: '10%' }}
-                    title="Rajdhani passing Udvada 03:00 to 03:25"
-                  >
-                    TRAIN PATH
-                  </div>
+              {/* Row 2: Rajdhani */}
+              <div className="relative my-2 py-1.5 flex items-center border-b border-[#D9D0C0]">
+                <div className="w-40 text-[9px] font-mono font-bold text-[#1E3A5F] shrink-0 truncate">RAJ-12951 (SUPERFAST)</div>
+                <div className="flex-1 relative h-5 bg-white border border-[#D9D0C0]">
+                  <div className="absolute top-0 bottom-0 bg-[#DBEAFE] border border-[#1E40AF] text-[7px] text-[#1E40AF] font-mono font-bold flex items-center justify-center px-1"
+                    style={{ left: '38%', width: '10%' }}>TRAIN PATH</div>
                 </div>
               </div>
 
-              {/* Row 3: BOXN Coal Freight (TRN-88201) */}
-              <div className="relative my-2 py-1.5 flex items-center border-b border-[#1E293B]">
-                <div className="w-40 text-[10px] font-bold text-[#fed7aa] shrink-0 truncate">
-                  BOXN-88201 (COAL)
-                </div>
-                <div className="flex-1 relative h-5 bg-[#161d16] border border-[#334155]">
-                  <div 
-                    className="absolute top-0 bottom-0 bg-[#7c2d12] border border-[#f97316] text-[8px] text-[#fed7aa] font-bold flex items-center justify-center px-1"
-                    style={{ left: '15%', width: '22%' }}
-                    title="BOXN freight holding / transit"
-                  >
-                    FREIGHT PATH
-                  </div>
+              {/* Row 3: BOXN Freight */}
+              <div className="relative my-2 py-1.5 flex items-center border-b border-[#D9D0C0]">
+                <div className="w-40 text-[9px] font-mono font-bold text-[#92400E] shrink-0 truncate">BOXN-88201 (COAL)</div>
+                <div className="flex-1 relative h-5 bg-white border border-[#D9D0C0]">
+                  <div className="absolute top-0 bottom-0 bg-[#FFFBEB] border border-[#92400E] text-[7px] text-[#92400E] font-mono font-bold flex items-center justify-center px-1"
+                    style={{ left: '15%', width: '22%' }}>FREIGHT PATH</div>
                 </div>
               </div>
 
-              {/* Row 4: Civil Track TMS Possession Request */}
-              <div className="relative my-2 py-1.5 flex items-center border-b border-[#1E293B]">
-                <div className="w-40 text-[10px] text-on-surface-variant shrink-0 flex items-center gap-1">
-                  <span className="w-2 h-2 bg-primary"></span> Civil Track Tamping
+              {/* Row 4: Civil Possession */}
+              <div className="relative my-2 py-1.5 flex items-center border-b border-[#D9D0C0]">
+                <div className="w-40 text-[9px] font-mono text-[#5C5347] shrink-0 flex items-center gap-1">
+                  <span className="w-2 h-2 bg-[#166534]"></span> Civil Track Tamping
                 </div>
-                <div className="flex-1 relative h-5 bg-[#161d16] border border-[#334155]">
-                  <div 
-                    className="absolute top-0 bottom-0 bg-[#22c55e]/20 border border-primary text-[8px] text-primary font-bold flex items-center justify-center"
-                    style={{ left: '18.7%', width: '37.5%' }}
-                    title="Civil requested 01:30 to 04:30"
-                  >
-                    REQ: 01:30–04:30 (3h)
-                  </div>
+                <div className="flex-1 relative h-5 bg-white border border-[#D9D0C0]">
+                  <div className="absolute top-0 bottom-0 bg-[#F0FDF4] border border-[#166534] text-[7px] text-[#166534] font-mono font-bold flex items-center justify-center"
+                    style={{ left: '18.7%', width: '37.5%' }}>REQ: 01:30–04:30 (3h)</div>
                 </div>
               </div>
 
-              {/* Row 5: Electrical OHE Request */}
-              <div className="relative my-2 py-1.5 flex items-center border-b border-[#1E293B]">
-                <div className="w-40 text-[10px] text-on-surface-variant shrink-0 flex items-center gap-1">
-                  <span className="w-2 h-2 bg-[#f97316]"></span> OHE Jumper Repair
+              {/* Row 5: OHE Request */}
+              <div className="relative my-2 py-1.5 flex items-center border-b border-[#D9D0C0]">
+                <div className="w-40 text-[9px] font-mono text-[#5C5347] shrink-0 flex items-center gap-1">
+                  <span className="w-2 h-2 bg-[#92400E]"></span> OHE Jumper Repair
                 </div>
-                <div className="flex-1 relative h-5 bg-[#161d16] border border-[#334155]">
-                  <div 
-                    className="absolute top-0 bottom-0 bg-[#f97316]/20 border border-[#f97316] text-[8px] text-[#f97316] font-bold flex items-center justify-center"
-                    style={{ left: '37.5%', width: '25%' }}
-                    title="OHE requested 03:00 to 05:00"
-                  >
-                    REQ: 03:00–05:00 (2h)
-                  </div>
+                <div className="flex-1 relative h-5 bg-white border border-[#D9D0C0]">
+                  <div className="absolute top-0 bottom-0 bg-[#FFFBEB] border border-[#92400E] text-[7px] text-[#92400E] font-mono font-bold flex items-center justify-center"
+                    style={{ left: '37.5%', width: '25%' }}>REQ: 03:00–05:00 (2h)</div>
                 </div>
               </div>
 
-              {/* Row 6: AI RECOMMENDED SHADOW BLOCK WINDOW */}
-              <div className="relative my-2 py-2 flex items-center bg-[#161d16] border border-primary p-1">
-                <div className="w-40 text-[10px] font-bold text-primary shrink-0 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-primary" />
+              {/* Row 6: AI Shadow Block */}
+              <div className="relative my-2 py-2 flex items-center bg-[#FEF2F2] border border-[#8B1A1A]/60 p-1">
+                <div className="w-40 text-[9px] font-mono font-bold text-[#8B1A1A] shrink-0 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-[#8B1A1A]" />
                   <span>AI SHADOW WINDOW</span>
                 </div>
-                <div className="flex-1 relative h-7 bg-[#091009] border border-primary">
-                  {/* The Optimized 02:00 to 03:30 Window (25% to 43.75%) */}
-                  <div 
-                    className="absolute top-0 bottom-0 bg-primary/30 border-2 border-primary text-[9px] text-primary font-extrabold flex items-center justify-center shadow-lg"
+                <div className="flex-1 relative h-7 bg-[#FAF7F2] border border-[#8B1A1A]/60">
+                  <div
+                    className="absolute top-0 bottom-0 bg-[#8B1A1A]/20 border-2 border-[#8B1A1A] text-[8px] text-[#8B1A1A] font-mono font-extrabold flex items-center justify-center"
                     style={{ left: '25%', width: '18.75%' }}
-                    title="AI Shadow Window: 02:00 to 03:30 (90 min) - 0 Train Delays!"
+                    title="AI Shadow Window: 02:00 to 03:30 (90 min)"
                   >
-                    ★ OPTIMAL SLOT: 02:00–03:30 (90 MIN)
+                    ★ OPTIMAL: 02:00–03:30 (90 MIN)
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Gantt Legend */}
-            <div className="mt-3 flex items-center justify-between text-[10px] text-on-surface-variant">
+            <div className="mt-3 flex items-center justify-between text-[9px] font-mono text-[#8B8073]">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#004b1e] border border-primary"></span> Superfast Path</span>
-                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#7c2d12] border border-[#f97316]"></span> Goods Path</span>
-                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-primary/30 border border-primary"></span> AI Clustered Slot</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#DBEAFE] border border-[#1E3A5F]"></span>Superfast Path</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#FFFBEB] border border-[#92400E]"></span>Goods Path</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#8B1A1A]/20 border border-[#8B1A1A]"></span>AI Clustered Slot</span>
               </div>
-              <span className="text-primary font-bold">ZERO PASSENGER TRAIN DELAYS</span>
+              <span className="text-[#166534] font-bold">ZERO PASSENGER TRAIN DELAYS</span>
             </div>
           </div>
 
           {/* AI Recommended Block Cards & Approval Flow */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-on-surface flex items-center gap-1.5">
-                <FileCheck className="w-4 h-4 text-primary" />
-                AI RECOMMENDED POSSESSION ACTIONS (CONTROLLER APPROVAL QUEUE)
+              <span className="text-[11px] font-mono font-bold uppercase text-[#1A1208] flex items-center gap-1.5">
+                <FileCheck className="w-4 h-4 text-[#8B1A1A]" />
+                AI Recommended Possession Actions (Controller Approval Queue)
               </span>
-              <span className="text-[10px] text-on-surface-variant">
-                Human-in-the-Loop Decision Matrix
-              </span>
+              <span className="text-[9px] text-[#8B8073] font-mono">Human-in-the-Loop Decision Matrix</span>
             </div>
 
             {blocks.map(block => (
-              <div 
+              <div
                 key={block.id}
-                className="bg-[#161d16] border border-[#3d4a3d] p-4 space-y-3 relative hover:border-primary/60 transition-colors"
+                className="bg-white border border-[#C4BAA8] p-4 space-y-3 hover:border-[#8B1A1A]/40 transition-colors"
               >
                 {/* Card Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#3d4a3d] pb-2 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#EDE7DA] pb-2 gap-2">
                   <div className="flex items-center gap-2">
                     <StatusBadge status={block.status} />
-                    <span className="font-bold text-xs text-primary">{block.blockCode}</span>
-                    <span className="text-xs text-on-surface font-semibold">{block.title}</span>
+                    <span className="font-mono font-bold text-[11px] text-[#8B1A1A]">{block.blockCode}</span>
+                    <span className="font-mono text-[11px] text-[#1A1208] font-medium">{block.title}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="text-on-surface-variant">CONFIDENCE:</span>
-                    <strong className="text-primary">{block.aiConfidenceScore}%</strong>
+                  <div className="flex items-center gap-2 text-[10px] font-mono">
+                    <span className="text-[#8B8073]">CONFIDENCE:</span>
+                    <strong className="text-[#166534]">{block.aiConfidenceScore}%</strong>
                   </div>
                 </div>
 
                 {/* Details Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-[#0e150e] p-3 border border-[#3d4a3d]">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-mono bg-[#F5F0E8] p-3 border border-[#D9D0C0]">
                   <div>
-                    <span className="text-[10px] text-on-surface-variant uppercase block">SECTION & TRACK:</span>
-                    <strong className="text-on-surface">{block.section} ({block.track} LINE)</strong>
+                    <span className="text-[9px] text-[#8B8073] uppercase font-bold block">SECTION & TRACK:</span>
+                    <strong className="text-[#1A1208]">{block.section} ({block.track} LINE)</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-on-surface-variant uppercase block">OPTIMAL TIME WINDOW:</span>
-                    <strong className="text-primary">{block.aiOptimalStartTime} – {block.aiOptimalEndTime} ({block.durationMinutes} min)</strong>
+                    <span className="text-[9px] text-[#8B8073] uppercase font-bold block">OPTIMAL WINDOW:</span>
+                    <strong className="text-[#8B1A1A]">{block.aiOptimalStartTime} – {block.aiOptimalEndTime} ({block.durationMinutes} min)</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-on-surface-variant uppercase block">DEPARTMENTS INVOLVED:</span>
-                    <strong className="text-[#9db2ff]">{block.departmentsInvolved.join(' + ')}</strong>
+                    <span className="text-[9px] text-[#8B8073] uppercase font-bold block">DEPARTMENTS:</span>
+                    <strong className="text-[#1E3A5F]">{block.departmentsInvolved.join(' + ')}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-on-surface-variant uppercase block">TRAIN IMPACT:</span>
-                    <strong className="text-[#4be277]">{block.affectedTrainCount} Affected ({block.predictedDelayMinutes} min delay)</strong>
+                    <span className="text-[9px] text-[#8B8073] uppercase font-bold block">TRAIN IMPACT:</span>
+                    <strong className="text-[#166534]">{block.affectedTrainCount} Affected ({block.predictedDelayMinutes} min delay)</strong>
                   </div>
                 </div>
 
-                {/* Explainable AI Rationale */}
-                <p className="text-xs text-on-surface bg-[#1a221a] p-2.5 border-l-2 border-primary">
-                  <span className="text-primary font-bold">AI Decision Synthesis: </span>
+                {/* AI Rationale */}
+                <p className="text-[10px] font-mono text-[#5C5347] bg-[#EFF6FF] p-2.5 border-l-2 border-[#1E3A5F]">
+                  <span className="text-[#1E3A5F] font-bold">AI Decision Synthesis: </span>
                   {block.aiExplanation}
                 </p>
 
-                {/* Controller Action Buttons */}
+                {/* Controller Actions */}
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                  <div className="text-[10px] text-on-surface-variant">
+                  <div className="text-[10px] text-[#8B8073] font-mono">
                     {block.status === 'APPROVED' ? (
-                      <span className="text-primary font-bold flex items-center gap-1">
+                      <span className="text-[#166534] font-bold flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Approved by {block.approvalHistory.approvedBy} at {block.approvalHistory.approvedAt}
                       </span>
                     ) : block.status === 'REJECTED' ? (
-                      <span className="text-[#ef4444] font-bold flex items-center gap-1">
+                      <span className="text-[#7F1D1D] font-bold flex items-center gap-1">
                         <XCircle className="w-3.5 h-3.5" /> Block Request Rejected
                       </span>
                     ) : (
@@ -586,23 +504,33 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
                           setEditStartTime(block.aiOptimalStartTime);
                           setEditEndTime(block.aiOptimalEndTime);
                         }}
-                        className="px-3 py-1.5 bg-[#242c24] hover:bg-[#2f372e] border border-[#3d4a3d] text-on-surface text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-[#BFDBFE] text-[#1E3A5F] text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition-colors"
                       >
-                        <Edit3 className="w-3.5 h-3.5 text-[#3b82f6]" />
+                        <Edit3 className="w-3.5 h-3.5" />
                         <span>MODIFY WINDOW</span>
                       </button>
 
                       <button
                         onClick={() => handleRejectBlock(block.id)}
-                        className="px-3 py-1.5 bg-[#242c24] hover:bg-[#7c2d12] border border-[#ef4444]/40 text-[#ef4444] text-xs font-bold flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 bg-white hover:bg-[#FEF2F2] border border-[#7F1D1D]/40 text-[#7F1D1D] text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition-colors"
                       >
                         <XCircle className="w-3.5 h-3.5" />
                         <span>REJECT</span>
                       </button>
 
+                      {onNavigateToOverview && (
+                        <button
+                          onClick={onNavigateToOverview}
+                          className="px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#F7F4EE] border border-[#D8D1C5] text-[#1A1815] text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <Train className="w-3.5 h-3.5" />
+                          <span>CANVAS</span>
+                        </button>
+                      )}
+
                       <button
                         onClick={() => handleApproveBlock(block.id)}
-                        className="px-4 py-1.5 bg-primary hover:bg-primary-fixed text-[#003915] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
+                        className="px-4 py-1.5 bg-[#166534] hover:bg-[#14532D] text-white text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-colors"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>APPROVE BLOCK</span>
@@ -618,51 +546,51 @@ export const AiBlockPlanner: React.FC<AiBlockPlannerProps> = ({
 
       {/* Modify Window Modal */}
       {editingBlock && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm select-none font-mono">
-          <div className="bg-[#161d16] border-2 border-primary p-6 max-w-md w-full space-y-4 shadow-2xl">
-            <div className="flex justify-between items-center border-b border-[#3d4a3d] pb-2">
-              <span className="font-bold text-xs text-primary">EDIT POSSESSION WINDOW</span>
-              <span className="text-[10px] text-on-surface-variant">{editingBlock.blockCode}</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1A1208]/80 backdrop-blur-sm select-none font-mono">
+          <div className="bg-[#FAF7F2] border-2 border-[#8B1A1A] p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-[#EDE7DA] pb-2">
+              <span className="font-mono font-bold text-[11px] text-[#8B1A1A]">EDIT POSSESSION WINDOW</span>
+              <span className="text-[10px] text-[#8B8073] font-mono">{editingBlock.blockCode}</span>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="space-y-3">
               <div>
-                <label className="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">START TIME</label>
+                <label className="block text-[9px] font-mono font-bold text-[#5C5347] uppercase tracking-wider mb-1">START TIME</label>
                 <input
                   type="text"
                   value={editStartTime}
                   onChange={(e) => setEditStartTime(e.target.value)}
-                  className="w-full bg-[#0e150e] border border-[#3d4a3d] px-3 py-2 text-primary font-bold outline-none"
+                  className="w-full bg-white border border-[#C4BAA8] px-3 py-2 text-[#1A1208] font-mono font-bold outline-none focus:border-[#8B1A1A] text-sm"
                   placeholder="HH:MM"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-on-surface-variant uppercase mb-1">END TIME</label>
+                <label className="block text-[9px] font-mono font-bold text-[#5C5347] uppercase tracking-wider mb-1">END TIME</label>
                 <input
                   type="text"
                   value={editEndTime}
                   onChange={(e) => setEditEndTime(e.target.value)}
-                  className="w-full bg-[#0e150e] border border-[#3d4a3d] px-3 py-2 text-primary font-bold outline-none"
+                  className="w-full bg-white border border-[#C4BAA8] px-3 py-2 text-[#1A1208] font-mono font-bold outline-none focus:border-[#8B1A1A] text-sm"
                   placeholder="HH:MM"
                 />
               </div>
 
-              <div className="p-2.5 bg-[#0e150e] border border-[#3d4a3d] text-[10px] text-on-surface-variant">
+              <div className="p-2.5 bg-[#FFFBEB] border border-[#92400E]/40 text-[10px] text-[#92400E] font-mono">
                 Note: Shifting window beyond 03:30 will trigger 18 min detention on incoming Vande Bharat 20901.
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#3d4a3d]">
+            <div className="flex justify-end gap-2 pt-2 border-t border-[#EDE7DA]">
               <button
                 onClick={() => setEditingBlock(null)}
-                className="px-3 py-1.5 bg-[#242c24] text-on-surface text-xs font-bold cursor-pointer"
+                className="px-3 py-1.5 bg-[#EDE7DA] hover:bg-[#D9D0C0] text-[#1A1208] text-[10px] font-mono font-bold cursor-pointer transition-colors"
               >
                 CANCEL
               </button>
               <button
                 onClick={handleSaveEdit}
-                className="px-4 py-1.5 bg-primary text-[#003915] text-xs font-bold uppercase cursor-pointer"
+                className="px-4 py-1.5 bg-[#1E3A5F] hover:bg-[#1E40AF] text-white text-[10px] font-mono font-bold uppercase cursor-pointer transition-colors"
               >
                 CONFIRM OVERRIDE
               </button>
