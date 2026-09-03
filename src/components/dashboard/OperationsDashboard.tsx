@@ -116,88 +116,64 @@ export const OperationsDashboard: React.FC<OperationsDashboardProps> = ({
   const hasInspectorOpen = Boolean(selectedTrain || selectedBlock || selectedAssetItem || selectedSignal || selectedTrack);
 
   return (
-    <div className="space-y-4 select-none">
+    <div className="space-y-3 select-none">
 
-      {/* ── Active Operational Command Ribbon ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#FFFFFF] border border-[#1A1815] p-3 sm:px-4 rounded-[2px] shadow-sm gap-3">
+      {/* ── Compact Operational Heading & Focus Strip ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#0D263D] border border-[#29455D] px-3.5 py-2.5 rounded-[4px] shadow-panel gap-2.5">
         <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#15803D] animate-pulse shrink-0" />
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-sans font-bold text-sm text-[#1A1815]">
-                Western Railway Main Corridor
-              </span>
-              <span className="text-[10px] font-mono text-[#615A4F] bg-[#F7F4EE] border border-[#D8D1C5] px-1.5 py-0.2 rounded-[2px]">
-                KM 100 – 160 · 25kV AC
-              </span>
-            </div>
-            <p className="text-[11px] text-[#615A4F] font-sans">
-              Active Kinematic Simulation & Signal-Reactive Headway Control
-            </p>
+          <div className="w-2 h-2 rounded-full bg-[#46A06A] animate-pulse shrink-0" />
+          <div className="flex items-baseline gap-2">
+            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '14px', color: '#F7FAFC' }}>
+              LIVE NETWORK
+            </span>
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: '#71879A' }}>
+              Western Corridor · KM 100–160 · 25kV AC
+            </span>
           </div>
         </div>
 
-        {/* Action Controls & Multi-Horizon Optimizer Trigger */}
+        {/* Action Controls */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={onRunOptimization}
-            className="btn-pen-primary text-[11px] font-mono uppercase tracking-wider"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Run AI Optimizer</span>
-          </button>
-          <button
-            onClick={() => onNavigate('map')}
-            className="btn-pen-secondary text-[11px] font-mono"
-          >
-            <Train className="w-3.5 h-3.5 text-[#1A1815]" />
-            <span>Full Map</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ── THE LIVING RAILWAY CANVAS CONTAINER ── */}
-      <div className="bg-[#FFFFFF] border border-[#1A1815] rounded-[2px] shadow-sm overflow-hidden relative">
-
-        {/* Canvas Toolbar & Department Focus Filter */}
-        <div className="p-2.5 sm:px-4 border-b border-[#D8D1C5] bg-[#F7F4EE] flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="font-mono font-bold text-xs uppercase tracking-wider text-[#1A1815]">
-              Living Railway Canvas
-            </span>
-            <span className="hidden md:inline text-[10px] text-[#615A4F] font-sans">
-              (Click signals to toggle RED/YELLOW/GREEN; click trains to inspect kinematics)
-            </span>
-          </div>
-
           {/* Department Focus Pills */}
-          <div className="flex items-center gap-1 bg-[#FFFFFF] p-0.5 border border-[#D8D1C5] rounded-[2px]">
-            <span className="text-[9.5px] font-mono font-semibold text-[#615A4F] px-1.5 flex items-center gap-1">
-              <Filter className="w-3 h-3 text-[#1A1815]" /> FOCUS:
+          <div className="flex items-center gap-1 bg-[#071A2B] p-0.5 border border-[#29455D] rounded-[3px]">
+            <span className="text-[9px] font-mono font-semibold text-[#71879A] px-1.5 flex items-center gap-1">
+              <Filter className="w-2.5 h-2.5 text-[#79B8E6]" /> FOCUS:
             </span>
             {[
               { label: 'ALL', value: 'ALL' },
-              { label: 'CIVIL TRACK', value: 'TRACK' },
-              { label: 'OHE TRACTION', value: 'OHE' },
+              { label: 'CIVIL', value: 'TRACK' },
+              { label: 'OHE', value: 'OHE' },
               { label: 'SIGNALS', value: 'SNT' },
             ].map(f => (
               <button
                 key={f.value}
                 onClick={() => setDepartmentFilter(f.value as any)}
-                className={`px-2 py-0.5 text-[9.5px] font-mono font-bold rounded-[1px] transition-colors cursor-pointer ${
+                className={`px-2 py-0.5 text-[9.5px] font-mono font-bold rounded-[2px] transition-colors cursor-pointer ${
                   departmentFilter === f.value
-                    ? 'bg-[#1A1815] text-[#FFFFFF]'
-                    : 'text-[#615A4F] hover:bg-[#F7F4EE]'
+                    ? 'bg-[#123551] text-[#79B8E6] border border-[#3B82C4]'
+                    : 'text-[#71879A] hover:text-[#F7FAFC]'
                 }`}
               >
                 {f.label}
               </button>
             ))}
           </div>
+
+          <button
+            onClick={onRunOptimization}
+            className="btn-pen-primary text-[11px] py-1 px-2.5"
+          >
+            <Sparkles className="w-3 h-3 text-[#F7FAFC]" />
+            <span>AI Optimizer</span>
+          </button>
         </div>
+      </div>
+
+      {/* ── THE HERO LIVING RAILWAY CANVAS CONTAINER ── */}
+      <div className="bg-[#0D263D] border border-[#29455D] rounded-[4px] shadow-panel overflow-hidden relative">
 
         {/* The Living Railway Vector Canvas */}
-        <div className="p-2 sm:p-4 bg-[#F7F4EE]">
+        <div className="p-1.5 sm:p-2 bg-[#0D263D]">
           <RailwaySceneCanvas
             trains={trains}
             blocks={blocks}
@@ -213,270 +189,260 @@ export const OperationsDashboard: React.FC<OperationsDashboardProps> = ({
           />
         </div>
 
-        {/* ── CONTEXTUAL SPATIAL INSPECTOR DRAWER ── */}
+        {/* ── COMPACT CONTEXTUAL SPATIAL INSPECTOR DRAWER ── */}
         {hasInspectorOpen && (
-          <div className="absolute top-11 right-2 bottom-2 w-80 sm:w-96 bg-[#FFFFFF] border border-[#1A1815] shadow-2xl p-4 z-30 flex flex-col justify-between overflow-y-auto rounded-[2px] animate-slide-in">
+          <div className="absolute top-12 right-2 bottom-2 w-80 sm:w-88 bg-[#0D263D] border border-[#29455D] shadow-panel-lift p-3.5 z-30 flex flex-col justify-between overflow-y-auto rounded-[4px] animate-slide-in">
             <div>
-              <div className="flex items-center justify-between border-b border-[#D8D1C5] pb-2 mb-3">
-                <span className="font-mono font-bold text-xs uppercase tracking-wider text-[#1A1815] flex items-center gap-1.5">
-                  <Eye className="w-3.5 h-3.5 text-[#1A1815]" />
-                  {selectedTrain ? 'Locomotive Kinematics Inspector'
-                    : selectedSignal ? 'Signal Aspect Inspector'
-                    : selectedTrack ? 'Track Geometry Inspector'
-                    : selectedBlock ? 'Task Block Inspector'
-                    : 'Asset Condition Inspector'}
+              <div className="flex items-center justify-between border-b border-[#1E384F] pb-2 mb-2.5">
+                <span className="font-mono font-bold text-xs uppercase tracking-wider text-[#F7FAFC] flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5 text-[#79B8E6]" />
+                  {selectedTrain ? 'Train Kinematics'
+                    : selectedSignal ? 'Signal Aspect'
+                    : selectedTrack ? 'Track Geometry'
+                    : selectedBlock ? 'Task Block'
+                    : 'Asset Condition'}
                 </span>
                 <button
                   onClick={closeDrawer}
-                  className="p-1 hover:bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px] text-[#615A4F] hover:text-[#1A1815] cursor-pointer"
+                  className="p-1 hover:bg-[#123551] border border-[#29455D] rounded-[3px] text-[#A9BBCB] hover:text-[#F7FAFC] cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* 1. Train Inspector with Real-Time Kinematics */}
+              {/* 1. Train Inspector */}
               {selectedTrain && (
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="p-2.5 bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px]">
+                <div className="space-y-2.5 font-sans text-xs">
+                  <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold text-[#1A1815]">{selectedTrain.trainNumber} · {selectedTrain.trainName}</span>
-                      <span className="text-[9px] bg-[#FFFFFF] border border-[#D8D1C5] px-1.5 py-0.5 rounded-[1px] font-mono font-bold">
-                        PRIORITY {selectedTrain.priority}
+                      <span className="text-sm font-bold text-[#F7FAFC]">{selectedTrain.trainNumber} · {selectedTrain.trainName}</span>
+                      <span className="text-[9px] bg-[#123551] border border-[#3B82C4] text-[#79B8E6] px-1.5 py-0.2 rounded-[2px] font-mono font-bold">
+                        P{selectedTrain.priority}
                       </span>
                     </div>
-                    <div className="text-[11px] text-[#615A4F] font-mono mt-1">{selectedTrain.origin} → {selectedTrain.destination}</div>
+                    <div className="text-[10.5px] text-[#71879A] font-mono mt-0.5">{selectedTrain.origin} → {selectedTrain.destination}</div>
                   </div>
 
-                  {/* Real-Time Speedometer & Dynamics */}
-                  <div className="p-3 bg-[#FFFFFF] border border-[#1A1815] rounded-[2px]">
+                  {/* Real-Time Speedometer */}
+                  <div className="p-2.5 bg-[#071A2B] border border-[#29455D] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[10px] text-[#615A4F] uppercase flex items-center gap-1">
-                        <Gauge className="w-3.5 h-3.5 text-[#1A1815]" /> LIVE VELOCITY
+                      <span className="font-mono font-bold text-[9.5px] text-[#71879A] uppercase flex items-center gap-1">
+                        <Gauge className="w-3 h-3 text-[#79B8E6]" /> LIVE VELOCITY
                       </span>
-                      <span className={`text-[9.5px] font-mono font-bold px-1.5 py-0.2 rounded-[1px] border ${
-                        selectedTrainPhysics?.accelState === 'BRAKING' ? 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]'
-                        : selectedTrainPhysics?.accelState === 'ACCELERATING' ? 'bg-[#EFF6FF] text-[#1E3A5F] border-[#BFDBFE]'
-                        : selectedTrainPhysics?.accelState === 'STOPPED' ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-                        : 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]'
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-[2px] border ${
+                        selectedTrainPhysics?.accelState === 'BRAKING' ? 'bg-[rgba(212,85,85,0.15)] text-[#D45555] border-[rgba(212,85,85,0.4)]'
+                        : selectedTrainPhysics?.accelState === 'ACCELERATING' ? 'bg-[rgba(59,130,196,0.15)] text-[#79B8E6] border-[rgba(59,130,196,0.4)]'
+                        : selectedTrainPhysics?.accelState === 'STOPPED' ? 'bg-[rgba(215,166,58,0.15)] text-[#D7A63A] border-[rgba(215,166,58,0.4)]'
+                        : 'bg-[rgba(70,160,106,0.15)] text-[#46A06A] border-[rgba(70,160,106,0.4)]'
                       }`}>
                         {selectedTrainPhysics?.accelState || 'CRUISING'}
                       </span>
                     </div>
 
-                    <div className="flex items-baseline justify-between mt-2">
-                      <span className="text-3xl font-mono font-black text-[#1A1815]">
+                    <div className="flex items-baseline justify-between mt-1.5">
+                      <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '26px', fontWeight: 700, color: '#F7FAFC' }}>
                         {selectedTrainPhysics ? Math.round(selectedTrainPhysics.speedKmH) : selectedTrain.speedKmH}
-                        <span className="text-xs font-normal text-[#615A4F] ml-1">km/h</span>
+                        <span className="text-xs font-normal text-[#71879A] ml-1">km/h</span>
                       </span>
-                      <span className="text-[10px] font-mono text-[#615A4F]">
+                      <span className="text-[10px] font-mono text-[#71879A]">
                         Target: {selectedTrainPhysics ? Math.round(selectedTrainPhysics.targetSpeedKmH) : 130} km/h
                       </span>
                     </div>
 
-                    {/* Dynamic Velocity Bar */}
-                    <div className="w-full bg-[#EDE7DC] h-1.5 mt-2 rounded-[1px] overflow-hidden">
+                    <div className="w-full bg-[#123551] h-1.5 mt-1.5 rounded-[1px] overflow-hidden">
                       <div
-                        className="h-full bg-[#1A1815] transition-all duration-100"
+                        className="h-full bg-[#3B82C4] transition-all duration-100"
                         style={{ width: `${Math.min(100, ((selectedTrainPhysics?.speedKmH || selectedTrain.speedKmH) / 130) * 100)}%` }}
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Current KM:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">
+                  <div className="grid grid-cols-2 gap-1.5 text-[10.5px]">
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Location:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">
                         KM {selectedTrainPhysics ? selectedTrainPhysics.currentKm.toFixed(2) : selectedTrain.currentKm.toFixed(1)}
                       </span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Loco Unit:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">WAP-7 #{selectedTrain.locoNumber}</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Loco Unit:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">WAP-7 #{selectedTrain.locoNumber}</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Signal Ahead:</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Next Signal:</span>
                       <span className={`font-mono font-bold ${
-                        selectedTrainPhysics?.nextSignalAspect === 'RED' ? 'text-[#B91C1C]'
-                        : selectedTrainPhysics?.nextSignalAspect === 'YELLOW' ? 'text-[#B45309]'
-                        : 'text-[#15803D]'
+                        selectedTrainPhysics?.nextSignalAspect === 'RED' ? 'text-[#D45555]'
+                        : selectedTrainPhysics?.nextSignalAspect === 'YELLOW' ? 'text-[#D7A63A]'
+                        : 'text-[#46A06A]'
                       }`}>
                         {selectedTrainPhysics?.nextSignalAspect || 'GREEN'} ({selectedTrainPhysics ? selectedTrainPhysics.nextSignalDistanceKm.toFixed(1) : '3.2'} km)
                       </span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Wheel Rotation:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Wheel Speed:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">
                         {selectedTrainPhysics ? Math.round((selectedTrainPhysics.speedKmH / 3.6 / 3.43) * 60) : 180} RPM
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-2 bg-[#F0FDF4] border border-[#BBF7D0] rounded-[2px] text-[10.5px]">
-                    <span className="text-[#15803D] font-mono font-bold">KAVACH AUTOMATIC PROTECTION: </span>
-                    <span className="text-[#15803D]">Continuous Speed Supervision active. Target braking distance computed in real-time.</span>
-                  </div>
-
                   <button
                     onClick={() => onNavigate('trains')}
-                    className="w-full btn-pen-primary py-2 text-[11px] font-mono uppercase"
+                    className="w-full btn-pen-secondary py-1.5 text-[11px]"
                   >
-                    Manage in Train Operations (COA)
+                    Open Train Operations (COA)
                   </button>
                 </div>
               )}
 
               {/* 2. Signal Inspector */}
               {selectedSignal && (
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="p-2.5 bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px]">
+                <div className="space-y-2.5 font-sans text-xs">
+                  <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-sm text-[#1A1815]">{selectedSignal.id}</span>
-                      <span className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-[2px] border ${
-                        selectedSignal.aspect === 'GREEN' ? 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]'
-                        : selectedSignal.aspect === 'YELLOW' ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-                        : 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]'
+                      <span className="font-mono font-bold text-sm text-[#F7FAFC]">{selectedSignal.id}</span>
+                      <span className={`px-2 py-0.5 text-[9.5px] font-mono font-bold rounded-[2px] border ${
+                        selectedSignal.aspect === 'GREEN' ? 'bg-[rgba(70,160,106,0.15)] text-[#46A06A] border-[rgba(70,160,106,0.4)]'
+                        : selectedSignal.aspect === 'YELLOW' ? 'bg-[rgba(215,166,58,0.15)] text-[#D7A63A] border-[rgba(215,166,58,0.4)]'
+                        : 'bg-[rgba(212,85,85,0.15)] text-[#D45555] border-[rgba(212,85,85,0.4)]'
                       }`}>
-                        {selectedSignal.aspect} ASPECT
+                        {selectedSignal.aspect}
                       </span>
                     </div>
-                    <div className="text-[11px] text-[#615A4F] font-mono mt-1">Location: KM {selectedSignal.km}.0 ({selectedSignal.track} Mainline)</div>
+                    <div className="text-[10.5px] text-[#71879A] font-mono mt-0.5">KM {selectedSignal.km}.0 ({selectedSignal.track} Mainline)</div>
                   </div>
 
-                  <div className="space-y-1.5 text-[11px]">
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Interlocking Logic:</span>
-                      <span className="font-mono font-semibold text-[#1A1815]">{selectedSignal.interlockingRule}</span>
+                  <div className="space-y-1 text-[10.5px]">
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Interlocking Rule:</span>
+                      <span className="font-mono font-semibold text-[#F7FAFC]">{selectedSignal.interlockingRule}</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Track Circuit Telemetry:</span>
-                      <span className="font-mono font-semibold text-[#15803D]">{selectedSignal.trackCircuit} (Normal)</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Track Circuit:</span>
+                      <span className="font-mono font-semibold text-[#46A06A]">{selectedSignal.trackCircuit} (Normal)</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Headway Clearance:</span>
-                      <span className="font-mono font-semibold text-[#1A1815]">Clear up to KM {selectedSignal.nextClearanceKm}.0</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Clearance Ahead:</span>
+                      <span className="font-mono font-semibold text-[#F7FAFC]">Clear to KM {selectedSignal.nextClearanceKm}.0</span>
                     </div>
                   </div>
-
-                  <p className="text-[10px] text-[#615A4F] font-mono italic">
-                    Tip: Click the signal mast on the canvas to cycle through GREEN → YELLOW → RED aspects.
-                  </p>
 
                   <button
                     onClick={() => onNavigate('dept-snt')}
-                    className="w-full btn-pen-primary py-2 text-[11px] font-mono uppercase"
+                    className="w-full btn-pen-secondary py-1.5 text-[11px]"
                   >
-                    Open S&T Interlocking (SMMS)
+                    Open S&T SMMS
                   </button>
                 </div>
               )}
 
               {/* 3. Track Section Inspector */}
               {selectedTrack && (
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="p-2.5 bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px]">
+                <div className="space-y-2.5 font-sans text-xs">
+                  <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-sm text-[#1A1815]">{selectedTrack.sectionId}</span>
-                      <span className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-[2px] border ${
-                        selectedTrack.tgiScore < 70 ? 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]' : 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]'
+                      <span className="font-mono font-bold text-sm text-[#F7FAFC]">{selectedTrack.sectionId}</span>
+                      <span className={`px-2 py-0.5 text-[9.5px] font-mono font-bold rounded-[2px] border ${
+                        selectedTrack.tgiScore < 70 ? 'bg-[rgba(212,85,85,0.15)] text-[#D45555] border-[rgba(212,85,85,0.4)]' : 'bg-[rgba(70,160,106,0.15)] text-[#46A06A] border-[rgba(70,160,106,0.4)]'
                       }`}>
                         TGI: {selectedTrack.tgiScore}
                       </span>
                     </div>
-                    <div className="text-[11px] text-[#615A4F] font-mono mt-1">KM {selectedTrack.kmStart}.0 to KM {selectedTrack.kmEnd}.0 ({selectedTrack.track} Line)</div>
+                    <div className="text-[10.5px] text-[#71879A] font-mono mt-0.5">KM {selectedTrack.kmStart}.0 to KM {selectedTrack.kmEnd}.0 ({selectedTrack.track})</div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Rail Specification:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">{selectedTrack.railType}</span>
+                  <div className="grid grid-cols-2 gap-1.5 text-[10.5px]">
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Rail Type:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">{selectedTrack.railType}</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">OMS Peak Acceleration:</span>
-                      <span className={`font-mono font-bold ${selectedTrack.omsPeakG > 0.2 ? 'text-[#B91C1C]' : 'text-[#15803D]'}`}>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Peak G:</span>
+                      <span className={`font-mono font-bold ${selectedTrack.omsPeakG > 0.2 ? 'text-[#D45555]' : 'text-[#46A06A]'}`}>
                         {selectedTrack.omsPeakG}g
                       </span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Speed Restriction:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">{selectedTrack.speedLimitKmph} km/h PSR</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Speed Limit:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">{selectedTrack.speedLimitKmph} km/h</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Possession State:</span>
-                      <span className={`font-mono font-bold ${selectedTrack.activeWork ? 'text-[#B45309]' : 'text-[#15803D]'}`}>
-                        {selectedTrack.activeWork ? 'Tamping Active' : 'Clear Line'}
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Possession:</span>
+                      <span className={`font-mono font-bold ${selectedTrack.activeWork ? 'text-[#D7A63A]' : 'text-[#46A06A]'}`}>
+                        {selectedTrack.activeWork ? 'Active Work' : 'Clear Line'}
                       </span>
                     </div>
                   </div>
 
                   <button
                     onClick={() => onNavigate('dept-track')}
-                    className="w-full btn-pen-primary py-2 text-[11px] font-mono uppercase"
+                    className="w-full btn-pen-secondary py-1.5 text-[11px]"
                   >
-                    Open Civil TMS Profile
+                    Open Civil TMS
                   </button>
                 </div>
               )}
 
               {/* 4. Task Block Inspector */}
               {selectedBlock && (
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="p-2.5 bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px]">
+                <div className="space-y-2.5 font-sans text-xs">
+                  <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-sm text-[#1A1815]">{selectedBlock.blockCode}</span>
+                      <span className="font-mono font-bold text-sm text-[#F7FAFC]">{selectedBlock.blockCode}</span>
                       <StatusBadge status={selectedBlock.status} />
                     </div>
-                    <div className="text-[11px] text-[#615A4F] font-mono mt-1">{selectedBlock.department} · {selectedBlock.title}</div>
+                    <div className="text-[10.5px] text-[#71879A] font-mono mt-0.5">{selectedBlock.department} · {selectedBlock.title}</div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Section Range:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">{selectedBlock.kmStart} to {selectedBlock.kmEnd}</span>
+                  <div className="grid grid-cols-2 gap-1.5 text-[10.5px]">
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Section:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">{selectedBlock.kmStart} to {selectedBlock.kmEnd}</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Granted Window:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">{selectedBlock.durationMinutes} min</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Duration:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">{selectedBlock.durationMinutes} min</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Time Schedule:</span>
-                      <span className="font-mono font-bold text-[#1A1815]">{selectedBlock.requestedStartTime} - {selectedBlock.requestedEndTime}</span>
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Window:</span>
+                      <span className="font-mono font-bold text-[#F7FAFC]">{selectedBlock.requestedStartTime} - {selectedBlock.requestedEndTime}</span>
                     </div>
-                    <div className="p-2 bg-[#F7F4EE] rounded-[2px]">
-                      <span className="text-[#615A4F] font-mono block">Shadow Clubbing:</span>
-                      <span className="font-mono font-bold text-[#15803D]">
-                        {selectedBlock.isShadowClubbed ? 'Clubbed with OHE' : 'Dedicated Window'}
+                    <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F]">
+                      <span className="text-[#71879A] font-mono block">Shadow Club:</span>
+                      <span className="font-mono font-bold text-[#46A06A]">
+                        {selectedBlock.isShadowClubbed ? 'Clubbed with OHE' : 'Dedicated'}
                       </span>
                     </div>
                   </div>
 
                   <button
                     onClick={() => onNavigate('planner')}
-                    className="w-full btn-pen-primary py-2 text-[11px] font-mono uppercase"
+                    className="w-full btn-pen-secondary py-1.5 text-[11px]"
                   >
-                    Open in AI Block Planner
+                    Open in Block Planner
                   </button>
                 </div>
               )}
 
               {/* 5. Asset Inspector */}
               {selectedAssetItem && (
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="p-2.5 bg-[#F7F4EE] border border-[#D8D1C5] rounded-[2px]">
+                <div className="space-y-2.5 font-sans text-xs">
+                  <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-sm text-[#1A1815]">{selectedAssetItem.code}</span>
+                      <span className="font-mono font-bold text-sm text-[#F7FAFC]">{selectedAssetItem.code}</span>
                       <StatusBadge status={selectedAssetItem.status} />
                     </div>
-                    <div className="text-[11px] text-[#615A4F] font-mono mt-1">{selectedAssetItem.department} · {selectedAssetItem.name}</div>
+                    <div className="text-[10.5px] text-[#71879A] font-mono mt-0.5">{selectedAssetItem.department} · {selectedAssetItem.name}</div>
                   </div>
 
-                  <div className="p-2 bg-[#F7F4EE] rounded-[2px] text-[11px]">
-                    <span className="text-[#615A4F] font-mono block">Failure Risk / RUL:</span>
-                    <span className="font-mono font-bold text-[#1A1815]">{selectedAssetItem.conditionScore}/100 Condition (Est Failure: {selectedAssetItem.predictedFailureDays} days)</span>
+                  <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F] text-[10.5px]">
+                    <span className="text-[#71879A] font-mono block">Condition & RUL:</span>
+                    <span className="font-mono font-bold text-[#F7FAFC]">{selectedAssetItem.conditionScore}/100 Condition (Est: {selectedAssetItem.predictedFailureDays} days)</span>
                   </div>
 
-                  <div className="p-2 bg-[#F7F4EE] rounded-[2px] text-[11px]">
-                    <span className="text-[#615A4F] font-mono block">AI Diagnosis:</span>
-                    <p className="text-[#1A1815] mt-0.5">{selectedAssetItem.xaiReasoning}</p>
+                  <div className="p-1.5 bg-[#071A2B] rounded-[2px] border border-[#1E384F] text-[10.5px]">
+                    <span className="text-[#71879A] font-mono block">AI Diagnosis:</span>
+                    <p className="text-[#A9BBCB] mt-0.5">{selectedAssetItem.xaiReasoning}</p>
                   </div>
 
                   <button
@@ -484,9 +450,9 @@ export const OperationsDashboard: React.FC<OperationsDashboardProps> = ({
                       onSelectAsset?.(selectedAssetItem);
                       onNavigate('assets');
                     }}
-                    className="w-full btn-pen-primary py-2 text-[11px] font-mono uppercase"
+                    className="w-full btn-pen-secondary py-1.5 text-[11px]"
                   >
-                    Inspect in Asset Intelligence
+                    Inspect Asset
                   </button>
                 </div>
               )}
@@ -495,34 +461,39 @@ export const OperationsDashboard: React.FC<OperationsDashboardProps> = ({
         )}
       </div>
 
-      {/* ── Operational Quick Summary Metrics ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
-        {[
-          { label: 'Asset Fleet', val: '12,482', sub: '98.4% OPR', tab: 'assets' as NavTab, icon: Layers },
-          { label: 'Critical Flaws', val: String(criticalAssets.length), sub: '2 Blocks Req', tab: 'assets' as NavTab, icon: AlertTriangle, color: '#B91C1C' },
-          { label: 'Active Blocks', val: String(activeBlocks.length), sub: '1 Shadow Clubbed', tab: 'planner' as NavTab, icon: CalendarClock },
-          { label: 'Trains in Transit', val: String(trains.length), sub: '96.8% Punctual', tab: 'trains' as NavTab, icon: Train },
-          { label: 'Conflicts', val: String(conflicts.length), sub: 'Auto-Resolving', tab: 'conflicts' as NavTab, icon: AlertTriangle, color: '#B45309' },
-          { label: 'Throughput ROI', val: '+3.5h', sub: 'Corridor Window Saved', tab: 'insights' as NavTab, icon: TrendingUp, color: '#15803D' },
-        ].map((kpi, idx) => {
-          const Icon = kpi.icon;
-          return (
-            <div
-              key={idx}
-              onClick={() => onNavigate(kpi.tab)}
-              className="p-3 bg-[#FFFFFF] border border-[#D8D1C5] hover:border-[#1A1815] rounded-[2px] transition-colors cursor-pointer flex flex-col justify-between"
-            >
-              <div className="flex items-center justify-between text-[10px] font-mono text-[#615A4F] uppercase">
-                <span>{kpi.label}</span>
-                <Icon className="w-3.5 h-3.5" style={{ color: kpi.color || '#1A1815' }} />
-              </div>
-              <div className="text-xl font-bold text-[#1A1815] mt-1.5" style={{ color: kpi.color || '#1A1815' }}>
-                {kpi.val}
-              </div>
-              <div className="text-[9.5px] font-mono text-[#615A4F] mt-0.5">{kpi.sub}</div>
-            </div>
-          );
-        })}
+      {/* ── Compact Operational Status Strip (Replaces bulky card grid) ── */}
+      <div className="flex items-center justify-between flex-wrap gap-2 px-3 py-2 bg-[#0D263D] border border-[#29455D] rounded-[4px] text-[11px] font-mono">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-1.5 cursor-pointer hover:text-[#79B8E6]" onClick={() => onNavigate('trains')}>
+            <span className="text-[#71879A]">TRAINS:</span>
+            <span className="font-bold text-[#F7FAFC]">{trains.length}</span>
+            <span className="text-[9.5px] text-[#46A06A]">(96.8% ON TIME)</span>
+          </div>
+          <span className="text-[#1E384F]">|</span>
+          <div className="flex items-center gap-1.5 cursor-pointer hover:text-[#79B8E6]" onClick={() => onNavigate('planner')}>
+            <span className="text-[#71879A]">BLOCKS:</span>
+            <span className="font-bold text-[#F7FAFC]">{activeBlocks.length}</span>
+            <span className="text-[9.5px] text-[#79B8E6]">(1 SHADOW)</span>
+          </div>
+          <span className="text-[#1E384F]">|</span>
+          <div className="flex items-center gap-1.5 cursor-pointer hover:text-[#79B8E6]" onClick={() => onNavigate('assets')}>
+            <span className="text-[#71879A]">CRITICAL FLAWS:</span>
+            <span className="font-bold text-[#D45555]">{criticalAssets.length}</span>
+          </div>
+          <span className="text-[#1E384F]">|</span>
+          <div className="flex items-center gap-1.5 cursor-pointer hover:text-[#79B8E6]" onClick={() => onNavigate('conflicts')}>
+            <span className="text-[#71879A]">CONFLICTS:</span>
+            <span className="font-bold text-[#D7A63A]">{conflicts.length}</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-[10px] text-[#71879A]">
+          <span>EFFICIENCY:</span>
+          <span className="text-[#46A06A] font-bold">98.4%</span>
+          <span>·</span>
+          <span>WINDOW SAVED:</span>
+          <span className="text-[#79B8E6] font-bold">+3.5h</span>
+        </div>
       </div>
     </div>
   );

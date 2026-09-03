@@ -11,6 +11,8 @@ import {
   Database,
   Maximize2,
   Minimize2,
+  Play,
+  Layers,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -70,52 +72,52 @@ export const Header: React.FC<HeaderProps> = ({
     <header
       className="fixed top-0 right-0 left-0 z-40 flex items-center justify-between select-none"
       style={{
-        height: '48px',
-        backgroundColor: '#F8F5EF',
-        borderBottom: '1px solid #D5CEC1',
-        padding: '0 20px',
+        height: '46px',
+        backgroundColor: '#071A2B',
+        borderBottom: '1px solid #29455D',
+        padding: '0 16px',
       }}
     >
       {/* ── Brand: Space Grotesk JUNCTION + compact mark ── */}
-      <div className="flex items-center gap-3">
-        {/* Junction mark — clean track switch SVG, no box */}
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="3" width="14" height="12" rx="1.5" stroke="#1D1F1E" strokeWidth="1.5" fill="none"/>
-          <line x1="8" y1="7" x2="16" y2="7" stroke="#1D1F1E" strokeWidth="1.1"/>
-          <circle cx="8.5" cy="11" r="1.2" fill="#1D1F1E"/>
-          <circle cx="15.5" cy="11" r="1.2" fill="#1D1F1E"/>
-          <path d="M4 21L8 16M20 21L16 16" stroke="#1D1F1E" strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1="8" y1="16" x2="16" y2="16" stroke="#1D1F1E" strokeWidth="1.4" strokeLinecap="round"/>
+      <div className="flex items-center gap-2.5">
+        {/* Junction mark — clean technical switch in light blue */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="3" width="14" height="12" rx="1.5" stroke="#79B8E6" strokeWidth="1.5" fill="none"/>
+          <line x1="8" y1="7" x2="16" y2="7" stroke="#79B8E6" strokeWidth="1.1"/>
+          <circle cx="8.5" cy="11" r="1.2" fill="#79B8E6"/>
+          <circle cx="15.5" cy="11" r="1.2" fill="#79B8E6"/>
+          <path d="M4 21L8 16M20 21L16 16" stroke="#79B8E6" strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1="8" y1="16" x2="16" y2="16" stroke="#79B8E6" strokeWidth="1.4" strokeLinecap="round"/>
         </svg>
 
-        <div className="flex items-baseline gap-2.5">
-          {/* JUNCTION — Space Grotesk, brand weight */}
+        <div className="flex items-baseline gap-2">
+          {/* JUNCTION — Space Grotesk */}
           <span
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: '16px',
-              fontWeight: 600,
+              fontSize: '15px',
+              fontWeight: 700,
               letterSpacing: '-0.01em',
-              color: '#1D1F1E',
+              color: '#F7FAFC',
               lineHeight: 1,
             }}
           >
             JUNCTION
           </span>
-          {/* System tag — Inter, very small */}
+          {/* System tag */}
           <span
             className="hidden sm:inline-block"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '9.5px',
-              fontWeight: 500,
-              letterSpacing: '0.05em',
-              color: '#77736C',
+              fontSize: '9px',
+              fontWeight: 600,
+              letterSpacing: '0.06em',
+              color: '#79B8E6',
               textTransform: 'uppercase',
-              padding: '2px 5px',
-              border: '1px solid #D5CEC1',
+              padding: '1.5px 5px',
+              border: '1px solid #29455D',
               borderRadius: '2px',
-              backgroundColor: 'transparent',
+              backgroundColor: '#0D263D',
             }}
           >
             IR-ABPS
@@ -123,65 +125,57 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* ── Center: Corridor live telemetry — Inter, restrained ── */}
-      <div className="hidden lg:flex items-center gap-4" style={{ fontSize: '12px', fontFamily: "'Inter', sans-serif", color: '#4B4A46' }}>
-        <div className="flex items-center gap-1.5">
-          <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: '#4D8B68', display: 'inline-block', flexShrink: 0 }} />
-          <span style={{ color: '#77736C' }}>Corridor</span>
-          <span style={{ fontWeight: 500, color: '#1D1F1E' }}>25kV AC · KM 100–160</span>
-        </div>
-        <span style={{ width: 1, height: 14, backgroundColor: '#D5CEC1', display: 'inline-block' }} />
-        <div className="flex items-center gap-1.5">
-          <Database style={{ width: 12, height: 12, color: '#77736C', flexShrink: 0 }} />
-          <span style={{ color: '#77736C' }}>Fusion</span>
-          <span style={{ fontWeight: 500, color: '#1D1F1E' }}>TMS · TDMS · SMMS · COA</span>
+      {/* ── Center: Corridor Live Operational State ── */}
+      <div className="hidden md:flex items-center gap-3" style={{ fontSize: '12px', fontFamily: "'Inter', sans-serif", color: '#A9BBCB' }}>
+        <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-[3px] bg-[#0D263D] border border-[#29455D]">
+          <span className="w-2 h-2 rounded-full bg-[#46A06A] animate-pulse shrink-0" />
+          <span style={{ fontWeight: 600, color: '#F7FAFC', fontSize: '11.5px' }}>LIVE</span>
+          <span style={{ color: '#71879A' }}>·</span>
+          <span style={{ color: '#A9BBCB', fontSize: '11.5px' }}>Western Corridor · KM 100–160</span>
         </div>
       </div>
 
       {/* ── Right controls ── */}
       <div className="flex items-center gap-1.5">
 
-        {/* Demo simulation trigger — primary graphite action */}
+        {/* 30s Automated Demo Story */}
         {onTriggerDemo && (
           <button
             onClick={onTriggerDemo}
             className="flex items-center gap-1.5 cursor-pointer"
             style={{
-              padding: '5px 12px',
-              backgroundColor: '#1D1F1E',
-              color: '#F2EADF',
-              border: '1px solid #1D1F1E',
+              padding: '4px 10px',
+              backgroundColor: '#123551',
+              color: '#F7FAFC',
+              border: '1px solid #3B82C4',
               borderRadius: '4px',
               fontFamily: "'Inter', sans-serif",
-              fontSize: '12px',
+              fontSize: '11.5px',
               fontWeight: 500,
-              letterSpacing: '0.01em',
-              transition: 'background-color 0.15s ease',
+              transition: 'all 0.15s ease',
             }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#242725')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#1D1F1E')}
             title="Launch 30-Second Automated Hackathon Story"
           >
-            <Activity style={{ width: 12, height: 12, color: '#4D8B68', flexShrink: 0 }} />
+            <Play style={{ width: 11, height: 11, color: '#79B8E6', fill: 'currentColor' }} />
             <span className="hidden sm:inline">Simulate Operation</span>
           </button>
         )}
 
-        {/* Emergency toggle — restrained */}
+        {/* Emergency toggle */}
         <button
           onClick={onToggleEmergency}
           style={{
-            padding: '5px 10px',
-            backgroundColor: activeEmergency ? '#C84B43' : '#F9EEEE',
-            color: activeEmergency ? '#FFFFFF' : '#C84B43',
-            border: `1px solid ${activeEmergency ? '#C84B43' : '#DCA09C'}`,
+            padding: '4px 9px',
+            backgroundColor: activeEmergency ? '#D45555' : 'rgba(212, 85, 85, 0.12)',
+            color: activeEmergency ? '#FFFFFF' : '#D45555',
+            border: `1px solid ${activeEmergency ? '#D45555' : 'rgba(212, 85, 85, 0.35)'}`,
             borderRadius: '4px',
             fontFamily: "'Inter', sans-serif",
             fontSize: '11px',
             fontWeight: 500,
             display: 'flex',
             alignItems: 'center',
-            gap: '5px',
+            gap: '4px',
             cursor: 'pointer',
             transition: 'all 0.15s ease',
           }}
@@ -189,22 +183,22 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <AlertTriangle style={{ width: 11, height: 11, flexShrink: 0 }} />
           <span className="hidden sm:inline">
-            {activeEmergency ? 'Incident Active' : 'Simulate Incident'}
+            {activeEmergency ? 'Incident Active' : 'Incident'}
           </span>
         </button>
 
-        {/* Clock — minimal */}
+        {/* Clock */}
         <div
           className="hidden xl:flex items-center gap-1.5"
           style={{
-            padding: '4px 8px',
-            border: '1px solid #D5CEC1',
+            padding: '3px 8px',
+            border: '1px solid #29455D',
             borderRadius: '4px',
-            backgroundColor: 'transparent',
+            backgroundColor: '#0D263D',
           }}
         >
-          <Clock style={{ width: 11, height: 11, color: '#77736C', flexShrink: 0 }} />
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10.5px', fontWeight: 500, color: '#1D1F1E', letterSpacing: '0.01em' }}>
+          <Clock style={{ width: 11, height: 11, color: '#71879A', flexShrink: 0 }} />
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10.5px', fontWeight: 500, color: '#A9BBCB' }}>
             {timeStr}
           </span>
         </div>
@@ -214,27 +208,25 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             style={{
-              width: 30,
-              height: 30,
+              width: 28,
+              height: 28,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid #D5CEC1',
+              border: '1px solid #29455D',
               borderRadius: '4px',
-              backgroundColor: 'transparent',
+              backgroundColor: '#0D263D',
               cursor: 'pointer',
               position: 'relative',
               transition: 'background-color 0.12s ease',
             }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0ECE4')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            <Bell style={{ width: 14, height: 14, color: '#4B4A46' }} />
+            <Bell style={{ width: 13, height: 13, color: '#A9BBCB' }} />
             <span style={{
-              position: 'absolute', top: -4, right: -4,
-              width: 14, height: 14, borderRadius: '50%',
-              backgroundColor: '#C84B43', color: '#FFFFFF',
-              fontSize: '8.5px', fontWeight: 600,
+              position: 'absolute', top: -3, right: -3,
+              width: 13, height: 13, borderRadius: '50%',
+              backgroundColor: '#D45555', color: '#FFFFFF',
+              fontSize: '8px', fontWeight: 700,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontFamily: "'Inter', sans-serif",
             }}>3</span>
@@ -242,32 +234,31 @@ export const Header: React.FC<HeaderProps> = ({
 
           {showNotifications && (
             <div
-              className="absolute right-0 mt-2 z-50"
+              className="absolute right-0 mt-2 z-50 shadow-2xl"
               style={{
-                width: 300,
-                backgroundColor: '#FBF9F4',
-                border: '1px solid #D5CEC1',
+                width: 290,
+                backgroundColor: '#0D263D',
+                border: '1px solid #29455D',
                 borderRadius: '6px',
-                boxShadow: '0px 4px 16px rgba(29,31,30,0.10)',
-                padding: '12px',
+                padding: '10px',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E8E2D8', paddingBottom: '8px', marginBottom: '8px' }}>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: '12px', color: '#1D1F1E', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Activity style={{ width: 13, height: 13, color: '#C84B43' }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #1E384F', paddingBottom: '6px', marginBottom: '6px' }}>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: '11.5px', color: '#F7FAFC', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Activity style={{ width: 12, height: 12, color: '#D45555' }} />
                   Operational Alerts
                 </span>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#C84B43' }}>3 critical</span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', fontWeight: 500, color: '#D45555' }}>3 critical</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: 220, overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', maxHeight: 200, overflowY: 'auto' }}>
                 {[
-                  { title: 'KM 127/4 Turnout PT-227-II', body: 'TGI dropped to 68.2. Lateral G: 0.28g.', color: '#C84B43' },
-                  { title: 'OHE Feeder Span 42 Hotspot', body: '+18.4°C thermal delta recorded by SCADA.', color: '#D49A32' },
-                  { title: 'Shadow Block Opportunity', body: 'Club Civil Tamping with OHE Jumper at 02:00.', color: '#4D8B68' },
+                  { title: 'KM 127/4 Turnout PT-227-II', body: 'TGI dropped to 68.2. Lateral G: 0.28g.', color: '#D45555' },
+                  { title: 'OHE Feeder Span 42 Hotspot', body: '+18.4°C thermal delta recorded by SCADA.', color: '#D7A63A' },
+                  { title: 'Shadow Block Opportunity', body: 'Club Civil Tamping with OHE Jumper at 02:00.', color: '#46A06A' },
                 ].map((n, i) => (
-                  <div key={i} style={{ padding: '8px 10px', backgroundColor: '#F0ECE4', borderLeft: `2px solid ${n.color}`, borderRadius: '3px' }}>
-                    <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '12px', color: '#1D1F1E' }}>{n.title}</div>
-                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: '#4B4A46', marginTop: '2px' }}>{n.body}</div>
+                  <div key={i} style={{ padding: '7px 9px', backgroundColor: '#071A2B', borderLeft: `2px solid ${n.color}`, borderRadius: '3px' }}>
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '11.5px', color: '#F7FAFC' }}>{n.title}</div>
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '10.5px', color: '#A9BBCB', marginTop: '1px' }}>{n.body}</div>
                   </div>
                 ))}
               </div>
@@ -280,58 +271,52 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setShowRoleMenu(!showRoleMenu)}
             style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '4px 8px',
-              border: '1px solid #D5CEC1',
+              display: 'flex', alignItems: 'center', gap: '5px',
+              padding: '3px 7px',
+              border: '1px solid #29455D',
               borderRadius: '4px',
-              backgroundColor: 'transparent',
+              backgroundColor: '#0D263D',
               cursor: 'pointer',
               transition: 'background-color 0.12s ease',
             }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0ECE4')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
             {/* User monogram */}
             <div style={{
-              width: 22, height: 22,
-              backgroundColor: '#1D1F1E',
-              color: '#F2EADF',
+              width: 20, height: 20,
+              backgroundColor: '#3B82C4',
+              color: '#F7FAFC',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 600, fontSize: '10px',
+              fontWeight: 600, fontSize: '9.5px',
               borderRadius: '3px', flexShrink: 0,
             }}>
               {currentUser.name[0]}
             </div>
             <div className="hidden md:flex flex-col text-left">
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', fontWeight: 500, color: '#1D1F1E', lineHeight: 1.2 }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 500, color: '#F7FAFC', lineHeight: 1.2 }}>
                 {currentUser.name}
               </span>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', color: '#77736C', lineHeight: 1.2 }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9px', color: '#71879A', lineHeight: 1.2 }}>
                 {currentUser.roleTitle.split('(')[0].trim()}
               </span>
             </div>
-            <ChevronDown style={{ width: 12, height: 12, color: '#77736C' }} />
+            <ChevronDown style={{ width: 11, height: 11, color: '#71879A' }} />
           </button>
 
           {showRoleMenu && (
             <div
-              className="absolute right-0 mt-2 z-50"
+              className="absolute right-0 mt-2 z-50 shadow-2xl"
               style={{
-                width: 280,
-                backgroundColor: '#FBF9F4',
-                border: '1px solid #D5CEC1',
+                width: 260,
+                backgroundColor: '#0D263D',
+                border: '1px solid #29455D',
                 borderRadius: '6px',
-                boxShadow: '0px 4px 16px rgba(29,31,30,0.10)',
-                padding: '8px',
+                padding: '6px',
               }}
             >
-              <div style={{ padding: '4px 8px 8px', borderBottom: '1px solid #E8E2D8', marginBottom: '4px' }}>
-                <span style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '2px' }}>
-                  Switch operational role
-                </span>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 500, color: '#1D1F1E' }}>
-                  6 Railway Stakeholder Portals
+              <div style={{ padding: '4px 6px 6px', borderBottom: '1px solid #1E384F', marginBottom: '4px' }}>
+                <span style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: '9.5px', fontWeight: 600, color: '#71879A', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '1px' }}>
+                  Switch Operational Role
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
@@ -341,50 +326,46 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={() => { onRoleChange(r.role); setShowRoleMenu(false); }}
                     style={{
                       width: '100%', textAlign: 'left',
-                      padding: '7px 8px',
+                      padding: '6px 7px',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      borderRadius: '4px',
-                      backgroundColor: currentRole === r.role ? '#1D1F1E' : 'transparent',
+                      borderRadius: '3px',
+                      backgroundColor: currentRole === r.role ? '#123551' : 'transparent',
                       cursor: 'pointer',
                       border: 'none',
                       transition: 'background-color 0.1s ease',
                     }}
-                    onMouseEnter={e => { if (currentRole !== r.role) e.currentTarget.style.backgroundColor = '#F0ECE4'; }}
-                    onMouseLeave={e => { if (currentRole !== r.role) e.currentTarget.style.backgroundColor = 'transparent'; }}
                   >
                     <div>
-                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', fontWeight: 500, color: currentRole === r.role ? '#F2EADF' : '#1D1F1E' }}>
+                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '11.5px', fontWeight: 500, color: currentRole === r.role ? '#79B8E6' : '#F7FAFC' }}>
                         {r.title}
                       </div>
-                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', color: currentRole === r.role ? '#A8A29E' : '#77736C', marginTop: '1px' }}>
+                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', color: '#71879A', marginTop: '1px' }}>
                         {r.dept}
                       </div>
                     </div>
                     {currentRole === r.role && (
-                      <CheckCircle style={{ width: 13, height: 13, color: '#4D8B68', flexShrink: 0 }} />
+                      <CheckCircle style={{ width: 12, height: 12, color: '#46A06A', flexShrink: 0 }} />
                     )}
                   </button>
                 ))}
               </div>
-              <div style={{ borderTop: '1px solid #E8E2D8', marginTop: '6px', paddingTop: '6px' }}>
+              <div style={{ borderTop: '1px solid #1E384F', marginTop: '4px', paddingTop: '4px' }}>
                 <button
                   onClick={() => { setShowRoleMenu(false); onOpenLogin(); }}
                   style={{
                     width: '100%', textAlign: 'center',
-                    padding: '6px',
+                    padding: '5px',
                     backgroundColor: 'transparent',
-                    border: '1px solid #D5CEC1',
-                    borderRadius: '4px',
+                    border: '1px solid #29455D',
+                    borderRadius: '3px',
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: '11px', fontWeight: 500,
-                    color: '#4B4A46',
+                    fontSize: '10.5px', fontWeight: 500,
+                    color: '#A9BBCB',
                     cursor: 'pointer',
                     transition: 'background-color 0.12s ease',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#EDE5D8')}
-                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  Switch user / re-authenticate
+                  Switch User / Re-authenticate
                 </button>
               </div>
             </div>
@@ -396,18 +377,18 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onTogglePresentationMode}
             style={{
-              width: 30, height: 30,
+              width: 28, height: 28,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid #D5CEC1',
+              border: '1px solid #29455D',
               borderRadius: '4px',
-              backgroundColor: isPresentationMode ? '#1D1F1E' : 'transparent',
-              color: isPresentationMode ? '#F2EADF' : '#4B4A46',
+              backgroundColor: isPresentationMode ? '#123551' : '#0D263D',
+              color: isPresentationMode ? '#79B8E6' : '#A9BBCB',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
-            title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Mode'}
+            title={isPresentationMode ? 'Exit Focus Mode' : 'Enter Focus Mode'}
           >
-            {isPresentationMode ? <Minimize2 style={{ width: 13, height: 13 }} /> : <Maximize2 style={{ width: 13, height: 13 }} />}
+            {isPresentationMode ? <Minimize2 style={{ width: 12, height: 12 }} /> : <Maximize2 style={{ width: 12, height: 12 }} />}
           </button>
         )}
       </div>

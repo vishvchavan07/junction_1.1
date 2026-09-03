@@ -23,48 +23,48 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, className = '' }) => {
-  // Muted industrial railway status palette
-  let barColor    = '#4D8B68';
-  let textColor   = '#4D8B68';
-  let bgColor     = '#EDF5F0';
-  let borderColor = '#96C4AE';
+  // Blue Professional Railway Operations Status Palette
+  let barColor    = '#46A06A';
+  let textColor   = '#46A06A';
+  let bgColor     = 'rgba(70, 160, 106, 0.12)';
+  let borderColor = 'rgba(70, 160, 106, 0.35)';
   let defaultLabel = 'Operational';
 
   switch (status) {
     case 'OPERATIONAL':
-      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
       defaultLabel = label || 'Operational'; break;
     case 'APPROVED':
     case 'COMPLETED':
-      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
       defaultLabel = label || (status === 'COMPLETED' ? 'Completed' : 'Approved'); break;
     case 'RESOLVED_BY_AI':
-      barColor = '#4D8B68'; textColor = '#4D8B68'; bgColor = '#EDF5F0'; borderColor = '#96C4AE';
+      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
       defaultLabel = label || 'AI Resolved'; break;
     case 'WARNING':
     case 'PENDING':
     case 'REQUESTED':
     case 'MODIFIED':
-      barColor = '#D49A32'; textColor = '#C4891F'; bgColor = '#FBF5E6'; borderColor = '#E0BF7A';
+      barColor = '#D7A63A'; textColor = '#D7A63A'; bgColor = 'rgba(215, 166, 58, 0.12)'; borderColor = 'rgba(215, 166, 58, 0.35)';
       defaultLabel = label || (status === 'MODIFIED' ? 'Modified' : status === 'REQUESTED' ? 'Requested' : status === 'PENDING' ? 'Pending' : 'Warning'); break;
     case 'CRITICAL':
     case 'BLOCKED':
-      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
       defaultLabel = label || (status === 'BLOCKED' ? 'Blocked' : 'Critical'); break;
     case 'ACTIVE':
-      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
       defaultLabel = label || 'Active'; break;
     case 'REJECTED':
-      barColor = '#C84B43'; textColor = '#C84B43'; bgColor = '#F9EEEE'; borderColor = '#DCA09C';
+      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
       defaultLabel = label || 'Rejected'; break;
     case 'AI_RECOMMENDED':
-      barColor = '#1E3A5F'; textColor = '#1E3A5F'; bgColor = '#EEF2F8'; borderColor = '#B0C4DC';
+      barColor = '#79B8E6'; textColor = '#79B8E6'; bgColor = 'rgba(59, 130, 196, 0.15)'; borderColor = 'rgba(59, 130, 196, 0.4)';
       defaultLabel = label || 'AI Rec'; break;
     case 'OVERRIDDEN':
-      barColor = '#A9674B'; textColor = '#A9674B'; bgColor = '#F5EDE8'; borderColor = '#C4957E';
+      barColor = '#C96A45'; textColor = '#C96A45'; bgColor = 'rgba(201, 106, 69, 0.12)'; borderColor = 'rgba(201, 106, 69, 0.35)';
       defaultLabel = label || 'Overridden'; break;
     default:
-      barColor = '#77736C'; textColor = '#4B4A46'; bgColor = '#F0ECE4'; borderColor = '#D5CEC1';
+      barColor = '#71879A'; textColor = '#A9BBCB'; bgColor = '#0D263D'; borderColor = '#29455D';
       defaultLabel = label || status;
   }
 

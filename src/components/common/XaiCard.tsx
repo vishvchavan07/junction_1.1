@@ -22,28 +22,38 @@ export const XaiCard: React.FC<XaiCardProps> = ({
   actionLabel = 'APPLY AI OPTIMIZATION',
 }) => {
   const confidenceColor =
-    confidenceScore >= 90 ? '#4D8B68'
-    : confidenceScore >= 75 ? '#D49A32'
-    : '#C84B43';
+    confidenceScore >= 90 ? '#46A06A'
+    : confidenceScore >= 75 ? '#D7A63A'
+    : '#D45555';
 
   return (
-    <div className="bg-[#FBF9F4] border border-[#D5CEC1] p-4 text-xs relative overflow-hidden" style={{ borderRadius: '6px', boxShadow: '0px 1px 4px rgba(29,31,30,0.05)' }}>
+    <div
+      className="p-3.5 text-xs relative overflow-hidden"
+      style={{
+        backgroundColor: '#0D263D',
+        border: '1px solid #29455D',
+        borderRadius: '4px',
+        boxShadow: '0px 2px 8px rgba(4, 13, 22, 0.4)',
+      }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#E8E2D8] pb-2.5 mb-3">
-        <div className="flex items-center gap-2" style={{ color: '#1D1F1E' }}>
-          <Cpu style={{ width: 15, height: 15, color: '#4B4A46' }} />
-          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 600, letterSpacing: '0.03em', color: '#1D1F1E', textTransform: 'uppercase' }}>{title}</span>
+      <div className="flex items-center justify-between border-b border-[#1E384F] pb-2 mb-2.5">
+        <div className="flex items-center gap-2" style={{ color: '#F7FAFC' }}>
+          <Cpu style={{ width: 14, height: 14, color: '#79B8E6' }} />
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em', color: '#F7FAFC', textTransform: 'uppercase' }}>
+            {title}
+          </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C' }}>Confidence</span>
-          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '13px', fontWeight: 600, color: confidenceColor }}>
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#71879A' }}>Confidence</span>
+          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '13px', fontWeight: 700, color: confidenceColor }}>
             {confidenceScore}%
           </span>
         </div>
       </div>
 
       {/* Confidence bar */}
-      <div className="w-full mb-3 overflow-hidden" style={{ height: 2, backgroundColor: '#E8E2D8', borderRadius: '2px' }}>
+      <div className="w-full mb-2.5 overflow-hidden" style={{ height: 2, backgroundColor: '#071A2B', borderRadius: '2px' }}>
         <div
           className="h-full transition-all duration-500"
           style={{ width: `${confidenceScore}%`, backgroundColor: confidenceColor }}
@@ -51,39 +61,39 @@ export const XaiCard: React.FC<XaiCardProps> = ({
       </div>
 
       {/* Reasoning block */}
-      <div className="mb-3" style={{ backgroundColor: '#F0ECE4', padding: '10px 12px', borderRadius: '4px' }}>
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <HelpCircle style={{ width: 12, height: 12, color: '#4B4A46' }} />
-          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', textTransform: 'uppercase', letterSpacing: '0.07em' }}>AI rationale</span>
+      <div className="mb-2.5" style={{ backgroundColor: '#071A2B', padding: '9px 11px', borderRadius: '3px', border: '1px solid #1E384F' }}>
+        <div className="flex items-center gap-1.5 mb-1">
+          <HelpCircle style={{ width: 11, height: 11, color: '#79B8E6' }} />
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', fontWeight: 600, color: '#79B8E6', textTransform: 'uppercase', letterSpacing: '0.07em' }}>AI Rationale</span>
         </div>
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12.5px', color: '#1D1F1E', lineHeight: 1.55, margin: 0 }}>{reasoning}</p>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '12px', color: '#A9BBCB', lineHeight: 1.5, margin: 0 }}>{reasoning}</p>
       </div>
 
       {/* Feature importance (SHAP) */}
       {features.length > 0 && (
-        <div className="space-y-1.5 mb-3">
-          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#77736C', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '6px' }}>
-            Feature importance (SHAP)
+        <div className="space-y-1.5 mb-2.5">
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', fontWeight: 600, color: '#71879A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '4px' }}>
+            Feature Importance (SHAP)
           </div>
           {features.map((feat, idx) => (
-            <div key={idx} style={{ backgroundColor: '#F0ECE4', padding: '7px 10px', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Inter', sans-serif", fontSize: '12px' }}>
-                <span style={{ color: '#1D1F1E', fontWeight: 500 }}>{feat.feature}</span>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', fontWeight: 600, color: feat.impact === 'NEGATIVE' ? '#D49A32' : '#4D8B68' }}>
+            <div key={idx} style={{ backgroundColor: '#071A2B', padding: '6px 9px', borderRadius: '3px', display: 'flex', flexDirection: 'column', gap: 4, border: '1px solid #142B3E' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Inter', sans-serif", fontSize: '11.5px' }}>
+                <span style={{ color: '#F7FAFC', fontWeight: 500 }}>{feat.feature}</span>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10.5px', fontWeight: 600, color: feat.impact === 'NEGATIVE' ? '#D7A63A' : '#46A06A' }}>
                   {feat.value}
                 </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ flex: 1, height: 2, backgroundColor: '#D5CEC1', borderRadius: '2px', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <div style={{ flex: 1, height: 2, backgroundColor: '#1E384F', borderRadius: '2px', overflow: 'hidden' }}>
                   <div
                     style={{
                       width: `${feat.importance * 100}%`,
                       height: '100%',
-                      backgroundColor: feat.impact === 'NEGATIVE' ? '#D49A32' : '#4D8B68',
+                      backgroundColor: feat.impact === 'NEGATIVE' ? '#D7A63A' : '#46A06A',
                     }}
                   />
                 </div>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '9px', color: '#77736C', flexShrink: 0 }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '9px', color: '#71879A', flexShrink: 0 }}>
                   {(feat.importance * 100).toFixed(0)}%
                 </span>
               </div>
@@ -94,9 +104,9 @@ export const XaiCard: React.FC<XaiCardProps> = ({
 
       {/* Rule trigger */}
       {ruleTriggered && (
-        <div style={{ padding: '8px 10px', backgroundColor: '#FBF5E6', border: '1px solid #E0BF7A', borderRadius: '4px', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', fontWeight: 500, color: '#C4891F', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Active safety rule</span>
-          <code style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', fontWeight: 600, color: '#C4891F' }}>{ruleTriggered}</code>
+        <div style={{ padding: '7px 9px', backgroundColor: 'rgba(215, 166, 58, 0.1)', border: '1px solid rgba(215, 166, 58, 0.35)', borderRadius: '3px', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9.5px', fontWeight: 600, color: '#D7A63A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Safety Rule</span>
+          <code style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10.5px', fontWeight: 600, color: '#D7A63A' }}>{ruleTriggered}</code>
         </div>
       )}
 
@@ -104,25 +114,9 @@ export const XaiCard: React.FC<XaiCardProps> = ({
       {onApplyRecommendation && (
         <button
           onClick={onApplyRecommendation}
-          style={{
-            width: '100%',
-            padding: '8px 14px',
-            backgroundColor: '#1D1F1E',
-            color: '#F2EADF',
-            border: '1px solid #1D1F1E',
-            borderRadius: '4px',
-            fontFamily: "'Inter', sans-serif",
-            fontSize: '12px',
-            fontWeight: 500,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
-            cursor: 'pointer',
-            transition: 'background-color 0.15s ease',
-          }}
+          className="btn-pen-primary w-full py-2 text-[11px]"
         >
-          <CheckCircle style={{ width: 14, height: 14 }} />
+          <CheckCircle style={{ width: 13, height: 13 }} />
           {actionLabel}
         </button>
       )}

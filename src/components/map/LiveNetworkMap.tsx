@@ -44,7 +44,6 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
   const [showPossessions,   setShowPossessions]   = useState(true);
   const [showSignals,       setShowSignals]        = useState(true);
 
-  // Train movement simulation loop — logic unchanged
   useEffect(() => {
     if (!isPlaying) return;
     const interval = setInterval(() => {
@@ -66,7 +65,6 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
     return () => clearInterval(interval);
   }, [isPlaying]);
 
-  // Filtered scene data driven by layer toggles
   const visibleTrains  = showTrains      ? trains  : [];
   const visibleAssets  = showAssets      ? assets  : [];
   const visibleBlocks  = showPossessions ? blocks  : [];
@@ -76,10 +74,10 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
   }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1 text-[10px] font-mono font-bold transition-colors cursor-pointer border ${
+      className={`px-2.5 py-1 text-[10px] font-mono font-bold transition-colors cursor-pointer border rounded-[3px] ${
         active
-          ? 'bg-[#1A1208] text-[#FAF7F2] border-[#1A1208]'
-          : 'bg-white text-[#5C5347] border-[#C4BAA8] hover:bg-[#EDE7DA]'
+          ? 'bg-[#123551] text-[#79B8E6] border-[#3B82C4]'
+          : 'bg-[#071A2B] text-[#71879A] border-[#29455D] hover:text-[#F7FAFC]'
       }`}
     >
       {children}
@@ -87,42 +85,42 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
   );
 
   return (
-    <div className="space-y-4 select-none font-mono">
+    <div className="space-y-3 select-none">
 
       {/* ── Top header & controls ───────────────────────── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#F5F0E8] border border-[#C4BAA8] p-3.5 gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between bg-[#0D263D] border border-[#29455D] p-3 rounded-[4px] shadow-panel gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-display font-bold text-lg text-[#1A1208]">
+            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '15px', fontWeight: 700, color: '#F7FAFC' }}>
               Live Network Schematic & Telemetry
             </span>
-            <span className="bg-[#EDE7DA] text-[#5C5347] text-[10px] font-mono px-2 py-0.5 border border-[#C4BAA8] font-bold">
-              Western Corridor · KM 100.0 – 160.0
+            <span className="bg-[#071A2B] text-[#79B8E6] text-[10px] font-mono px-2 py-0.5 border border-[#29455D] rounded-[2px] font-semibold">
+              Western Corridor · KM 100–160
             </span>
           </div>
-          <p className="text-[11px] text-[#5C5347]">
-            Real-time track occupancy, automatic block signalling aspects, and multi-department possessions.
+          <p className="text-[11px] text-[#71879A] mt-0.5">
+            Real-time track occupancy · automatic block signalling aspects · multi-department possessions
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Play / Pause / Reset */}
-          <div className="flex items-center border border-[#C4BAA8] bg-white overflow-hidden">
+          <div className="flex items-center border border-[#29455D] bg-[#071A2B] rounded-[3px] overflow-hidden">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className={`px-2.5 py-1.5 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors ${
-                isPlaying ? 'bg-[#1A1208] text-[#FAF7F2]' : 'text-[#1A1208] hover:bg-[#EDE7DA]'
+              className={`px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition-colors ${
+                isPlaying ? 'bg-[#123551] text-[#79B8E6]' : 'text-[#F7FAFC] hover:bg-[#0D263D]'
               }`}
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
               <span>{isPlaying ? 'Live Sim' : 'Paused'}</span>
             </button>
             <button
               onClick={() => setTrains(initialTrains)}
-              className="px-2 py-1.5 text-[#8B8073] hover:text-[#1A1208] hover:bg-[#EDE7DA] border-l border-[#C4BAA8] cursor-pointer"
+              className="px-2 py-1 text-[#71879A] hover:text-[#F7FAFC] hover:bg-[#0D263D] border-l border-[#29455D] cursor-pointer"
               title="Reset Train Positions"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3 h-3" />
             </button>
           </div>
 
@@ -145,25 +143,25 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
       </div>
 
       {/* ── Main canvas + inspector ─────────────────────── */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3">
 
         {/* ── Left 9-cols: Illustrated schematic ─────────── */}
-        <div className="xl:col-span-9 bg-white border border-[#C4BAA8] overflow-hidden flex flex-col">
+        <div className="xl:col-span-9 bg-[#0D263D] border border-[#29455D] rounded-[4px] shadow-panel overflow-hidden flex flex-col">
           {/* HUD top bar */}
-          <div className="flex items-center justify-between border-b border-[#D9D0C0] px-4 py-2 text-[10px] font-mono text-[#8B8073]">
+          <div className="flex items-center justify-between border-b border-[#1E384F] px-3.5 py-1.5 text-[10px] font-mono text-[#71879A] bg-[#071A2B]">
             <div className="flex items-center gap-4">
-              <span className="text-[#8B1A1A] font-bold">GRID: WR-BCT-BRC-MAIN</span>
+              <span className="text-[#79B8E6] font-bold">GRID: WR-BCT-BRC-MAIN</span>
               <span>AUTO SIGNALLING: 1.0 KM HEADWAY</span>
               <span>25kV AC TRACTION: ENERGIZED</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#166534] animate-pulse" />
-              <span className="text-[#166534] font-bold">COA SYNCED</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#46A06A] animate-pulse" />
+              <span className="text-[#46A06A] font-bold">COA SYNCED</span>
             </div>
           </div>
 
           {/* The illustrated SVG railway scene */}
-          <div className="flex-1 min-h-[420px]">
+          <div className="flex-1 p-1 bg-[#0D263D]">
             <RailwaySceneCanvas
               trains={visibleTrains}
               blocks={visibleBlocks}
@@ -182,38 +180,38 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
           </div>
 
           {/* Bottom legend */}
-          <div className="border-t border-[#D9D0C0] px-4 py-2.5 flex flex-wrap items-center justify-between text-[9px] font-mono text-[#8B8073] gap-3">
+          <div className="border-t border-[#1E384F] px-3.5 py-2 flex flex-wrap items-center justify-between text-[9px] font-mono text-[#71879A] gap-3 bg-[#071A2B]">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-[#1A1208]">LEGEND:</span>
+              <span className="font-bold text-[#F7FAFC]">LEGEND:</span>
               {[
-                { color: '#166534', label: 'Healthy Asset' },
-                { color: '#92400E', label: 'Warning'       },
-                { color: '#7F1D1D', label: 'Critical'      },
+                { color: '#46A06A', label: 'Healthy Asset' },
+                { color: '#D7A63A', label: 'Warning'       },
+                { color: '#D45555', label: 'Critical'      },
               ].map(l => (
                 <span key={l.label} className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 inline-block" style={{ backgroundColor: l.color }} />
+                  <span className="w-2 h-2 inline-block rounded-[1px]" style={{ backgroundColor: l.color }} />
                   {l.label}
                 </span>
               ))}
               <span className="flex items-center gap-1">
-                <span className="inline-block w-5 h-2" style={{
-                  background: 'repeating-linear-gradient(45deg,#92400E33 0,#92400E33 4px,transparent 4px,transparent 8px)',
-                  border: '1px solid #92400E60',
+                <span className="inline-block w-4 h-2 rounded-[1px]" style={{
+                  background: 'repeating-linear-gradient(45deg,rgba(215,166,58,0.3) 0,rgba(215,166,58,0.3) 3px,transparent 3px,transparent 6px)',
+                  border: '1px solid rgba(215,166,58,0.5)',
                 }} />
                 Block Possession
               </span>
             </div>
-            <span className="text-[#8B1A1A] font-bold">CLICK ANY ASSET / TRAIN TO INSPECT TELEMETRY</span>
+            <span className="text-[#79B8E6] font-semibold">CLICK ANY ASSET / TRAIN TO INSPECT TELEMETRY</span>
           </div>
         </div>
 
         {/* ── Right 3-cols: Inspector ─────────────────────── */}
-        <div className="xl:col-span-3 bg-[#F5F0E8] border border-[#C4BAA8] flex flex-col">
-          <div className="flex items-center justify-between border-b border-[#C4BAA8] px-3 py-2.5">
-            <span className="text-[11px] font-mono font-bold text-[#8B1A1A] uppercase tracking-wider flex items-center gap-1.5">
-              <Info className="w-4 h-4" /> Entity Inspector
+        <div className="xl:col-span-3 bg-[#0D263D] border border-[#29455D] rounded-[4px] shadow-panel flex flex-col">
+          <div className="flex items-center justify-between border-b border-[#1E384F] px-3 py-2 bg-[#071A2B]">
+            <span className="text-[11px] font-mono font-bold text-[#79B8E6] uppercase tracking-wider flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5" /> Entity Inspector
             </span>
-            <span className="text-[9px] bg-[#EDE7DA] text-[#8B8073] font-mono font-bold px-1.5 py-0.5 border border-[#C4BAA8]">
+            <span className="text-[9px] bg-[#123551] text-[#79B8E6] font-mono font-bold px-1.5 py-0.5 border border-[#3B82C4] rounded-[2px]">
               HUD
             </span>
           </div>
@@ -227,27 +225,27 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
                   const t = selectedEntity.data;
                   return (
                     <div className="space-y-2">
-                      <div className="p-2.5 bg-white border border-[#D9D0C0]">
-                        <div className="text-[9px] text-[#8B8073] font-mono font-bold">TRAIN COA DATA</div>
-                        <div className="text-sm font-mono font-bold text-[#1E3A5F] mt-0.5">{t.trainNumber}</div>
-                        <div className="text-[10px] text-[#5C5347] font-mono mt-0.5 leading-snug">{t.trainName}</div>
+                      <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
+                        <div className="text-[9px] text-[#71879A] font-mono font-bold">TRAIN COA DATA</div>
+                        <div className="text-sm font-mono font-bold text-[#F7FAFC] mt-0.5">{t.trainNumber}</div>
+                        <div className="text-[10px] text-[#A9BBCB] font-mono mt-0.5 leading-snug">{t.trainName}</div>
                       </div>
-                      <div className="space-y-1 text-[10px] font-mono bg-white p-2.5 border border-[#D9D0C0]">
+                      <div className="space-y-1 text-[10px] font-mono bg-[#071A2B] p-2 border border-[#1E384F] rounded-[3px]">
                         {[
-                          ['Current KM',     `KM ${t.currentKm}`,  '#1E3A5F'],
-                          ['Speed',          `${t.speedKmH} km/h`, '#1A1208'],
-                          ['Assigned Track', `${t.assignedTrack} MAIN`, '#1E3A5F'],
-                          ['Delay',          `${t.delayMinutes} min`, t.delayMinutes > 0 ? '#92400E' : '#166534'],
-                          ['Rake',           t.rakeCapacity,        '#1A1208'],
+                          ['Current KM',     `KM ${t.currentKm}`,  '#79B8E6'],
+                          ['Speed',          `${t.speedKmH} km/h`, '#F7FAFC'],
+                          ['Assigned Track', `${t.assignedTrack} MAIN`, '#79B8E6'],
+                          ['Delay',          `${t.delayMinutes} min`, t.delayMinutes > 0 ? '#D7A63A' : '#46A06A'],
+                          ['Rake',           t.rakeCapacity,        '#A9BBCB'],
                         ].map(([k, v, c]) => (
                           <div key={k} className="flex justify-between gap-2">
-                            <span className="text-[#8B8073]">{k}:</span>
+                            <span className="text-[#71879A]">{k}:</span>
                             <span className="font-bold truncate" style={{ color: c as string }}>{v as string}</span>
                           </div>
                         ))}
                       </div>
                       {t.diverted && (
-                        <div className="p-2 bg-[#FFFBEB] border border-[#92400E]/40 text-[10px] font-mono text-[#92400E]">
+                        <div className="p-2 bg-[rgba(215,166,58,0.1)] border border-[rgba(215,166,58,0.35)] rounded-[3px] text-[10px] font-mono text-[#D7A63A]">
                           <span className="font-bold">DIVERSION ACTIVE: </span>{t.diversionRoute}
                         </div>
                       )}
@@ -260,30 +258,30 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
                   const a = selectedEntity.data;
                   return (
                     <div className="space-y-2">
-                      <div className="p-2.5 bg-white border border-[#D9D0C0]">
+                      <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                         <div className="flex justify-between items-center">
-                          <span className="font-mono font-bold text-[11px] text-[#1A1208]">{a.code}</span>
+                          <span className="font-mono font-bold text-[11px] text-[#F7FAFC]">{a.code}</span>
                           <StatusBadge status={a.status} />
                         </div>
-                        <div className="text-[10px] text-[#5C5347] font-mono mt-0.5">{a.name}</div>
+                        <div className="text-[10px] text-[#A9BBCB] font-mono mt-0.5">{a.name}</div>
                       </div>
-                      <div className="space-y-1 text-[10px] font-mono bg-white p-2.5 border border-[#D9D0C0]">
+                      <div className="space-y-1 text-[10px] font-mono bg-[#071A2B] p-2 border border-[#1E384F] rounded-[3px]">
                         {[
-                          ['Department',        a.department,                         '#1E3A5F'],
-                          ['Location',          `${a.section} (${a.kmMarker})`,       '#1A1208'],
-                          ['Condition Score',   `${a.conditionScore} / 100`,          '#166534'],
-                          ['Failure Risk',      `${a.failureRiskProbability}%`,       '#7F1D1D'],
-                          ['Block Required',    a.blockRequired ? 'YES' : 'NO',       a.blockRequired ? '#92400E' : '#166534'],
+                          ['Department',        a.department,                         '#79B8E6'],
+                          ['Location',          `${a.section} (${a.kmMarker})`,       '#F7FAFC'],
+                          ['Condition Score',   `${a.conditionScore} / 100`,          '#46A06A'],
+                          ['Failure Risk',      `${a.failureRiskProbability}%`,       '#D45555'],
+                          ['Block Required',    a.blockRequired ? 'YES' : 'NO',       a.blockRequired ? '#D7A63A' : '#46A06A'],
                         ].map(([k, v, c]) => (
                           <div key={k} className="flex justify-between gap-2">
-                            <span className="text-[#8B8073]">{k}:</span>
+                            <span className="text-[#71879A]">{k}:</span>
                             <span className="font-bold" style={{ color: c as string }}>{v as string}</span>
                           </div>
                         ))}
                       </div>
-                      <div className="p-2 bg-white border border-[#D9D0C0] text-[10px] font-mono">
-                        <span className="text-[#8B1A1A] font-bold">XAI: </span>
-                        <p className="text-[#5C5347] mt-0.5 leading-snug">{a.xaiReasoning}</p>
+                      <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px] text-[10px] font-mono">
+                        <span className="text-[#79B8E6] font-bold">XAI: </span>
+                        <p className="text-[#A9BBCB] mt-0.5 leading-snug">{a.xaiReasoning}</p>
                       </div>
                     </div>
                   );
@@ -294,22 +292,22 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
                   const b = selectedEntity.data;
                   return (
                     <div className="space-y-2">
-                      <div className="p-2.5 bg-white border border-[#D9D0C0]">
+                      <div className="p-2 bg-[#071A2B] border border-[#1E384F] rounded-[3px]">
                         <div className="flex justify-between items-center">
-                          <span className="font-mono font-bold text-[11px] text-[#8B1A1A]">{b.blockCode}</span>
+                          <span className="font-mono font-bold text-[11px] text-[#79B8E6]">{b.blockCode}</span>
                           <StatusBadge status={b.status} />
                         </div>
-                        <div className="text-[10px] text-[#1A1208] font-mono font-bold mt-1">{b.title}</div>
+                        <div className="text-[10px] text-[#F7FAFC] font-mono font-bold mt-1">{b.title}</div>
                       </div>
-                      <div className="space-y-1 text-[10px] font-mono bg-white p-2.5 border border-[#D9D0C0]">
+                      <div className="space-y-1 text-[10px] font-mono bg-[#071A2B] p-2 border border-[#1E384F] rounded-[3px]">
                         {[
-                          ['Optimal Window',  `${b.aiOptimalStartTime} – ${b.aiOptimalEndTime}`, '#8B1A1A'],
-                          ['Duration',        `${b.durationMinutes} min`,                        '#1A1208'],
-                          ['Departments',     b.departmentsInvolved.join(' + '),                  '#1E3A5F'],
-                          ['Affected Trains', `${b.affectedTrainCount} (${b.predictedDelayMinutes} min delay)`, '#166534'],
+                          ['Optimal Window',  `${b.aiOptimalStartTime} – ${b.aiOptimalEndTime}`, '#79B8E6'],
+                          ['Duration',        `${b.durationMinutes} min`,                        '#F7FAFC'],
+                          ['Departments',     b.departmentsInvolved.join(' + '),                  '#79B8E6'],
+                          ['Affected Trains', `${b.affectedTrainCount} (${b.predictedDelayMinutes} min delay)`, '#46A06A'],
                         ].map(([k, v, c]) => (
                           <div key={k} className="flex justify-between gap-2">
-                            <span className="text-[#8B8073]">{k}:</span>
+                            <span className="text-[#71879A]">{k}:</span>
                             <span className="font-bold" style={{ color: c as string }}>{v as string}</span>
                           </div>
                         ))}
@@ -320,18 +318,18 @@ export const LiveNetworkMap: React.FC<LiveNetworkMapProps> = ({
 
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center text-[#8B8073] space-y-2 p-4 border border-dashed border-[#C4BAA8]">
-                <Compass className="w-8 h-8 opacity-40" />
-                <p className="text-[11px] font-mono">No element selected.</p>
-                <p className="text-[9px] font-mono text-[#C4BAA8]">
+              <div className="h-full flex flex-col items-center justify-center text-center text-[#71879A] space-y-2 p-4 border border-dashed border-[#29455D] rounded-[3px]">
+                <Compass className="w-8 h-8 opacity-40 text-[#79B8E6]" />
+                <p className="text-[11px] font-mono">No element selected</p>
+                <p className="text-[9px] font-mono text-[#71879A]">
                   Click any train, turnout, possession block, or asset on the schematic to inspect full telemetry.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="border-t border-[#C4BAA8] p-2.5">
-            <div className="text-[9px] text-[#C4BAA8] font-mono text-center">
+          <div className="border-t border-[#1E384F] p-2 bg-[#071A2B] rounded-b-[4px]">
+            <div className="text-[9px] text-[#71879A] font-mono text-center">
               Indian Railways Automatic Block System · High Density Corridor
             </div>
           </div>

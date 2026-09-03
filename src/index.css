@@ -3,52 +3,56 @@
 @tailwind utilities;
 
 /* ================================================================
-   JUNCTION — PREMIUM ENGINEERING DESIGN SYSTEM
-   Warm Parchment · Precision Graphite · Muted Railway Status
-   Typography: Space Grotesk (Display) + Inter (UI) + JetBrains Mono (Code)
+   JUNCTION — BLUE PROFESSIONAL RAILWAY OPERATIONS DESIGN SYSTEM
+   Deep Navy · Dark Steel Blue · Ice White · Authentic Signals
+   Typography: Space Grotesk (Brand/Display) + Inter (UI) + JetBrains Mono (Code)
    ================================================================ */
 
 :root {
   /* ── Primary Backgrounds ── */
-  --rail-bg:               #F2EADF;   /* warm parchment */
-  --rail-bg-secondary:     #F8F5EF;   /* soft ivory */
+  --rail-bg:               #071A2B;   /* deep navy */
+  --rail-bg-secondary:     #0D263D;   /* dark steel blue */
 
   /* ── Surfaces ── */
-  --rail-surface:          #F0ECE4;   /* surface hover */
-  --rail-surface-card:     #FBF9F4;   /* card / elevated surface */
-  --rail-surface-inset:    #EDE5D8;   /* recessed / inset */
-  --rail-surface-elevated: #F8F5EF;   /* soft elevated */
+  --rail-surface:          #0D263D;   /* main surface */
+  --rail-surface-card:     #0D263D;   /* card surface */
+  --rail-surface-inset:    #051422;   /* recessed / inset deep navy */
+  --rail-surface-elevated: #123551;   /* railway blue elevated */
 
-  /* ── Technical Pen Lines ── */
-  --rail-line:             #1D1F1E;   /* deep graphite */
-  --rail-line-muted:       #D5CEC1;   /* warm divider */
-  --rail-line-subtle:      #E8E2D8;   /* hairline */
+  /* ── Technical Lines & Borders ── */
+  --rail-line:             #29455D;   /* steel border */
+  --rail-line-muted:       #1E384F;   /* divider */
+  --rail-line-subtle:      #142B3E;   /* hairline */
 
   /* ── Typography ── */
-  --rail-text:             #1D1F1E;   /* primary ink / deep graphite */
-  --rail-text-secondary:   #4B4A46;   /* secondary ink */
-  --rail-text-muted:       #77736C;   /* muted text */
+  --rail-text:             #F7FAFC;   /* primary text (ice white) */
+  --rail-text-secondary:   #A9BBCB;   /* secondary text */
+  --rail-text-muted:       #71879A;   /* muted text */
 
-  /* ── Railway Status — Muted & Industrial ── */
-  --rail-red:              #C84B43;
-  --rail-red-tint:         #F9EEEE;
-  --rail-red-border:       #DCA09C;
+  /* ── Accent System ── */
+  --rail-accent-blue:      #3B82C4;   /* operations blue */
+  --rail-accent-light:     #79B8E6;   /* light blue */
 
-  --rail-yellow:           #D49A32;
-  --rail-yellow-tint:      #FBF5E6;
-  --rail-yellow-border:    #E0BF7A;
+  /* ── Authentic Railway Status Colors ── */
+  --rail-red:              #D45555;   /* signal red */
+  --rail-red-tint:         rgba(212, 85, 85, 0.12);
+  --rail-red-border:       rgba(212, 85, 85, 0.4);
 
-  --rail-green:            #4D8B68;
-  --rail-green-tint:       #EDF5F0;
-  --rail-green-border:     #96C4AE;
+  --rail-yellow:           #D7A63A;   /* signal yellow */
+  --rail-yellow-tint:      rgba(215, 166, 58, 0.12);
+  --rail-yellow-border:    rgba(215, 166, 58, 0.4);
 
-  /* ── Industrial Rust Accent ── */
-  --rail-accent:           #A9674B;
-  --rail-accent-tint:      #F5EDE8;
-  --rail-accent-muted:     #C4957E;
+  --rail-green:            #46A06A;   /* signal green */
+  --rail-green-tint:       rgba(70, 160, 106, 0.12);
+  --rail-green-border:     rgba(70, 160, 106, 0.4);
 
-  /* ── Active Graphite ── */
-  --active-graphite:       #242725;
+  /* ── Indian Railway Warm Accent ── */
+  --rail-accent:           #C96A45;
+  --rail-accent-tint:      rgba(201, 106, 69, 0.12);
+  --rail-accent-muted:     #A35332;
+
+  /* ── Active State ── */
+  --active-blue:           #123551;
 }
 
 @layer base {
@@ -56,7 +60,7 @@
     background-color: var(--rail-bg);
     color: var(--rail-text);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -71,11 +75,11 @@
   }
 
   ::selection {
-    background-color: #DDD4C8;
-    color: #1D1F1E;
+    background-color: #123551;
+    color: #79B8E6;
   }
 
-  /* Headings: Space Grotesk for display/major titles, Inter as fallback for smaller headings */
+  /* Headings: Space Grotesk for display/major titles, Inter for structure */
   h1 {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--rail-text);
@@ -127,73 +131,67 @@
    TYPOGRAPHIC HIERARCHY
    ================================================================ */
 
-/* Large display numerals / scene headings */
 .text-display {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.1;
   color: var(--rail-text);
 }
 
-/* Page title */
 .text-page-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--rail-text);
 }
 
-/* Section title (large) */
 .text-section-xl {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.25;
   color: var(--rail-text);
 }
 
-/* Section title */
 .text-section {
   font-family: 'Inter', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.3;
   color: var(--rail-text);
 }
 
-/* Body */
 .text-body-lg {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.6;
   color: var(--rail-text);
 }
 .text-body {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 400;
   line-height: 1.5;
   color: var(--rail-text);
 }
 .text-body-secondary {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 400;
   line-height: 1.5;
   color: var(--rail-text-secondary);
 }
 
-/* Operational data number — large prominent */
 .text-data-xl {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1;
@@ -201,14 +199,13 @@
 }
 .text-data-lg {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.1;
   color: var(--rail-text);
 }
 
-/* Small label — Inter, uppercase for status only */
 .text-label {
   font-family: 'Inter', sans-serif;
   font-size: 11px;
@@ -218,577 +215,102 @@
   color: var(--rail-text-secondary);
 }
 
-/* Status / operational state label — uppercase, tiny */
 .text-status {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1.2;
 }
 
-/* Technical/operational label — small caps, inter, spaced */
-.text-tech-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--rail-text-muted);
-}
-
-/* Code / ID / technical reference — JetBrains Mono */
-.text-mono-sm {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0;
-  line-height: 1.4;
-}
-.text-mono-xs {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0;
-  line-height: 1.3;
-}
-
 /* ================================================================
-   SURFACES — RESTRAINED, FLAT-FIRST
+   BLUE THEME BUTTON & PANEL UTILITIES
    ================================================================ */
 
-/* Base surface — no border, just background shift */
-.surface-base {
-  background-color: var(--rail-surface-card);
-}
-
-/* Primary panel — 1px divider, minimal border */
-.pen-panel {
-  background-color: var(--rail-surface-card);
-  border: 1px solid var(--rail-line-muted);
-  border-radius: 4px;
-}
-
-/* Card — slight elevation via subtle shadow, not heavy border */
-.pen-card {
-  background-color: var(--rail-surface-card);
-  border: 1px solid var(--rail-line-subtle);
-  border-radius: 4px;
-  box-shadow: 0px 1px 3px 0px rgba(29,31,30,0.05);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.pen-card:hover {
-  border-color: var(--rail-line-muted);
-  box-shadow: 0px 2px 6px 0px rgba(29,31,30,0.07);
-}
-
-/* Accent card — sharp graphite border */
-.pen-card-accent {
-  background-color: var(--rail-surface-card);
-  border: 1px solid var(--rail-line);
-  border-radius: 4px;
-}
-
-/* Inset / recessed container */
-.pen-inset {
-  background-color: var(--rail-surface-inset);
-  border: 1px solid var(--rail-line-subtle);
-  border-radius: 4px;
-}
-
-/* Warm surface container */
-.pen-surface-warm {
-  background-color: var(--rail-surface);
-  border: 1px solid var(--rail-line-subtle);
-  border-radius: 4px;
-}
-
-/* ── Borderless section divider ── */
-.section-divider {
-  height: 1px;
-  background-color: var(--rail-line-subtle);
-  width: 100%;
-}
-
-/* ── Precision Corner Marks (engineering aesthetic) ── */
-.pen-corner-mark {
-  position: relative;
-}
-.pen-corner-mark::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 6px;
-  height: 6px;
-  border-top: 1.5px solid var(--rail-line);
-  border-left: 1.5px solid var(--rail-line);
-  pointer-events: none;
-}
-.pen-corner-mark::after {
-  content: '';
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  width: 6px;
-  height: 6px;
-  border-top: 1.5px solid var(--rail-line);
-  border-right: 1.5px solid var(--rail-line);
-  pointer-events: none;
-}
-
-/* ================================================================
-   PRECISION BUTTONS — Professional control interface feel
-   ================================================================ */
-
-/* Primary: dark graphite background, light text */
 .btn-pen-primary {
-  background-color: var(--rail-line);
-  color: var(--rail-bg);
-  border: 1px solid var(--rail-line);
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: background-color 0.15s ease, opacity 0.12s ease;
+  padding: 6px 14px;
+  background-color: #3B82C4;
+  color: #F7FAFC;
+  border: 1px solid #3B82C4;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  line-height: 1;
+  transition: all 0.15s ease;
 }
 .btn-pen-primary:hover {
-  background-color: var(--active-graphite);
-}
-.btn-pen-primary:active {
-  opacity: 0.88;
+  background-color: #2D6CA8;
+  border-color: #2D6CA8;
 }
 
-/* Secondary: transparent parchment + thin border */
 .btn-pen-secondary {
-  background-color: transparent;
-  color: var(--rail-text);
-  border: 1px solid var(--rail-line-muted);
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  padding: 6px 12px;
+  background-color: #0D263D;
+  color: #F7FAFC;
+  border: 1px solid #29455D;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  line-height: 1;
+  transition: all 0.15s ease;
 }
 .btn-pen-secondary:hover {
-  background-color: var(--rail-surface);
-  border-color: var(--rail-text-secondary);
+  background-color: #123551;
+  border-color: #3B82C4;
 }
 
-/* Tertiary: text only */
-.btn-pen-ghost {
-  background-color: transparent;
-  color: var(--rail-text-secondary);
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-  line-height: 1;
-}
-.btn-pen-ghost:hover {
-  background-color: var(--rail-surface);
-  color: var(--rail-text);
-}
-
-/* Danger */
 .btn-pen-danger {
-  background-color: var(--rail-red-tint);
-  color: var(--rail-red);
-  border: 1px solid var(--rail-red-border);
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: background-color 0.15s ease;
+  padding: 5px 10px;
+  background-color: rgba(212, 85, 85, 0.15);
+  color: #D45555;
+  border: 1px solid rgba(212, 85, 85, 0.4);
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
-  line-height: 1;
+  transition: all 0.15s ease;
 }
 .btn-pen-danger:hover {
-  background-color: #F5E2E1;
+  background-color: #D45555;
+  color: #FFFFFF;
 }
 
-/* ── Inputs & Form Controls ── */
-.input-pen,
-.select-pen {
-  background-color: var(--rail-surface-card);
-  color: var(--rail-text);
-  border: 1px solid var(--rail-line-muted);
-  border-radius: 4px;
-  padding: 7px 10px;
-  font-size: 13px;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  outline: none;
-  line-height: 1.4;
-}
-.input-pen:focus,
-.select-pen:focus {
-  border-color: var(--rail-text-secondary);
-  box-shadow: 0 0 0 3px rgba(75, 74, 70, 0.1);
-}
-
-/* ================================================================
-   STATUS BADGES — Muted, industrial, precise
-   ================================================================ */
-
-.badge-pen-red {
-  background-color: var(--rail-red-tint);
-  color: var(--rail-red);
-  border: 1px solid var(--rail-red-border);
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  padding: 2px 8px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-pen-yellow {
-  background-color: var(--rail-yellow-tint);
-  color: var(--rail-yellow);
-  border: 1px solid var(--rail-yellow-border);
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  padding: 2px 8px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-pen-green {
-  background-color: var(--rail-green-tint);
-  color: var(--rail-green);
-  border: 1px solid var(--rail-green-border);
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  padding: 2px 8px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-pen-neutral {
-  background-color: var(--rail-surface);
-  color: var(--rail-text-secondary);
-  border: 1px solid var(--rail-line-muted);
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.badge-pen-accent {
-  background-color: var(--rail-accent-tint);
-  color: var(--rail-accent);
-  border: 1px solid var(--rail-accent-muted);
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  padding: 2px 8px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-/* Status dots */
-.dot-pen-red    { width: 6px; height: 6px; border-radius: 50%; background-color: var(--rail-red);    display: inline-block; }
-.dot-pen-yellow { width: 6px; height: 6px; border-radius: 50%; background-color: var(--rail-yellow); display: inline-block; }
-.dot-pen-green  { width: 6px; height: 6px; border-radius: 50%; background-color: var(--rail-green);  display: inline-block; }
-.dot-pen-muted  { width: 6px; height: 6px; border-radius: 50%; background-color: var(--rail-text-muted); display: inline-block; }
-
-/* ================================================================
-   TABLES — Precision data grid
-   ================================================================ */
-.table-pen {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-}
-.table-pen th {
-  background-color: transparent;
-  color: var(--rail-text-muted);
-  font-weight: 500;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--rail-line-muted);
-  text-align: left;
-}
-.table-pen td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--rail-line-subtle);
-  color: var(--rail-text);
-  font-size: 13px;
-}
-.table-pen tr:last-child td {
-  border-bottom: none;
-}
-.table-pen tr:hover td {
-  background-color: var(--rail-surface);
-}
-
-/* ================================================================
-   NAVIGATION SIDEBAR — Clean line-indicator active state
-   ================================================================ */
-
-.nav-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 12px;
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--rail-text-secondary);
-  transition: background-color 0.12s ease, color 0.12s ease;
-  cursor: pointer;
-  position: relative;
-  border: none;
-  background: transparent;
-  text-align: left;
-}
-.nav-item:hover {
-  background-color: var(--rail-surface);
-  color: var(--rail-text);
-}
-.nav-item.active {
-  background-color: var(--rail-surface);
-  color: var(--rail-text);
-  font-weight: 500;
-}
-/* Thin left-edge indicator for active nav item */
-.nav-item.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 4px;
-  bottom: 4px;
-  width: 2px;
-  border-radius: 2px;
-  background-color: var(--rail-line);
-}
-
-/* Section label in nav */
-.nav-section-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--rail-text-muted);
-  padding: 0 12px;
-  margin-bottom: 2px;
-}
-
-/* ================================================================
-   PRECISION SCROLLBARS
-   ================================================================ */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #071A2B;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--rail-line-muted);
-  border-radius: 2px;
+  background: #29455D;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--rail-text-muted);
+  background: #3B82C4;
 }
 
-/* ================================================================
-   MATERIAL SYMBOLS ALIGNMENT
-   ================================================================ */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  font-size: 18px;
-  line-height: 1;
-  display: inline-block;
-  vertical-align: middle;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-.material-symbols-outlined.filled {
-  font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-/* ================================================================
-   STATUS BAR ACCENT — Left edge department indicators
-   ================================================================ */
-.status-bar-opr  { border-left: 2px solid var(--rail-green)  !important; }
-.status-bar-wng  { border-left: 2px solid var(--rail-yellow) !important; }
-.status-bar-blk  { border-left: 2px solid var(--rail-red)    !important; }
-.status-bar-blue { border-left: 2px solid #1E3A5F             !important; }
-.status-bar-ai   { border-left: 2px solid var(--rail-accent)  !important; }
-
-/* ================================================================
-   BACKWARD COMPATIBILITY — Legacy class aliases
-   ================================================================ */
-.railway-panel {
-  background-color: var(--rail-surface-card);
-  border: 1px solid var(--rail-line-muted);
-  border-radius: 4px;
-}
-.railway-card {
-  background-color: var(--rail-surface-card);
-  border: 1px solid var(--rail-line-subtle);
-  border-radius: 4px;
-  box-shadow: 0px 1px 3px 0px rgba(29,31,30,0.04);
-}
-.railway-card-inset {
-  background-color: var(--rail-surface-inset);
-  border: 1px solid var(--rail-line-subtle);
-  border-radius: 4px;
-}
-.railway-ink-panel {
-  background-color: var(--rail-line);
-  color: var(--rail-bg);
-  border: 1px solid var(--rail-line);
-  border-radius: 4px;
-}
-.railway-section-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--rail-text-muted);
-}
-
-.text-railway-display {
-  font-family: 'Space Grotesk', sans-serif;
-  letter-spacing: -0.02em;
-}
-.text-railway-mono {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* Compat buttons */
-.railway-btn-primary {
-  background-color: var(--rail-line);
-  color: var(--rail-bg);
-  border: 1px solid var(--rail-line);
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 14px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-.railway-btn-primary:hover {
-  background-color: var(--active-graphite);
-}
-.railway-btn-secondary {
-  background-color: transparent;
-  color: var(--rail-text);
-  border: 1px solid var(--rail-line-muted);
-  border-radius: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 14px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-.railway-btn-secondary:hover {
-  background-color: var(--rail-surface);
-}
-
-/* Compat HUD panels */
-.hud-panel     { background-color: var(--rail-surface-card); border: 1px solid var(--rail-line-muted); border-radius: 4px; }
-.hud-panel-alt { background-color: var(--rail-surface);      border: 1px solid var(--rail-line-subtle); border-radius: 4px; }
-.hud-card      { background-color: var(--rail-surface-card); border: 1px solid var(--rail-line-subtle); border-radius: 4px; box-shadow: 0px 1px 3px 0px rgba(29,31,30,0.04); }
-.hud-card-alt  { background-color: var(--rail-surface-inset); border: 1px solid var(--rail-line-subtle); border-radius: 4px; }
-
-/* ================================================================
-   ANIMATION UTILITIES
-   ================================================================ */
-.animate-reveal-up {
-  animation: revealUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes revealUp {
-  from { transform: translateY(6px); opacity: 0; }
-  to   { transform: translateY(0);   opacity: 1; }
-}
-
-/* Task annotation style — engineering annotation feel */
-.task-annotation {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  color: var(--rail-text-secondary);
-  padding: 4px 8px;
-  border-left: 2px solid var(--rail-line-muted);
-  background: transparent;
-}
-.task-annotation.active {
-  border-left-color: var(--rail-accent);
-  color: var(--rail-text);
-}
-
-/* ================================================================
-   PROGRESS BARS
-   ================================================================ */
-.progress-pen {
-  height: 3px;
-  background-color: var(--rail-line-subtle);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.progress-pen-fill {
-  height: 100%;
-  border-radius: 2px;
-  background-color: var(--rail-line);
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.progress-pen-fill.green  { background-color: var(--rail-green); }
-.progress-pen-fill.yellow { background-color: var(--rail-yellow); }
-.progress-pen-fill.red    { background-color: var(--rail-red); }
-.progress-pen-fill.accent { background-color: var(--rail-accent); }

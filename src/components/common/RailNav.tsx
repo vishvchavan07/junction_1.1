@@ -50,7 +50,7 @@ export const RailNav: React.FC<RailNavProps> = ({
         { tab: 'trains',     label: 'Trains (COA)',  icon: Train },
         { tab: 'conflicts',  label: 'Conflicts',     icon: AlertTriangle, badge: '3', badgeType: 'red' },
         { tab: 'simulation', label: 'Simulation',    icon: Flame },
-        { tab: 'insights',   label: 'Insights',      icon: Sparkles },
+        { tab: 'insights',   label: 'AI Insights',   icon: Sparkles },
       ],
     },
     {
@@ -69,32 +69,34 @@ export const RailNav: React.FC<RailNavProps> = ({
     },
   ];
 
-  const getBadgeClass = (type?: string) => {
+  const getBadgeStyle = (type?: string, isActive?: boolean) => {
+    if (isActive) {
+      return { backgroundColor: '#3B82C4', color: '#F7FAFC', borderColor: '#79B8E6' };
+    }
     switch (type) {
-      case 'red':   return 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]';
-      case 'amber': return 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]';
-      case 'green': return 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]';
-      case 'blue':  return 'bg-[#EFF6FF] text-[#1E3A5F] border-[#BFDBFE]';
-      default:      return 'bg-[#F0EBE1] text-[#615A4F] border-[#D8D1C5]';
+      case 'red':   return { backgroundColor: 'rgba(212, 85, 85, 0.15)', color: '#D45555', borderColor: 'rgba(212, 85, 85, 0.4)' };
+      case 'amber': return { backgroundColor: 'rgba(215, 166, 58, 0.15)', color: '#D7A63A', borderColor: 'rgba(215, 166, 58, 0.4)' };
+      case 'green': return { backgroundColor: 'rgba(70, 160, 106, 0.15)', color: '#46A06A', borderColor: 'rgba(70, 160, 106, 0.4)' };
+      case 'blue':  return { backgroundColor: 'rgba(59, 130, 196, 0.15)', color: '#79B8E6', borderColor: 'rgba(59, 130, 196, 0.4)' };
+      default:      return { backgroundColor: '#123551', color: '#A9BBCB', borderColor: '#29455D' };
     }
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF]/95 backdrop-blur-md border-t border-[#1A1815] shadow-lg select-none">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#071A2B]/95 backdrop-blur-md border-t border-[#29455D] select-none">
       {/* Decorative Miniature Rail Track Line */}
-      <div className="h-[2.5px] w-full bg-[#1A1815] relative flex items-center justify-between overflow-hidden">
-        {/* Subtle sleepers */}
-        <div className="w-full h-full opacity-20 bg-[repeating-linear-gradient(90deg,transparent,transparent_8px,#FFFFFF_8px,#FFFFFF_10px)]" />
+      <div className="h-[2px] w-full bg-[#123551] relative flex items-center justify-between overflow-hidden">
+        <div className="w-full h-full opacity-30 bg-[repeating-linear-gradient(90deg,transparent,transparent_8px,#3B82C4_8px,#3B82C4_10px)]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-1.5 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
         {/* Navigation Categories and Nodes */}
-        <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
           {navGroups.map((group, gIdx) => (
-            <div key={group.category} className="flex items-center gap-1.5">
+            <div key={group.category} className="flex items-center gap-1">
               {/* Category Divider on desktop */}
               {gIdx > 0 && (
-                <div className="hidden md:flex items-center h-5 w-[1px] bg-[#D8D1C5] mx-1 shrink-0" />
+                <div className="hidden md:flex items-center h-4 w-[1px] bg-[#1E384F] mx-1 shrink-0" />
               )}
               
               <div className="flex items-center gap-1">
@@ -106,25 +108,28 @@ export const RailNav: React.FC<RailNavProps> = ({
                     <button
                       key={item.tab}
                       onClick={() => onTabChange(item.tab)}
-                      className={`relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-[2px] transition-all cursor-pointer whitespace-nowrap ${
+                      className={`relative flex items-center gap-1.5 px-2.5 py-1 rounded-[3px] transition-all cursor-pointer whitespace-nowrap ${
                         isActive
-                          ? 'bg-[#1A1815] text-[#FFFFFF]'
-                          : 'text-[#615A4F] hover:text-[#1A1815] hover:bg-[#F7F4EE]'
+                          ? 'bg-[#123551] text-[#79B8E6] border border-[#3B82C4]'
+                          : 'text-[#A9BBCB] hover:text-[#F7FAFC] hover:bg-[#0D263D] border border-transparent'
                       }`}
                       title={item.label}
                     >
-                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[#FFFFFF]' : 'text-[#615A4F]'}`} />
-                      <span className={`text-[11px] font-sans font-medium ${isActive ? 'text-[#FFFFFF] font-semibold' : ''}`}>
+                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[#79B8E6]' : 'text-[#71879A]'}`} />
+                      <span className={`text-[11px] font-sans font-medium ${isActive ? 'text-[#F7FAFC] font-semibold' : ''}`}>
                         {item.label}
                       </span>
                       {item.badge && (
-                        <span className={`text-[8.5px] font-mono font-bold px-1 py-0.1 border rounded-[1px] ${isActive ? 'bg-[#FFFFFF] text-[#1A1815] border-[#FFFFFF]' : getBadgeClass(item.badgeType)}`}>
+                        <span
+                          className="text-[8.5px] font-mono font-bold px-1 py-0.1 border rounded-[2px]"
+                          style={getBadgeStyle(item.badgeType, isActive)}
+                        >
                           {item.badge}
                         </span>
                       )}
-                      {/* Active station node dot */}
+                      {/* Active indicator dot */}
                       {isActive && (
-                        <span className="absolute -top-[5.5px] left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full bg-[#1A1815] border-2 border-[#FFFFFF]" />
+                        <span className="absolute -top-[4px] left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#3B82C4] shadow-glow-blue" />
                       )}
                     </button>
                   );
@@ -136,15 +141,15 @@ export const RailNav: React.FC<RailNavProps> = ({
 
         {/* Presentation Focus Mode Toggle */}
         {onTogglePresentationMode && (
-          <div className="flex items-center gap-2 pl-2 shrink-0 border-l border-[#D8D1C5]">
+          <div className="flex items-center gap-2 pl-2 shrink-0 border-l border-[#29455D]">
             <button
               onClick={onTogglePresentationMode}
-              className={`p-1.5 rounded-[2px] border transition-colors cursor-pointer flex items-center gap-1 text-[10px] font-mono ${
+              className={`p-1 rounded-[3px] border transition-colors cursor-pointer flex items-center gap-1 text-[10px] font-mono ${
                 isPresentationMode
-                  ? 'bg-[#1A1815] text-[#FFFFFF] border-[#1A1815]'
-                  : 'bg-[#F7F4EE] text-[#615A4F] hover:text-[#1A1815] border-[#D8D1C5]'
+                  ? 'bg-[#123551] text-[#79B8E6] border-[#3B82C4]'
+                  : 'bg-[#0D263D] text-[#A9BBCB] hover:text-[#F7FAFC] border-[#29455D]'
               }`}
-              title={isPresentationMode ? 'Exit Focus Mode' : 'Enter Focus Presentation Mode'}
+              title={isPresentationMode ? 'Exit Focus Mode' : 'Enter Focus Mode'}
             >
               {isPresentationMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
               <span className="hidden xl:inline">{isPresentationMode ? 'STANDARD' : 'FOCUS'}</span>

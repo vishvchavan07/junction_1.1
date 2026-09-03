@@ -100,7 +100,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F4EE] text-[#1A1815] font-sans flex flex-col antialiased selection:bg-[#E2DBD1] selection:text-[#1A1815]">
+    <div className="min-h-screen bg-[#071A2B] text-[#F7FAFC] font-sans flex flex-col antialiased selection:bg-[#123551] selection:text-[#79B8E6]">
       {/* Top Minimal Header */}
       <Header
         currentRole={currentRole}
@@ -114,15 +114,15 @@ export const App: React.FC = () => {
       />
 
       {/* Main Spatial Operations Viewport */}
-      <main className={`flex-1 ${isPresentationMode ? 'mt-14 mb-16 px-3 sm:px-6' : 'mt-14 mb-16 px-3 sm:px-6 py-2'} max-w-7xl w-full mx-auto transition-all duration-200`}>
+      <main className={`flex-1 ${isPresentationMode ? 'mt-13 mb-14 px-3 sm:px-5' : 'mt-13 mb-14 px-3 sm:px-5 py-2'} max-w-7xl w-full mx-auto transition-all duration-200`}>
         {/* Emergency Alert Header (if triggered) */}
         {activeEmergency && (
-          <div className="mb-3 p-3 bg-[#FEF2F2] border border-[#B91C1C] rounded-[2px] text-[#1A1815] flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <AlertTriangle className="w-4 h-4 text-[#B91C1C] shrink-0" />
+          <div className="mb-2.5 p-2.5 bg-[#0D263D] border border-[#D45555] rounded-[4px] text-[#F7FAFC] flex items-center justify-between shadow-panel">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-[#D45555] shrink-0" />
               <div>
-                <span className="font-mono font-bold text-xs text-[#B91C1C]">EMERGENCY INCIDENT ACTIVE ON CORRIDOR: </span>
-                <span className="font-sans text-xs text-[#615A4F]">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
+                <span className="font-mono font-bold text-xs text-[#D45555]">EMERGENCY INCIDENT ACTIVE: </span>
+                <span className="font-sans text-xs text-[#A9BBCB]">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
               </div>
             </div>
             <button
@@ -250,8 +250,8 @@ export const App: React.FC = () => {
 
       {/* Global Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-16 right-6 z-50 bg-[#1A1815] border border-[#1A1815] text-[#F7F4EE] px-3.5 py-2 text-[11px] font-mono font-semibold rounded-[2px] shadow-xl flex items-center gap-2 animate-fade-in">
-          <CheckCircle className="w-4 h-4 text-[#4ADE80]" />
+        <div className="fixed bottom-14 right-6 z-50 bg-[#0D263D] border border-[#29455D] text-[#F7FAFC] px-3 py-1.5 text-[11px] font-mono font-medium rounded-[4px] shadow-panel-lift flex items-center gap-2 animate-fade-in">
+          <CheckCircle className="w-3.5 h-3.5 text-[#46A06A]" />
           <span>{toastMessage}</span>
         </div>
       )}

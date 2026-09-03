@@ -40,36 +40,36 @@ interface SidebarProps {
 
 const NAV_LABEL_STYLE: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
-  fontSize: '12.5px',
+  fontSize: '12px',
   fontWeight: 400,
   letterSpacing: 0,
-  color: '#4B4A46',
+  color: '#A9BBCB',
 };
 
 const NAV_LABEL_ACTIVE_STYLE: React.CSSProperties = {
   ...NAV_LABEL_STYLE,
-  fontWeight: 500,
-  color: '#1D1F1E',
+  fontWeight: 600,
+  color: '#F7FAFC',
 };
 
 const SECTION_LABEL_STYLE: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
-  fontSize: '10px',
-  fontWeight: 500,
-  letterSpacing: '0.07em',
+  fontSize: '9.5px',
+  fontWeight: 600,
+  letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  color: '#77736C',
+  color: '#71879A',
   padding: '0 12px',
   marginBottom: '2px',
 };
 
 const BADGE_STYLE: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
-  fontSize: '10px',
-  fontWeight: 500,
+  fontSize: '9.5px',
+  fontWeight: 600,
   letterSpacing: '0.02em',
-  padding: '1px 6px',
-  borderRadius: '3px',
+  padding: '1px 5px',
+  borderRadius: '2px',
   flexShrink: 0,
   lineHeight: 1.4,
 };
@@ -91,24 +91,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { tab: 'dashboard',  label: 'Overview',               icon: LayoutDashboard },
     { tab: 'map',        label: 'Live Network',            icon: Map,
       badge: 'Live',
-      badgeStyle: { backgroundColor: '#EDF5F0', color: '#4D8B68', border: '1px solid #96C4AE' },
+      badgeStyle: { backgroundColor: 'rgba(70, 160, 106, 0.15)', color: '#46A06A', border: '1px solid rgba(70, 160, 106, 0.4)' },
     },
     { tab: 'planner',    label: 'Block Planner',           icon: CalendarClock,
       badge: 'Auto',
-      badgeStyle: { backgroundColor: '#EEF2F8', color: '#1E3A5F', border: '1px solid #B0C4DC' },
+      badgeStyle: { backgroundColor: 'rgba(59, 130, 196, 0.15)', color: '#79B8E6', border: '1px solid rgba(59, 130, 196, 0.4)' },
     },
     { tab: 'assets',     label: 'Asset Intelligence',      icon: Layers,
       badge: '17 ⚠',
-      badgeStyle: { backgroundColor: '#FBF5E6', color: '#D49A32', border: '1px solid #E0BF7A' },
+      badgeStyle: { backgroundColor: 'rgba(215, 166, 58, 0.15)', color: '#D7A63A', border: '1px solid rgba(215, 166, 58, 0.4)' },
     },
     { tab: 'trains',     label: 'Train Operations',        icon: Train },
     { tab: 'conflicts',  label: 'Conflict Center',         icon: AlertTriangle,
       badge: '3',
-      badgeStyle: { backgroundColor: '#F9EEEE', color: '#C84B43', border: '1px solid #DCA09C' },
+      badgeStyle: { backgroundColor: 'rgba(212, 85, 85, 0.15)', color: '#D45555', border: '1px solid rgba(212, 85, 85, 0.4)' },
     },
     { tab: 'simulation', label: 'What-If Sandbox',         icon: Flame,
       badge: 'Sandbox',
-      badgeStyle: { backgroundColor: '#F5F0F8', color: '#6B21A8', border: '1px solid #D8B4FE' },
+      badgeStyle: { backgroundColor: 'rgba(147, 51, 234, 0.15)', color: '#C084FC', border: '1px solid rgba(147, 51, 234, 0.4)' },
     },
     { tab: 'insights',   label: 'AI Insights',             icon: Sparkles },
   ];
@@ -143,34 +143,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
           display: 'flex',
           alignItems: 'center',
           gap: collapsed ? 0 : 10,
-          padding: collapsed ? '8px 0' : '7px 12px',
+          padding: collapsed ? '7px 0' : '6px 12px',
           justifyContent: collapsed ? 'center' : 'flex-start',
-          borderRadius: '4px',
-          backgroundColor: isActive ? '#EDE5D8' : 'transparent',
+          borderRadius: '3px',
+          backgroundColor: isActive ? '#123551' : 'transparent',
           border: 'none',
           cursor: 'pointer',
           position: 'relative',
           transition: 'background-color 0.12s ease',
           marginBottom: '1px',
         }}
-        onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = '#F0ECE4'; }}
+        onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = '#0D263D'; }}
         onMouseLeave={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'transparent'; }}
       >
-        {/* Left-edge indicator for active item */}
+        {/* Left-edge active indicator */}
         {isActive && !collapsed && (
           <span style={{
             position: 'absolute', left: 0, top: '4px', bottom: '4px',
-            width: '2px', borderRadius: '2px',
-            backgroundColor: '#1D1F1E',
+            width: '2.5px', borderRadius: '2px',
+            backgroundColor: '#3B82C4',
           }} />
         )}
 
         <Icon
           style={{
-            width: 15,
-            height: 15,
+            width: 14,
+            height: 14,
             flexShrink: 0,
-            color: isActive ? '#1D1F1E' : '#77736C',
+            color: isActive ? '#79B8E6' : '#71879A',
             transition: 'color 0.12s ease',
           }}
         />
@@ -190,8 +190,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span style={{
                   ...BADGE_STYLE,
                   backgroundColor: 'transparent',
-                  border: `1px solid ${isActive ? '#A8A29E' : '#D5CEC1'}`,
-                  color: isActive ? '#1D1F1E' : '#77736C',
+                  border: `1px solid ${isActive ? '#3B82C4' : '#29455D'}`,
+                  color: isActive ? '#79B8E6' : '#71879A',
                 }}>
                   {deptCode}
                 </span>
@@ -207,25 +207,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside
       style={{
         position: 'fixed',
-        left: 0, top: 48, bottom: 0,
-        backgroundColor: '#F8F5EF',
-        borderRight: '1px solid #D5CEC1',
+        left: 0, top: 46, bottom: 0,
+        backgroundColor: '#071A2B',
+        borderRight: '1px solid #29455D',
         zIndex: 30,
         display: 'flex',
         flexDirection: 'column',
         transition: 'width 0.2s ease',
-        width: collapsed ? 56 : 232,
+        width: collapsed ? 56 : 220,
         userSelect: 'none',
       }}
     >
       {/* Top accent line */}
-      <div style={{ height: 2, backgroundColor: '#1D1F1E', flexShrink: 0 }} />
+      <div style={{ height: 2, backgroundColor: '#3B82C4', flexShrink: 0 }} />
 
       {/* Navigation */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '10px 6px', display: 'flex', flexDirection: 'column', gap: 0 }}>
 
         {/* ── Mission Control ── */}
-        <div style={{ marginBottom: 8 }}>
+        <div style={{ marginBottom: 6 }}>
           {!collapsed && (
             <div style={{ ...SECTION_LABEL_STYLE, marginBottom: 4 }}>
               Mission Control
@@ -237,11 +237,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── Departments ── */}
-        <div style={{ paddingTop: 8, borderTop: '1px solid #E8E2D8', marginBottom: 8 }}>
+        <div style={{ paddingTop: 6, borderTop: '1px solid #1E384F', marginBottom: 6 }}>
           {!collapsed && (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px', marginBottom: 4 }}>
               <span style={{ ...SECTION_LABEL_STYLE, padding: 0 }}>Departments</span>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', color: '#77736C' }}>Fusion</span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '9px', color: '#71879A' }}>Fusion</span>
             </div>
           )}
           {deptNavItems.map(item =>
@@ -250,7 +250,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── Governance ── */}
-        <div style={{ paddingTop: 8, borderTop: '1px solid #E8E2D8' }}>
+        <div style={{ paddingTop: 6, borderTop: '1px solid #1E384F' }}>
           {!collapsed && (
             <div style={{ ...SECTION_LABEL_STYLE, marginBottom: 4 }}>
               Governance
@@ -261,27 +261,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Collapse toggle */}
-      <div style={{ borderTop: '1px solid #D5CEC1', flexShrink: 0 }}>
+      <div style={{ borderTop: '1px solid #29455D', flexShrink: 0 }}>
         <button
           onClick={onToggleCollapse}
           style={{
             width: '100%',
-            padding: '9px',
+            padding: '8px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
             backgroundColor: 'transparent',
             border: 'none',
             cursor: 'pointer',
             fontFamily: "'Inter', sans-serif",
-            fontSize: '10px', fontWeight: 500,
-            color: '#77736C',
-            letterSpacing: '0.05em',
+            fontSize: '9.5px', fontWeight: 600,
+            color: '#71879A',
+            letterSpacing: '0.06em',
             transition: 'background-color 0.12s ease, color 0.12s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#EDE5D8'; e.currentTarget.style.color = '#1D1F1E'; }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#77736C'; }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#0D263D'; e.currentTarget.style.color = '#F7FAFC'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#71879A'; }}
         >
           <ChevronRight
-            style={{ width: 14, height: 14, transition: 'transform 0.2s ease', transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)' }}
+            style={{ width: 13, height: 13, transition: 'transform 0.2s ease', transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)' }}
           />
           {!collapsed && <span>Collapse</span>}
         </button>
