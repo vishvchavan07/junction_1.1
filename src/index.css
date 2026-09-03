@@ -3,56 +3,53 @@
 @tailwind utilities;
 
 /* ================================================================
-   JUNCTION — BLUE PROFESSIONAL RAILWAY OPERATIONS DESIGN SYSTEM
-   Deep Navy · Dark Steel Blue · Ice White · Authentic Signals
+   JUNCTION — WHITE PROFESSIONAL RAILWAY OPERATIONS DESIGN SYSTEM
+   Pure White · Crisp Slate · Deep Charcoal Ink · Authentic Signals
    Typography: Space Grotesk (Brand/Display) + Inter (UI) + JetBrains Mono (Code)
    ================================================================ */
 
 :root {
   /* ── Primary Backgrounds ── */
-  --rail-bg:               #071A2B;   /* deep navy */
-  --rail-bg-secondary:     #0D263D;   /* dark steel blue */
+  --rail-bg:               #F8FAFC;   /* crisp slate-50 */
+  --rail-bg-secondary:     #FFFFFF;   /* pure white */
 
   /* ── Surfaces ── */
-  --rail-surface:          #0D263D;   /* main surface */
-  --rail-surface-card:     #0D263D;   /* card surface */
-  --rail-surface-inset:    #051422;   /* recessed / inset deep navy */
-  --rail-surface-elevated: #123551;   /* railway blue elevated */
+  --rail-surface:          #FFFFFF;   /* white surface */
+  --rail-surface-card:     #FFFFFF;   /* white card */
+  --rail-surface-inset:    #F1F5F9;   /* slate-100 recessed */
+  --rail-surface-elevated: #FFFFFF;   /* elevated */
 
   /* ── Technical Lines & Borders ── */
-  --rail-line:             #29455D;   /* steel border */
-  --rail-line-muted:       #1E384F;   /* divider */
-  --rail-line-subtle:      #142B3E;   /* hairline */
+  --rail-line:             #E2E8F0;   /* crisp border (slate-200) */
+  --rail-line-muted:       #CBD5E1;   /* divider (slate-300) */
+  --rail-line-subtle:      #F1F5F9;   /* hairline */
 
   /* ── Typography ── */
-  --rail-text:             #F7FAFC;   /* primary text (ice white) */
-  --rail-text-secondary:   #A9BBCB;   /* secondary text */
-  --rail-text-muted:       #71879A;   /* muted text */
+  --rail-text:             #0F172A;   /* deep slate-900 */
+  --rail-text-secondary:   #475569;   /* slate-600 */
+  --rail-text-muted:       #94A3B8;   /* slate-400 */
 
   /* ── Accent System ── */
-  --rail-accent-blue:      #3B82C4;   /* operations blue */
-  --rail-accent-light:     #79B8E6;   /* light blue */
+  --rail-accent-blue:      #2563EB;   /* professional royal blue */
+  --rail-accent-light:     #3B82F6;
 
   /* ── Authentic Railway Status Colors ── */
-  --rail-red:              #D45555;   /* signal red */
-  --rail-red-tint:         rgba(212, 85, 85, 0.12);
-  --rail-red-border:       rgba(212, 85, 85, 0.4);
+  --rail-red:              #DC2626;   /* signal red */
+  --rail-red-tint:         #FEF2F2;
+  --rail-red-border:       #FECACA;
 
-  --rail-yellow:           #D7A63A;   /* signal yellow */
-  --rail-yellow-tint:      rgba(215, 166, 58, 0.12);
-  --rail-yellow-border:    rgba(215, 166, 58, 0.4);
+  --rail-yellow:           #D97706;   /* signal amber */
+  --rail-yellow-tint:      #FFFBEB;
+  --rail-yellow-border:    #FDE68A;
 
-  --rail-green:            #46A06A;   /* signal green */
-  --rail-green-tint:       rgba(70, 160, 106, 0.12);
-  --rail-green-border:     rgba(70, 160, 106, 0.4);
+  --rail-green:            #16A34A;   /* signal green */
+  --rail-green-tint:       #F0FDF4;
+  --rail-green-border:     #BBF7D0;
 
   /* ── Indian Railway Warm Accent ── */
-  --rail-accent:           #C96A45;
-  --rail-accent-tint:      rgba(201, 106, 69, 0.12);
-  --rail-accent-muted:     #A35332;
-
-  /* ── Active State ── */
-  --active-blue:           #123551;
+  --rail-accent:           #C2410C;
+  --rail-accent-tint:      #FFF7ED;
+  --rail-accent-muted:     #EA580C;
 }
 
 @layer base {
@@ -75,11 +72,10 @@
   }
 
   ::selection {
-    background-color: #123551;
-    color: #79B8E6;
+    background-color: #E2E8F0;
+    color: #0F172A;
   }
 
-  /* Headings: Space Grotesk for display/major titles, Inter for structure */
   h1 {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--rail-text);
@@ -114,16 +110,11 @@
    FONT SYSTEM UTILITIES
    ================================================================ */
 
-/* Display / Brand — Space Grotesk */
 .font-display   { font-family: 'Space Grotesk', sans-serif; }
 .font-brand     { font-family: 'Space Grotesk', sans-serif; }
 .font-headline  { font-family: 'Space Grotesk', sans-serif; }
-
-/* Operational UI — Inter */
 .font-ui        { font-family: 'Inter', sans-serif; }
 .font-body      { font-family: 'Inter', sans-serif; }
-
-/* Codes / Technical — JetBrains Mono */
 .font-code      { font-family: 'JetBrains Mono', monospace; }
 .font-mono-ui   { font-family: 'JetBrains Mono', monospace; }
 
@@ -225,7 +216,7 @@
 }
 
 /* ================================================================
-   BLUE THEME BUTTON & PANEL UTILITIES
+   WHITE THEME BUTTON & PANEL UTILITIES
    ================================================================ */
 
 .btn-pen-primary {
@@ -234,9 +225,9 @@
   justify-content: center;
   gap: 6px;
   padding: 6px 14px;
-  background-color: #3B82C4;
-  color: #F7FAFC;
-  border: 1px solid #3B82C4;
+  background-color: #0F172A;
+  color: #FFFFFF;
+  border: 1px solid #0F172A;
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   font-size: 12px;
@@ -245,8 +236,8 @@
   transition: all 0.15s ease;
 }
 .btn-pen-primary:hover {
-  background-color: #2D6CA8;
-  border-color: #2D6CA8;
+  background-color: #1E293B;
+  border-color: #1E293B;
 }
 
 .btn-pen-secondary {
@@ -255,9 +246,9 @@
   justify-content: center;
   gap: 6px;
   padding: 6px 12px;
-  background-color: #0D263D;
-  color: #F7FAFC;
-  border: 1px solid #29455D;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   font-size: 12px;
@@ -266,8 +257,8 @@
   transition: all 0.15s ease;
 }
 .btn-pen-secondary:hover {
-  background-color: #123551;
-  border-color: #3B82C4;
+  background-color: #F8FAFC;
+  border-color: #94A3B8;
 }
 
 .btn-pen-danger {
@@ -276,9 +267,9 @@
   justify-content: center;
   gap: 6px;
   padding: 5px 10px;
-  background-color: rgba(212, 85, 85, 0.15);
-  color: #D45555;
-  border: 1px solid rgba(212, 85, 85, 0.4);
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   font-size: 11px;
@@ -287,7 +278,7 @@
   transition: all 0.15s ease;
 }
 .btn-pen-danger:hover {
-  background-color: #D45555;
+  background-color: #DC2626;
   color: #FFFFFF;
 }
 
@@ -297,14 +288,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #071A2B;
+  background: #F8FAFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #29455D;
+  background: #CBD5E1;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82C4;
+  background: #94A3B8;
 }
 
 .no-scrollbar::-webkit-scrollbar {

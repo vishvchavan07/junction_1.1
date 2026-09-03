@@ -23,48 +23,48 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, className = '' }) => {
-  // Blue Professional Railway Operations Status Palette
-  let barColor    = '#46A06A';
-  let textColor   = '#46A06A';
-  let bgColor     = 'rgba(70, 160, 106, 0.12)';
-  let borderColor = 'rgba(70, 160, 106, 0.35)';
+  // White Professional Railway Operations Status Palette
+  let barColor    = '#16A34A';
+  let textColor   = '#15803D';
+  let bgColor     = '#F0FDF4';
+  let borderColor = '#BBF7D0';
   let defaultLabel = 'Operational';
 
   switch (status) {
     case 'OPERATIONAL':
-      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
+      barColor = '#16A34A'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
       defaultLabel = label || 'Operational'; break;
     case 'APPROVED':
     case 'COMPLETED':
-      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
+      barColor = '#16A34A'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
       defaultLabel = label || (status === 'COMPLETED' ? 'Completed' : 'Approved'); break;
     case 'RESOLVED_BY_AI':
-      barColor = '#46A06A'; textColor = '#46A06A'; bgColor = 'rgba(70, 160, 106, 0.12)'; borderColor = 'rgba(70, 160, 106, 0.35)';
+      barColor = '#16A34A'; textColor = '#15803D'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0';
       defaultLabel = label || 'AI Resolved'; break;
     case 'WARNING':
     case 'PENDING':
     case 'REQUESTED':
     case 'MODIFIED':
-      barColor = '#D7A63A'; textColor = '#D7A63A'; bgColor = 'rgba(215, 166, 58, 0.12)'; borderColor = 'rgba(215, 166, 58, 0.35)';
+      barColor = '#D97706'; textColor = '#B45309'; bgColor = '#FFFBEB'; borderColor = '#FDE68A';
       defaultLabel = label || (status === 'MODIFIED' ? 'Modified' : status === 'REQUESTED' ? 'Requested' : status === 'PENDING' ? 'Pending' : 'Warning'); break;
     case 'CRITICAL':
     case 'BLOCKED':
-      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
+      barColor = '#DC2626'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
       defaultLabel = label || (status === 'BLOCKED' ? 'Blocked' : 'Critical'); break;
     case 'ACTIVE':
-      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
+      barColor = '#DC2626'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
       defaultLabel = label || 'Active'; break;
     case 'REJECTED':
-      barColor = '#D45555'; textColor = '#D45555'; bgColor = 'rgba(212, 85, 85, 0.12)'; borderColor = 'rgba(212, 85, 85, 0.35)';
+      barColor = '#DC2626'; textColor = '#B91C1C'; bgColor = '#FEF2F2'; borderColor = '#FECACA';
       defaultLabel = label || 'Rejected'; break;
     case 'AI_RECOMMENDED':
-      barColor = '#79B8E6'; textColor = '#79B8E6'; bgColor = 'rgba(59, 130, 196, 0.15)'; borderColor = 'rgba(59, 130, 196, 0.4)';
+      barColor = '#2563EB'; textColor = '#1D4ED8'; bgColor = '#EFF6FF'; borderColor = '#BFDBFE';
       defaultLabel = label || 'AI Rec'; break;
     case 'OVERRIDDEN':
-      barColor = '#C96A45'; textColor = '#C96A45'; bgColor = 'rgba(201, 106, 69, 0.12)'; borderColor = 'rgba(201, 106, 69, 0.35)';
+      barColor = '#EA580C'; textColor = '#C2410C'; bgColor = '#FFF7ED'; borderColor = '#FED7AA';
       defaultLabel = label || 'Overridden'; break;
     default:
-      barColor = '#71879A'; textColor = '#A9BBCB'; bgColor = '#0D263D'; borderColor = '#29455D';
+      barColor = '#64748B'; textColor = '#475569'; bgColor = '#F8FAFC'; borderColor = '#E2E8F0';
       defaultLabel = label || status;
   }
 
@@ -77,7 +77,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, classNa
         borderRadius: '3px',
         fontFamily: "'Inter', sans-serif",
         fontSize: '10.5px',
-        fontWeight: 500,
+        fontWeight: 600,
         letterSpacing: '0.02em',
       }}
     >

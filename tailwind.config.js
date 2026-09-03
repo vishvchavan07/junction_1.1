@@ -9,148 +9,145 @@ export default {
     extend: {
       colors: {
         // ======================================================
-        // JUNCTION BLUE PROFESSIONAL RAILWAY OPERATIONS THEME
-        // Deep Navy + Dark Steel Blue + Ice White + Authentic Signals
+        // JUNCTION WHITE PROFESSIONAL RAILWAY OPERATIONS THEME
+        // Pure White + Crisp Slate + Deep Charcoal Ink + Authentic Signals
         // ======================================================
 
         // ── Primary Backgrounds ──
-        "rail-bg":                "#071A2B",   // Deep Navy (primary)
-        "background":             "#071A2B",
+        "rail-bg":                "#F8FAFC",   // Crisp Slate-50 Background
+        "background":             "#F8FAFC",
 
         // ── Surfaces ──
-        "rail-surface":           "#0D263D",   // Main Surface (Dark Steel Blue)
-        "rail-surface-card":      "#0D263D",   // Main Card Surface
-        "rail-surface-inset":     "#051422",   // Inset / recessed deep navy
-        "rail-surface-elevated":  "#123551",   // Secondary Surface (Railway Blue)
-        "surface":                "#0D263D",
-        "surface-dim":            "#071A2B",
-        "surface-bright":         "#123551",
-        "surface-container-lowest": "#051422",
-        "surface-container-low":  "#071A2B",
-        "surface-container":      "#0D263D",
-        "surface-container-high": "#123551",
-        "surface-container-highest": "#194164",
+        "rail-surface":           "#FFFFFF",   // Pure White Main Surface
+        "rail-surface-card":      "#FFFFFF",   // White Card
+        "rail-surface-inset":     "#F1F5F9",   // Slate-100 Inset / Recessed
+        "rail-surface-elevated":  "#FFFFFF",   // Elevated White
+        "surface":                "#FFFFFF",
+        "surface-dim":            "#F8FAFC",
+        "surface-bright":         "#FFFFFF",
+        "surface-container-lowest": "#FFFFFF",
+        "surface-container-low":  "#F8FAFC",
+        "surface-container":      "#F1F5F9",
+        "surface-container-high": "#E2E8F0",
+        "surface-container-highest": "#CBD5E1",
 
         // ── Technical Lines & Borders ──
-        "rail-line":              "#29455D",   // Steel Blue Border
-        "rail-line-muted":        "#1E384F",   // Subtle Divider
-        "rail-line-subtle":       "#142B3E",   // Hairline
-        "border":                 "#29455D",
-        "border-muted":           "#1E384F",
-        "outline":                "#3B82C4",
-        "outline-variant":        "#29455D",
+        "rail-line":              "#E2E8F0",   // Crisp Slate Border (Slate-200)
+        "rail-line-muted":        "#CBD5E1",   // Divider (Slate-300)
+        "rail-line-subtle":       "#F1F5F9",   // Hairline
+        "border":                 "#E2E8F0",
+        "border-muted":           "#CBD5E1",
+        "outline":                "#2563EB",
+        "outline-variant":        "#E2E8F0",
 
         // ── Typography / Ink ──
-        "rail-text":              "#F7FAFC",   // Primary Text (Ice White)
-        "rail-text-secondary":    "#A9BBCB",   // Secondary Text (Soft Steel Blue)
-        "rail-text-muted":        "#71879A",   // Muted Text (Muted Blue-Gray)
-        "on-surface":             "#F7FAFC",
-        "on-surface-variant":     "#A9BBCB",
-        "inverse-surface":        "#F4F7FA",
-        "inverse-on-surface":     "#071A2B",
+        "rail-text":              "#0F172A",   // Primary Ink (Slate-900)
+        "rail-text-secondary":    "#475569",   // Secondary Ink (Slate-600)
+        "rail-text-muted":        "#94A3B8",   // Muted Ink (Slate-400)
+        "on-surface":             "#0F172A",
+        "on-surface-variant":     "#475569",
+        "inverse-surface":        "#0F172A",
+        "inverse-on-surface":     "#FFFFFF",
 
-        // ── Blue Accent System ──
-        "rail-accent-blue":       "#3B82C4",   // Operations Blue
-        "rail-accent-light":      "#79B8E6",   // Light Sky Blue
-        "rail-accent-glow":       "rgba(59, 130, 196, 0.15)",
+        // ── Professional Blue Accent ──
+        "rail-accent-blue":       "#2563EB",   // Professional Royal Blue
+        "rail-accent-light":      "#3B82F6",
+        "rail-accent-glow":       "rgba(37, 99, 235, 0.12)",
 
         // ── Controlled Railway Signal Colors ──
-        "rail-red":               "#D45555",   // Signal Red
-        "rail-red-tint":          "rgba(212, 85, 85, 0.12)",
-        "rail-red-border":        "rgba(212, 85, 85, 0.4)",
+        "rail-red":               "#DC2626",   // Signal Red
+        "rail-red-tint":          "#FEF2F2",
+        "rail-red-border":        "#FECACA",
 
-        "rail-yellow":            "#D7A63A",   // Signal Yellow / Caution
-        "rail-yellow-tint":       "rgba(215, 166, 58, 0.12)",
-        "rail-yellow-border":     "rgba(215, 166, 58, 0.4)",
+        "rail-yellow":            "#D97706",   // Signal Amber / Caution
+        "rail-yellow-tint":       "#FFFBEB",
+        "rail-yellow-border":     "#FDE68A",
 
-        "rail-green":             "#46A06A",   // Signal Green / Proceed
-        "rail-green-tint":        "rgba(70, 160, 106, 0.12)",
-        "rail-green-border":      "rgba(70, 160, 106, 0.4)",
+        "rail-green":             "#16A34A",   // Signal Green / Proceed
+        "rail-green-tint":        "#F0FDF4",
+        "rail-green-border":      "#BBF7D0",
 
-        "rail-warning":           "#D7A63A",
-        "rail-active":            "#46A06A",
+        "rail-warning":           "#D97706",
+        "rail-active":            "#16A34A",
 
-        // ── Indian Railway Warm Accent (used sparingly) ──
-        "rail-accent":            "#C96A45",   // Warm Indian Railway Accent
-        "rail-accent-tint":       "rgba(201, 106, 69, 0.12)",
-        "rail-accent-muted":      "#A35332",
+        // ── Indian Railway Warm Accent ──
+        "rail-accent":            "#C2410C",   // Rust / Orange Accent
+        "rail-accent-tint":       "#FFF7ED",
+        "rail-accent-muted":      "#EA580C",
 
         // ── Primary / Secondary Tokens ──
-        "primary":                "#3B82C4",
-        "on-primary":             "#F7FAFC",
-        "primary-container":      "#123551",
-        "on-primary-container":   "#79B8E6",
+        "primary":                "#0F172A",
+        "on-primary":             "#FFFFFF",
+        "primary-container":      "#F1F5F9",
+        "on-primary-container":   "#0F172A",
 
-        "secondary":              "#123551",
-        "on-secondary":           "#F7FAFC",
-        "secondary-container":    "#0D263D",
-        "on-secondary-container": "#A9BBCB",
+        "secondary":              "#2563EB",
+        "on-secondary":           "#FFFFFF",
+        "secondary-container":    "#EFF6FF",
+        "on-secondary-container": "#1E40AF",
 
-        "error":                  "#D45555",
+        "error":                  "#DC2626",
         "on-error":               "#FFFFFF",
-        "error-container":        "rgba(212, 85, 85, 0.12)",
-        "on-error-container":     "#FCA5A5",
+        "error-container":        "#FEF2F2",
+        "on-error-container":     "#991B1B",
 
         // ── Railway Signal Mapping ──
         "signal": {
-          green:  "#46A06A",
-          amber:  "#D7A63A",
-          yellow: "#D7A63A",
-          red:    "#D45555",
-          blue:   "#3B82C4",
-          purple: "#9333EA",
+          green:  "#16A34A",
+          amber:  "#D97706",
+          yellow: "#D97706",
+          red:    "#DC2626",
+          blue:   "#2563EB",
+          purple: "#7C3AED",
         },
 
         // ── Canvas Drafting Colors ──
         "drafting": {
-          bg:         "#EBF1F6",
-          grid:       "#D2DEE9",
-          ink:        "#1B3246",
-          rail:       "#0D263D",
-          mast:       "#1B3246",
-          wire:       "#29455D",
+          bg:         "#FFFFFF",
+          grid:       "#F1F5F9",
+          ink:        "#0F172A",
+          rail:       "#0F172A",
+          mast:       "#1E293B",
+          wire:       "#334155",
         },
 
         // ── Backward compatibility mapping ──
         "railway": {
-          paper:       "#071A2B",
-          parchment:   "#0D263D",
-          aged:        "#29455D",
-          ink:         "#F7FAFC",
-          "ink-soft":  "#A9BBCB",
-          rail:        "#29455D",
-          crimson:     "#D45555",
-          navy:        "#071A2B",
-          amber:       "#D7A63A",
-          gold:        "#D7A63A",
-          rust:        "#C96A45",
-          sky:         "#79B8E6",
-          grass:       "#46A06A",
-          track:       "#0D263D",
-          cream:       "#F4F7FA",
-          "header-bg": "#071A2B",
-          "accent-bar":"#3B82C4",
+          paper:       "#F8FAFC",
+          parchment:   "#FFFFFF",
+          aged:        "#E2E8F0",
+          ink:         "#0F172A",
+          "ink-soft":  "#475569",
+          rail:        "#0F172A",
+          crimson:     "#DC2626",
+          navy:        "#0F172A",
+          amber:       "#D97706",
+          gold:        "#D97706",
+          rust:        "#C2410C",
+          sky:         "#3B82F6",
+          grass:       "#16A34A",
+          track:       "#0F172A",
+          cream:       "#FFFFFF",
+          "header-bg": "#FFFFFF",
+          "accent-bar":"#0F172A",
         },
 
         "navy": {
-          950: "#040D16",
-          900: "#071A2B",
-          800: "#0D263D",
-          700: "#123551",
-          600: "#194164",
-          500: "#29455D",
+          950: "#020617",
+          900: "#0F172A",
+          800: "#1E293B",
+          700: "#334155",
+          600: "#475569",
+          500: "#64748B",
         },
       },
 
       fontFamily: {
-        // Space Grotesk — brand / display / major titles / key numbers
         "display":      ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         "headline":     ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         "brand":        ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
-        // Inter — all operational UI, body, data, labels, buttons
         "sans":         ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         "ui":           ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        // JetBrains Mono — codes, IDs, technical notation only
         "mono":         ["JetBrains Mono", "SFMono-Regular", "Menlo", "monospace"],
         "data-compact": ["JetBrains Mono", "monospace"],
         "data-primary": ["JetBrains Mono", "monospace"],
@@ -158,7 +155,6 @@ export default {
       },
 
       fontSize: {
-        // Typographic scale
         "display-2xl": ["48px", { lineHeight: "1.1",  letterSpacing: "-0.03em" }],
         "display-xl":  ["40px", { lineHeight: "1.1",  letterSpacing: "-0.025em" }],
         "display-lg":  ["36px", { lineHeight: "1.15", letterSpacing: "-0.025em" }],
@@ -201,10 +197,9 @@ export default {
       },
 
       boxShadow: {
-        "panel":      "0px 2px 8px 0px rgba(4, 13, 22, 0.4)",
-        "panel-lift": "0px 4px 16px 0px rgba(4, 13, 22, 0.6)",
-        "subtle":     "0px 1px 3px 0px rgba(4, 13, 22, 0.3)",
-        "glow-blue":  "0 0 12px rgba(59, 130, 196, 0.25)",
+        "panel":      "0px 1px 3px 0px rgba(15, 23, 42, 0.06), 0px 1px 2px -1px rgba(15, 23, 42, 0.04)",
+        "panel-lift": "0px 4px 16px 0px rgba(15, 23, 42, 0.08), 0px 2px 6px -1px rgba(15, 23, 42, 0.04)",
+        "subtle":     "0px 1px 2px 0px rgba(15, 23, 42, 0.05)",
         none: "none",
       },
 

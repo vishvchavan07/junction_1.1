@@ -100,7 +100,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#071A2B] text-[#F7FAFC] font-sans flex flex-col antialiased selection:bg-[#123551] selection:text-[#79B8E6]">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] font-sans flex flex-col antialiased selection:bg-[#E2E8F0] selection:text-[#0F172A]">
       {/* Top Minimal Header */}
       <Header
         currentRole={currentRole}
@@ -117,12 +117,12 @@ export const App: React.FC = () => {
       <main className={`flex-1 ${isPresentationMode ? 'mt-13 mb-14 px-3 sm:px-5' : 'mt-13 mb-14 px-3 sm:px-5 py-2'} max-w-7xl w-full mx-auto transition-all duration-200`}>
         {/* Emergency Alert Header (if triggered) */}
         {activeEmergency && (
-          <div className="mb-2.5 p-2.5 bg-[#0D263D] border border-[#D45555] rounded-[4px] text-[#F7FAFC] flex items-center justify-between shadow-panel">
+          <div className="mb-2.5 p-2.5 bg-[#FEF2F2] border border-[#FECACA] rounded-[4px] text-[#0F172A] flex items-center justify-between shadow-panel">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-[#D45555] shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-[#DC2626] shrink-0" />
               <div>
-                <span className="font-mono font-bold text-xs text-[#D45555]">EMERGENCY INCIDENT ACTIVE: </span>
-                <span className="font-sans text-xs text-[#A9BBCB]">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
+                <span className="font-mono font-bold text-xs text-[#DC2626]">EMERGENCY INCIDENT ACTIVE: </span>
+                <span className="font-sans text-xs text-[#475569]">Rail Fracture on UP Line KM 127/4. Single Line Working (SLW) engaged on Down Line.</span>
               </div>
             </div>
             <button
@@ -250,8 +250,8 @@ export const App: React.FC = () => {
 
       {/* Global Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-14 right-6 z-50 bg-[#0D263D] border border-[#29455D] text-[#F7FAFC] px-3 py-1.5 text-[11px] font-mono font-medium rounded-[4px] shadow-panel-lift flex items-center gap-2 animate-fade-in">
-          <CheckCircle className="w-3.5 h-3.5 text-[#46A06A]" />
+        <div className="fixed bottom-14 right-6 z-50 bg-[#0F172A] border border-[#0F172A] text-[#FFFFFF] px-3.5 py-2 text-[11px] font-mono font-medium rounded-[4px] shadow-panel-lift flex items-center gap-2 animate-fade-in">
+          <CheckCircle className="w-3.5 h-3.5 text-[#22C55E]" />
           <span>{toastMessage}</span>
         </div>
       )}
